@@ -1,0 +1,770 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+    <div class="col-lg-12">
+        <h4 class="padding-5">
+            <a routerLink="/inicio">Inicio</a> / Monitoreo /
+            <strong>Asignación de Trabajo</strong>
+        </h4>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight" *ngIf="mostrarPrincipal">
+    <!-- wrapper asignación -->
+    <!-- fila de botones -->
+    <div class="row m-b-lg">
+        <div class="col-lg-12">
+                <button *ngIf="mostrarAddBtn" type="button" class="btn btn-success limite" title="Agregar" (click)="agregarTrabajo()">
+                    <i class="fa fa-plus margin-right-10"></i>
+                    <span>Agregar</span>
+                </button>
+
+                <button type="button" class="btn btn-default limite" title="Regresar" (click)="regresarPrincipal()">
+                    <i class="fa fa-reply margin-right-10"></i>
+                    <span>Regresar</span>
+                </button>
+
+                <button type="button" class="btn btn-success limite" title="Limpiar" (click)="onLimpiarFiltros()">
+                    <i class="fa fa-eraser margin-right-10" title="Limpiar"></i>
+                    <span>Limpiar</span>
+                </button>
+
+                <button type="button" class="btn btn-info limite" title="Buscar" (click)="onObtenerAsignaciones()">
+                    <i class="fa fa-search margin-right-10"></i>
+                    <span>Buscar</span>
+                </button>
+
+        </div>
+    </div>
+    <!-- fin de fila de botones -->
+    <!-- Inicio filtros -->
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Contratista: *</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametrosMonitoreo.listaEmpresa" bindLabel="descripcion" bindValue="codigo" name="contratistas" placeholder="Seleccione Contratista"
+                        #selectContratista [clearable]=clrEmpresa [(ngModel)]="filtros.contratista.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarViewContratistas($event)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Actividad: *</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo" placeholder="Seleccione Actividad"
+                        name="actividades" #selectActividad [clearable]="true" [(ngModel)]="filtros.actividad.codigo" [ngModelOptions]="{standalone: true}"
+                        (change)="onSeleccionarActividad($event)">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <label class="col-lg-2" style="text-align: left">Estado: *</label>
+            <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaEstado" bindLabel="detalle" bindValue="codigo" name="estado" #selectEstado
+                    placeholder="Seleccione Estado" [clearable]="true" [(ngModel)]="filtros.estado.codigo" [ngModelOptions]="{standalone: true}"
+                    dropdownPosition="bottom" (change)="seleccionarviewEstado($event)">
+                </ng-select>
+            </div>
+            <label class="col-lg-2 control-label">Oficina: *</label>
+              <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaOficina"
+                          bindLabel="descripcion"
+                          bindValue="codigo"
+                          placeholder="Seleccione Oficina"
+                          name="oficina"
+                          #selectOficina
+                          [clearable]="clrOficina"
+                          [(ngModel)]="filtros.oficina.codigo"
+                          [ngModelOptions]="{standalone: true}"
+                          dropdownPosition="bottom"
+                          (change)="onSeleccionarOficina($event)">
+                </ng-select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row m-b-lg">
+        <div class="col-mb-12">
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">F. Asignación Inicio:</label>
+                <div class="col-lg-3">
+                    <div class="input-group date">
+                        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaAsignacionInicio" [(bsValue)]="filtros.fechaAsignacionInicio"
+                            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"  (bsValueChange)="detectarCambioFechas()">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">F. Asignación Fin:</label>
+                <div class="col-lg-3">
+                    <div class="input-group date">
+                        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaAsignacionFin" [(bsValue)]="filtros.fechaAsignacionFin"
+                            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="detectarCambioFechas()">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fin filtros -->
+
+
+
+    <div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true">
+
+        <div class="row margin--left-right-6" *ngIf="mostrarFiltros">
+            <alert type="info" class="padding-0">
+              <div class="row">
+                <div class="col-md-10">
+                  <span class="padding-0" [innerHtml]="filtrosTexto"></span>
+                </div>
+                <div class="col-md-offset-10">
+                  <a (click)="eliminarFiltros()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+                </div>
+              </div>
+            </alert>
+          </div>
+          <sk-three-bounce></sk-three-bounce>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover issue-tracker">
+                <thead>
+                    <tr>
+                        <!-- <th class="text-center padding8">Id Detalle</th> -->
+                        <th class="text-center">Nro. Carga Enviada</th>
+                        <th class="text-center padding-left-15">Contratista</th>
+                        <th class="text-center">Oficina</th>
+                        <th class="text-center">Actividad</th>
+                        <th class="text-center">Fecha Envío Sedapal</th>
+                        <th class="text-center">Cantidad Asignada</th>
+                        <th class="text-center">Cantidad Programada </th>
+                        <th class="text-center">Cantidad Pendiente de Programación</th>
+                        <th class="text-center">% Avance</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr *ngFor="let asignacion of onListarAsignaciones(); let indice = index">
+                            <!-- <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td> -->
+                            <td class="text-center" data-col="nro-carga-enviada">{{asignacion.numeroCarga}}</td>
+                            <td class="text-center" data-col="contratista">{{asignacion.contratista.descripcion}}</td>
+                            <td class="text-center" data-col="oficina">{{asignacion.oficina.descripcion}}</td>
+                            <td class="text-center" data-col="actividad">{{asignacion.actividad.descripcion}}</td>
+                            <td class="text-center" data-col="fecha-asignacion">{{asignacion.fechaAsignacion}}</td>
+                            <td class="text-center" data-col="cantidad-asignada-ejecutar">{{asignacion.cantAsignada}}</td>
+                            <td class="text-center" data-col="cantidad-asignada-ejecutada">{{asignacion.cantProgramada}}</td>
+                            <td class="text-center" data-col="cantidad-asignada-pendiente">{{asignacion.cantAsignada - asignacion.cantProgramada}}</td>
+                            <!-- <td class="text-center" data-col="avance">{{(asignacion.cantProgramada / asignacion.cantAsignada)*100}}</td> -->
+                            <td class="text-center" data-col="avance">{{getAvance(asignacion)}}</td>
+                            <td class="text-center" data-col="estado-asignacion">{{asignacion.estadoAsignacion.descripcion}}</td>
+                            <td class="text-center" data-col="accion">
+                                <div *ngIf="asignacion.estadoAsignacion.codigo != 6">
+                                    <button  class="btn btn-sm btn-success margin-right-10" title="Detalle" (click)="buscarAsignacion(asignacion);">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                    <button  class="btn btn-sm btn-error margin-right-10" title="Anular" [swal]="eliminarSwal2"
+                                         (click)="eliminarAsignacion(asignacion);">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row margin-top-20">
+            <!-- inicio paginación -->
+            <div class="col-md-4 col-sm-12 col-xs-12">
+                <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="onPageChanged($event)" [totalItems]="paginacion.totalRegistros"
+                    [itemsPerPage]="paginacion.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                    firstText="&laquo;" lastText="&raquo;"></pagination>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-center m-a-sm">
+                    <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-right m-a-sm">
+                    <pagination-set (optionChanged)="onPageOptionChanged($event)"></pagination-set>
+                </div>
+            </div>
+        </div>
+        <!-- final de paginación -->
+    </div>
+    <!-- final del recuadro de la tabla -->
+
+
+</div>
+<!-- final del wrapper asignación -->
+<!-- inicio pantalla carga -->
+<div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true"  *ngIf="mostrarAgregar">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <!-- fila de botones -->
+        <div class="row m-b-lg">
+                <button type="button" class="btn btn-info limite" title="Cargar" (click)="onCargarArchivos()">
+                    <i class="fa fa-check margin-right-10"></i>
+                    <span>Cargar archivo</span>
+                </button>
+                    <button type="button" class="btn btn-default limite" title="Regresar" (click)="regresarCarga()">
+                        <i class="fa fa-reply margin-right-10"></i>
+                        <span>Regresar</span>
+                    </button>
+        </div>
+        <!-- fin de fila de botones -->
+        <div class="row m-b-mb">
+            <label class="col-lg-2" style="text-align: left">Contratista:</label>
+            <div class="col-lg-3">
+                <ng-select [items]="this.listaParametrosMonitoreo.listaEmpresa" bindLabel="descripcion" bindValue="codigo" name="contratistasCarga"
+                    placeholder="Seleccione Contratista" #selectContratista [clearable]="true" [(ngModel)]="filtrosCarga.contratista.codigo"
+                    [ngModelOptions]="{standalone: true}" dropdownPosition="bottom" (change)="seleccionarViewContratistasCarga($event)">
+                </ng-select>
+            </div>
+        </div>
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">Actividad:</label>
+            <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo" placeholder="Seleccione Actividad"
+                    name="actividades" #selectActividad [clearable]="true" [(ngModel)]="filtrosCarga.actividad.codigo" [ngModelOptions]="{standalone: true}"
+                    (change)="onSeleccionarActividadCarga($event)">
+                </ng-select>
+            </div>
+        </div>
+
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label">Oficina:</label>
+            <div class="col-lg-3">
+            <ng-select [items]="this.listaParametros.listaOficina"
+                        bindLabel="descripcion"
+                        bindValue="codigo"
+                        placeholder="Seleccione Oficina"
+                        name="oficina"
+                        #selectOficina
+                        [clearable]="clrOficina"
+                        [(ngModel)]="filtrosCarga.oficina.codigo"
+                        [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom"
+                        (change)="onSeleccionarOficinaCarga($event)">
+            </ng-select>
+        </div>
+        </div>
+
+
+
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">Seleccionar archivo:</label>
+
+            <div class="col 10">
+                <div class="col-lg-3">
+                    <div class="uploader">
+                        <div id="input-file" class="input-value">
+                            <span>{{inputFile}}</span>
+                        </div>
+                        <label for="attach-file"></label>
+                        <input #FileInput (click)="resetFile()" accept=".txt" type="file" class="upload" id="attach-file" (change)="handleFileInput($event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- fin pantalla carga -->
+
+        <!-- wrapper detalles -->
+    <div class="wrapper wrapper-content animated fadeInRight" *ngIf="mostrarDetalle">
+        <!-- fila de botones -->
+        <div class="row m-b-lg">
+            <div class="col-lg-12">
+
+                    <button type="button" class="btn btn-error limite" title="Anular"  [swal]="comentarSwal2">
+                        <i class="fa fa-close margin-right-10"></i>
+                        <span>Anular</span>
+                    </button>
+
+                    <button type="button" class="btn btn-info limite" title="Buscar" (click)="onObtenerDetalles()">
+                        <i class="fa fa-search margin-right-10"></i>
+                        <span>Buscar</span>
+                    </button>
+
+                    <button type="button" class="btn btn-info limite" title="Regresar" (click)="regresarDetalle()">
+                        <i class="fa fa-reply margin-right-10"></i>
+                        <span>Regresar</span>
+                    </button>
+
+                    <a type="button" *ngIf="mostrarAddBtn" class="btn btn-success limite" title="Limpiar" (click)="onReasignacionMasiva()">
+                        <i class="fa fa-upload margin-right-10" title="Limpiar"></i>
+                        <span>Reprogramación masiva</span>
+                    </a>
+
+            </div>
+        </div>
+        <!-- fin de fila de botones -->
+        <!-- Inicio filtros -->
+        <div class="row m-b-mb">
+            <div class="col mb 12">
+                <div class="col 6">
+                    <label class="col-lg-2" style="text-align: left">Id. Detalle:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.idCabecera"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+                </div>
+                <div class="col 6">
+                    <label class="col-lg-2 control-label" style="text-align: left">Fecha Asignación:</label>
+                    <div class="col-lg-3">
+
+                            <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.fechaAsignacionDetalle"
+                            [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-b-mb">
+            <div class="col mb 12">
+                <label class="col-lg-2" style="text-align: left">Contratista:</label>
+                <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.contratista.descripcion"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+                <label class="col-lg-2" style="text-align: left">Actividad:</label>
+                <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.actividad.descripcion"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row m-b-mb">
+            <div class="col mb 12">
+                <label class="col-lg-2" style="text-align: left">Cod. Trabajador:</label>
+                <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.trabajador.codigo"
+                        [ngModelOptions]="{standalone: true}"  (keypress)="validacionNumero.validacionSoloNumeros($event)" maxlength="9"/>
+                    </div>
+                <label class="col-lg-2" style="text-align: left">Suministro:</label>
+                <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.suministro"
+                        [ngModelOptions]="{standalone: true}"  (keypress)="validacionNumero.validacionSoloNumeros($event)"/>
+                    </div>
+            </div>
+        </div>
+        <div class="row m-b-lg">
+            <div class="col mb 12">
+                <label class="col-lg-2" style="text-align: left">Zona:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaTipoZona" bindLabel="detalle" bindValue="codigo" name="zona" #selectZonaDetalle placeholder="Seleccione Zona"
+                        [clearable]=true [(ngModel)]="filtrosDetalle.zona.codigo" [ngModelOptions]="{standalone: true}" dropdownPosition="bottom"
+                        (change)="seleccionarviewZonaDetalle($event)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col mb 12">
+                <label class="col-lg-2" style="text-align: left">Estado:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaEstadoDetalle" bindLabel="detalle" bindValue="codigo" name="estadoDetalle" #selectEstadoDetalle placeholder="Seleccione Estado"
+                        [clearable]=true [(ngModel)]="filtrosDetalle.estado.codigo" [ngModelOptions]="{standalone: true}" dropdownPosition="bottom"
+                        (change)="seleccionarviewEstadoDetalle($event)">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fin filtros -->
+
+
+
+        <div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true">
+            <div class="row margin--left-right-6" *ngIf="mostrarFiltrosDetalle">
+                <alert type="info" class="padding-0">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <span class="padding-0" [innerHtml]="filtrosTextoDetalle"></span>
+                        </div>
+                        <div class="col-md-offset-10">
+                            <a (click)="eliminarFiltrosDetalle()" class="col-md-offset-11">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </alert>
+            </div>
+
+            <sk-three-bounce></sk-three-bounce>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                        <tr>
+                            <th class="text-center padding8">Id</th>
+                            <th class="text-center">Cod. Trabajador</th>
+                            <th class="text-center padding-left-15">Nom. Trabajador</th>
+                            <th class="text-center">Actividad</th>
+                            <th class="text-center">Suministro</th>
+                            <!-- <th class="text-center">Cantidad Asignada </th>
+                            <th class="text-center">Cantidad Ejecutada </th>
+                            <th class="text-center">Cantidad Pendiente </th> -->
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Cod. Zona</th>
+                            <th class="text-center">Zona</th>
+                            <th class="text-center">Fecha Programada </th>
+                            <!-- <th class="text-center">Fecha Ejecucion</th> -->
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <tr *ngFor="let detalle of onListarDetalle(); let indice = index">
+                                        <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacionDetalle.pagina - 1) * paginacionDetalle.registros)}}</td>
+                                        <td class="text-center" data-col="codigo-trabajador">{{detalle.trabajador.codigo}}</td>
+                                        <td class="text-center" data-col="nombre-trabajador">{{detalle.trabajador.nombre}}</td>
+                                        <td class="text-center" data-col="actividad">{{detalle.actividad.descripcion}}</td>
+                                        <td class="text-center" data-col="suministro">{{detalle.suministro}}</td>
+                                        <!-- <td class="text-center" data-col="cantidad-asignada">{{detalle.cantAsigEjecutar}}</td>
+                                        <td class="text-center" data-col="cantidad-ejecutada">{{detalle.cantAsigEjecutada}}</td>
+                                        <td class="text-center" data-col="cantidad-pendiente">{{detalle.cantAsigPendiente}}</td> -->
+                                        <td class="text-center" data-col="avance">{{detalle.estadoProgramacion}}</td>
+                                        <td class="text-center" data-col="codigo-zona">
+                                            <div *ngIf="detalle.zona.codigo == 2">
+                                                <span style="font-size: 25px; color: rgb(29, 219, 22);"><i class="fa fa-circle margin-right-10"></i></span>
+                                             </div>
+                                            <div *ngIf="detalle.zona.codigo == 0">
+                                                <span style="font-size: 25px; color: wheat;"><i class="fa fa-circle margin-right-10"></i></span>
+                                            </div>
+                                            <div *ngIf="detalle.zona.codigo == 4">
+                                                <span style="font-size: 25px; color: Tomato;"><i class="fa fa-circle margin-right-10"></i></span>
+                                            </div>
+
+                                        </td>
+                                        <td class="text-center" data-col="zona">
+                                            <div *ngIf="detalle.zona.codigo == 0">
+                                                No definida
+                                            </div>
+                                            <div *ngIf="detalle.zona.codigo != 0">
+                                                {{detalle.zona.detalle}}
+                                            </div>
+
+                                        </td>
+                                        <td class="text-center" data-col="fecha-programada">{{detalle.fechaProgramacion}}</td>
+                                        <!-- <td class="text-center" data-col="fecha-ejecucion">{{detalle.fechaEjecucion}}</td> -->
+                                        <td class="text-center" data-col="accion">
+
+                                            <div *ngIf="detalle.estadoProgramacion == 'PROGRAMADO'">
+                                                <button class="btn btn-sm btn-error margin-right-10" title="Buscar" (click)="visualizarTrabajadores(detalle);">
+                                                    <i class="fa fa-user-circle"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row margin-top-20">
+                <!-- inicio paginación -->
+                <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacionDetalle.pagina" (pageChanged)="onPageChangedDetalle($event)" [totalItems]="paginacionDetalle.totalRegistros"
+                        [itemsPerPage]="paginacionDetalle.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                        firstText="&laquo;" lastText="&raquo;"></pagination>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                        <pagination-info [totalItems]="paginacionDetalle.totalRegistros" [itemsPerPage]="paginacionDetalle.registros" [page]="paginacionDetalle.pagina"></pagination-info>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                        <pagination-set (optionChanged)="onPageOptionChangedDetalle($event)"></pagination-set>
+                    </div>
+                </div>
+            </div>
+            <!-- final de paginación -->
+        </div>
+        <!-- final del recuadro de la tabla -->
+
+
+    </div>
+    <!-- final del wrapper detalle -->
+
+
+    <!-- inicio pantalla ReasignacionMasiva -->
+    <div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true" *ngIf="mostrarMasiva">
+        <div class="wrapper wrapper-content animated fadeInRight" >
+        <!-- fila de botones -->
+        <div class="row m-b-lg">
+                <button type="button" class="btn btn-info limite" title="Cargar" [swal]="reprogramarMasivo">
+                    <i class="fa fa-check margin-right-10"></i>
+                    <span>Cargar archivo</span>
+                </button>
+                    <button type="button" class="btn btn-default limite" title="Regresar" (click)="regresarCargaMasiva()">
+                        <i class="fa fa-reply margin-right-10"></i>
+                        <span>Regresar</span>
+                    </button>
+        </div>
+        <!-- fin de fila de botones -->
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">ID Detalle:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" [(ngModel)]="filtrosCargaMasiva.idDetalle"
+                [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+            </div>
+        </div>
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">Número de Carga:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" [(ngModel)]="filtrosCargaMasiva.nroCarga"
+                [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+            </div>
+        </div>
+        <div class="row m-b-mb">
+            <label class="col-lg-2" style="text-align: left">Contratista:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" [(ngModel)]="filtrosCargaMasiva.contratista.descripcion"
+                [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+            </div>
+        </div>
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">Actividad:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" [(ngModel)]="filtrosCargaMasiva.actividad.descripcion"
+                [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+            </div>
+        </div>
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">F. Ejecución Reasignación:</label>
+            <div class="col-lg-3">
+                <div class="input-group date">
+                    <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fecReasignacion" [(bsValue)]="filtrosCargaMasiva.fecReasignacion"
+                        [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="detectarCambioFechas()">
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row m-b-mb">
+            <label class="col-lg-2 control-label" style="text-align: left">Seleccionar archivo:</label>
+
+            <div class="col 10">
+                <div class="col-lg-3">
+                    <div class="uploader">
+                        <div id="input-file" class="input-value">
+                            <span>{{inputFileMasiva}}</span>
+                        </div>
+                        <label for="attach-file"></label>
+                        <input #FileInput (click)="resetFile()" accept=".txt" type="file" class="upload" id="attach-file" (change)="handleFileInputMasiva($event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- fin pantalla ReasignacionMasiva -->
+
+
+    <!-- inicio pantalla ReasignacionManual -->
+
+    <div class="wrapper wrapper-content animated fadeInRight" *ngIf="mostrarManual">
+        <!-- wrapper asignación -->
+        <!-- fila de botones -->
+        <div class="row m-b-lg">
+            <div class="col-lg-12">
+
+                <button type="button" class="btn btn-info limite" title="Buscar" (click)="onObtenerTrabajadorManual()">
+                    <i class="fa fa-search margin-right-10"></i>
+                    <span>Buscar</span>
+                </button>
+
+                <button type="button" class="btn btn-default limite" title="Regresar" (click)="regresarTrabajadores()">
+                    <i class="fa fa-reply margin-right-10"></i>
+                    <span>Regresar</span>
+                </button>
+
+                   <!--  <button type="button" class="btn btn-success limite" title="Limpiar" (click)="onLimpiarFiltros()">
+                        <i class="fa fa-eraser margin-right-10" title="Limpiar"></i>
+                        <span>Limpiar</span>
+                    </button> -->
+
+            </div>
+        </div>
+        <!-- fin de fila de botones -->
+        <!-- Inicio filtros -->
+        <div class="row m-b-mb">
+            <div class="col mb 12">
+                <div class="col 6">
+                    <label class="col-lg-2" style="text-align: left">Contratista:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.contratista.descripcion"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+                </div>
+                <div class="col 6">
+                    <label class="col-lg-2 control-label" style="text-align: left">Actividad:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.actividad.descripcion"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-b-mb">
+            <div class="col mb 12">
+                <label class="col-lg-2" style="text-align: left">Nro. Carga:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.nroCarga"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                </div>
+
+                <label class="col-lg-2 control-label">Fecha Asignación</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.fechaAsignacionManual"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row m-b-mb">
+            <div class="col-mb-12">
+                <div class="col 6">
+                    <label class="col-lg-2 control-label" style="text-align: left">T. Reemplazar:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.trabReemplazar"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+                </div>
+                <div class="col 6">
+                    <label class="col-lg-2 control-label" style="text-align: left">Suministro:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.suministro"
+                        [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row m-b-lg">
+            <div class="col-mb-12">
+                <div class="col 6">
+                    <label class="col-lg-2 control-label" style="text-align: left">Cod. Reemplazante:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.trabajador.codigo"
+                        [ngModelOptions]="{standalone: true}" maxlength="9"  (keypress)="validacionNumero.validacionSoloNumeros($event)"/>
+                    </div>
+                </div>
+                <div class="col 6">
+                    <label class="col-lg-2 control-label" style="text-align: left">Nombres:</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" [(ngModel)]="filtrosCargaManual.trabajador.nombre"
+                        [ngModelOptions]="{standalone: true}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fin filtros -->
+
+
+
+        <div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true">
+
+            <div class="row margin--left-right-6" *ngIf="mostrarFiltrosManual">
+                <alert type="info" class="padding-0">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <span class="padding-0" [innerHtml]="filtrosTextoManual"></span>
+                    </div>
+                    <div class="col-md-offset-10">
+                      <a (click)="eliminarFiltrosManual()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+                    </div>
+                  </div>
+                </alert>
+              </div>
+              <sk-three-bounce></sk-three-bounce>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                        <tr>
+                            <th class="text-center padding8">Id</th>
+                            <th class="text-center">Código Trabajador</th>
+                            <th class="text-center padding-left-15">Nombre Trabajador</th>
+                            <th class="text-center">DNI</th>
+                            <th class="text-center">Fecha Reasignación</th>
+                            <th class="text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <tr *ngFor="let reasignacion of onListarReasignaciones(); let indice = index">
+                                <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                                <td class="text-center" data-col="nro-carga-enviada">{{reasignacion.trabajador.codigo}}</td>
+                                <td class="text-center" data-col="contratista">{{reasignacion.trabajador.nombre}}</td>
+                                <td class="text-center" data-col="oficina">{{reasignacion.trabajador.documento}}</td>
+                                <td class="text-center" data-col="actividad">{{reasignacion.fechaAsignacion}}</td>
+                                <td class="text-center" data-col="accion">
+                                        <button  class="btn btn-sm btn-success margin-right-10" title="Asignar"  [swal]="reprogramarManual" (click)="asignarObjTrabajador(reasignacion);">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row margin-top-20">
+                <!-- inicio paginación -->
+                <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacionManual.pagina" (pageChanged)="onPageChangedManual($event)" [totalItems]="paginacionManual.totalRegistros"
+                        [itemsPerPage]="paginacionManual.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                        firstText="&laquo;" lastText="&raquo;"></pagination>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                        <pagination-info [totalItems]="paginacionManual.totalRegistros" [itemsPerPage]="paginacionManual.registros" [page]="paginacionManual.pagina"></pagination-info>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                        <pagination-set (optionChanged)="onPageOptionChangedManual($event)"></pagination-set>
+                    </div>
+                </div>
+            </div>
+            <!-- final de paginación -->
+        </div>
+        <!-- final del recuadro de la tabla -->
+    </div>
+
+    <!-- fin pantalla ReasignacionManual -->
+
+
+
+
+    <swal #comentarSwal2 title="Anular Registro" imageUrl= "assets/images/advertencia.png" imageWidth=50
+        confirmButtonText="Aceptar " [allowOutsideClick]="true" cancelButtonText="Cancelar " [showCancelButton]="true "
+        (confirm)="anularDetalle()"></swal>
+
+    <swal #eliminarSwal2 title="Anular Registro" imageUrl= "assets/images/advertencia.png" imageWidth=50
+        confirmButtonText="Aceptar " [allowOutsideClick]="true" cancelButtonText="Cancelar " [showCancelButton]="true "
+        (confirm)="anularDetallePrincipal()">
+    </swal>
+    <swal #reprogramarMasivo title="Realizar Reprogramación" imageUrl= "assets/images/advertencia.png" imageWidth=50
+        confirmButtonText="Aceptar " [allowOutsideClick]="true" cancelButtonText="Cancelar " [showCancelButton]="true "
+        (confirm)="onCargarArchivosMasiva()">
+    </swal>
+    <swal #reprogramarManual title="Realizar Reprogramación" imageUrl= "assets/images/advertencia.png" imageWidth=50
+        confirmButtonText="Aceptar " [allowOutsideClick]="true" cancelButtonText="Cancelar " [showCancelButton]="true "
+        (confirm)="asignarTrabajador(reasignacion)">
+    </swal>

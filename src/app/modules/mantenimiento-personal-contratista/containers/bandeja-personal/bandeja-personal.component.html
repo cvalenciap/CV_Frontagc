@@ -1,0 +1,97 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento de Personal del Contratista /
+      <strong>{{ config.title }}</strong></h4>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated main-content" style="padding: 0px;">
+  <div class="ibox-content" [class.sk-loading]="isLoading"
+    style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <sk-three-bounce></sk-three-bounce>
+    <!-- Opciones y filtros -->
+    <div class="row mb-2">
+      <div class="col-md-1" *ngIf="config.btnNuevo">
+        <button class="btn btn-success" (click)="nuevoPersonal();">
+          <i class="fa fa-plus"></i> Nuevo
+        </button>
+      </div>
+      <div class="col-md-4 text-right" *ngIf="config.comboFiltro">
+        <app-custom-filtro-basico [busquedaAvanzada]="true" [customDataList]="dataBusquedaSimple"
+          (busquedaSimpleEvent)="onBusquedaSimpleEmit($event)"
+          (mostrarBusquedaAvanzadaEvent)="onMostrarBusquedaAvanzadaEmit()"></app-custom-filtro-basico>
+      </div>
+      <div class="col-md-offset-3 col-md-4 text-right">
+        <div class="col-md-6 no-lateral-padding"
+        [ngClass]="{'pull-right': config.btnCargaMasiva && !config.btnCesarPersonal}">
+          <button class="btn btn-success"
+                  (click)="onMostrarModalCargaMasiva()"
+                  *ngIf="config.btnCargaMasiva">
+                  <i class="fa fa-cloud-upload"></i> Carga Masiva
+          </button>
+        </div>
+        <div class="col-md-6 no-lateral-padding"
+             [ngClass]="{'pull-right': config.btnCesarPersonal && !config.btnCargaMasiva}">
+          <button class="btn btn-danger"
+                  (click)="onMostrarModalCesarPersonal()"
+                  *ngIf="config.btnCesarPersonal">
+            <i class="fa fa-user-times"></i> Cesar Personal
+          </button>
+        </div>
+      </div>
+      <div class="pull-right text-right col-md-2" *ngIf="config.btnDarAlta">
+        <button class="btn btn-info" (click)="onMostrarModalDarAlta()">
+          <i class="fa fa-user"></i> Dar de Alta
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros Seleccionados -->
+    <div class="row" *ngIf="showFiltrosBusqueda">
+      <div class="col-md-12">
+        <app-custom-filtros-busqueda [dataFiltros]="dataFiltrosBusqueda"
+                                     (limpiarFiltrosEvent)="onLimpiarFiltrosEmit()"></app-custom-filtros-busqueda>
+      </div>
+    </div>
+
+
+    <!-- Tabla lista personal -->
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <app-tabla-personal-contratista [config]="config"></app-tabla-personal-contratista>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<swal #modalBusquedaAvanzada [showCancelButton]="false" [showConfirmButton]="false" customClass="swal-modal-60">
+  <div *swalPartial>
+    <app-busqueda-avanzada-personal-contratista (cerrarModalEvent)="onCerrarModalBusquedaEmit()"
+                                                (busquedaAvanzadaEvent)="onBusquedaAvanzadaEmit($event)">
+    </app-busqueda-avanzada-personal-contratista>
+  </div>
+</swal>
+
+<swal #modalDarAlta [showCancelButton]="false" [showConfirmButton]="false" [allowOutsideClick]="false"
+  customClass="swal-modal-65">
+  <div *swalPartial>
+    <app-dar-alta-contratista [personalPendiente]="personalPendiente"
+                              (darAltaCompletado)="onDarAltaCompletadoEmit()"></app-dar-alta-contratista>
+  </div>
+</swal>
+
+<swal #modalCesarPersonal [showCancelButton]="false" [showConfirmButton]="false" [allowOutsideClick]="false"
+  customClass="swal-modal-autofit">
+  <div *swalPartial>
+    <app-cesar-personal [data]="personalSeleccionado"
+                        (cesarPersonalEvent)="onCesarPersonalEmit($event)"></app-cesar-personal>
+  </div>
+</swal>
+
+<swal #modalCargaMasiva [showCancelButton]="true" [cancelButtonText]="'Cerrar'" [showConfirmButton]="false"
+  [allowOutsideClick]="false" (close)="onCloseModalCargaMasiva()" customClass="swal-modal-60">
+  <div *swalPartial>
+    <app-carga-masiva-personal></app-carga-masiva-personal>
+  </div>
+</swal>

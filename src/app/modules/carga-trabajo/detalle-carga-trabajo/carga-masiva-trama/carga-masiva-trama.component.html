@@ -1,0 +1,48 @@
+<div class="wrapper white-bg page-heading " style="padding:0px;">
+    <div class="ibox-content" style="padding-top: 7px;padding-bottom: 7px;">
+        <sk-three-bounce></sk-three-bounce>
+        <div class="row">
+            <div class="col-lg-2">
+                <button *ngIf="datosRegistro.uidActividad!='SG'" type="button" class="btn" style="background-color: transparent;font-size: 1em;cursor: default;color: #222" disabled>
+                    <label *ngIf="datosRegistro.uidActividad!='SG'">Archivo de ejecución:</label>
+                </button>
+            </div>
+            <div class="col-lg-3" style="padding-left: 0px;">
+                <div *ngIf="datosRegistro.uidActividad!='SG'" class="uploader">
+                    <div id="inputval" class="input-value"><span>{{nombreArchivoSeleccionado}}</span></div>
+                    <label for="file_1"></label>
+                    <input #FileInput accept=".zip" (click)="resetFile()" (change)="seleccionarArchivo($event)" id="file_1" class="upload" type="file">
+                </div>
+            </div>
+            <div class="col-lg-2" style="padding-left: 0px">
+                <button *ngIf="acciones.includes('CA') && datosRegistro.uidActividad!='SG'" class="btn-sm btn-success" [disabled]="!archivoSeleccionado" (click)="onCargarArchivoEjecucion()">Cargar Archivo Ejecución
+                </button>
+            </div>
+            <div class="col-lg-1">
+                <button *ngIf="datosRegistro.uidActividad!='SG'" type="button" class="btn" style="padding-left: 0px;background-color: transparent;font-size: 1em;cursor: default;color: #222"
+                    disabled>
+                    <label>Filtro Item:</label>
+                </button>
+            </div>
+            <div class="col-lg-2">
+                <div *ngIf="datosRegistro.uidActividad!='SG'" class="input-group">
+                    <input numberOnly type="text" class="form-control" style="width: 100px" [(ngModel)]="itemCargaTrabajo">
+                    <button type="button" class="btn btn-info" (click)="onBuscarItemDetalleTrabajo()">
+                        <i class="fa fa-search" title="Buscar"></i>
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="acciones.includes('CA')" class="col-lg-2 text-center">
+                <button class="btn-sm btn-success" tooltip="Solo se pueden cargar Imágenes y PDF’s" [swal]="cargaMasiva">Carga archivos</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+<swal #cargaMasiva title="Carga Masiva" customClass="carga-masiva-swal" [showCancelButton]="true" [focusCancel]="true" [showConfirmButton]="false"
+    [allowOutsideClick]="false" cancelButtonText="Cerrar" confirmButtonText="Subir" cancelButtontext="Cancelar">
+    <div *swalPartial>
+      <app-cargar-archivos></app-cargar-archivos>
+    </div>
+</swal>

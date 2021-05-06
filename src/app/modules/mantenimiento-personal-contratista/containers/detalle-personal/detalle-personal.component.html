@@ -1,0 +1,317 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4 class="padding-5"><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Detalle Personal</strong></h4>
+  </div>
+</div>
+
+
+<label>Datos Basicos</label>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">D.N.I:</label>
+            </div>
+            <div class="col-lg-5">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputDNI" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Nombres:</label>
+            </div>
+            <div class="col-lg-9">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputNombres" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Apellido Paterno:</label>
+            </div>
+            <div class="col-lg-9">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputApellidoPaterno" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Apellido Materno:</label>
+            </div>
+            <div class="col-lg-9">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputApellidoMaterno" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Tipo de Cargo:</label>
+            </div>
+            <div class="col-lg-9">
+              <ng-select [items]="listaTipoCargo" bindLabel="descripcion" bindValue="id"
+                placeholder="Seleccione Tipo de Cargo" [clearable]="true" [disabled]="!config.comboTipoCargo"
+                [(ngModel)]="tipoCargo">
+              </ng-select>
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Item:</label>
+            </div>
+            <div class="col-lg-9">
+              <ng-select [items]="listaItems" bindLabel="descripcion" bindValue="id" placeholder="Seleccione Item"
+                [clearable]="true" [disabled]="!config.comboItem" [(ngModel)]="item">
+              </ng-select>
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Correo Electrónico:</label>
+            </div>
+            <div class="col-lg-9">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputCorreo" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Nro. Telf. Personal:</label>
+            </div>
+            <div class="col-lg-5">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputTelfonoPersonal" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Código del Contratista:</label>
+            </div>
+            <div class="col-lg-5">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputCodigoContratista" />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Foto:</label>
+            </div>
+            <div class="col-lg-9">
+              <!-- <img height="120" src="https://www.layoutit.com/img/sports-q-c-140-140-3.jpg" /> -->
+              <form class="form-inline">
+                <div class="form-group">
+                  <img height="120"
+                    src="https://upload.wikimedia.org/wikipedia/en/thumb/2/24/Crystal_personal.svg/1024px-Crystal_personal.svg.png" />&nbsp;
+                  <label for="carga-foto" class="btn-green" *ngIf="config.botonCargarFoto">
+                    <i class="fa fa-cloud-upload"></i>&nbsp;Cargar Foto
+                  </label>
+                  <input #inputImage id="carga-foto" (change)="createAttachment($event); inputImage.value = ''"
+                    type="file" accept=".jpg" style="display: none;" />
+                </div>
+              </form>
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Dirección:</label>
+            </div>
+            <div class="col-lg-9">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputDireccion" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Fecha de Nacimiento:</label>
+            </div>
+            <div class="col-lg-5">
+              <div class="input-group date">
+                <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [disabled]="!config.inputFechaNacimiento" />
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Cargo:</label>
+            </div>
+            <div class="col-lg-9">
+              <ng-select [items]="listaCargos" bindLabel="descripcion" bindValue="id" placeholder="Seleccione Cargo"
+                [clearable]="true" [disabled]="!config.comboCargo" [(ngModel)]="cargo">
+              </ng-select>
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Oficina:</label>
+            </div>
+            <div class="col-lg-9">
+              <ng-select [items]="listaOficinas" bindLabel="descripcion" bindValue="id" placeholder="Seleccione Oficina"
+                [clearable]="true" [disabled]="!config.comboOficina" [(ngModel)]="oficina">
+              </ng-select>
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Nro. Celular Asignado:</label>
+            </div>
+            <div class="col-lg-5">
+              <input type="text" class="form-control" value="" [disabled]="!config.inputCelularAsignado" />
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-lg-3" style="padding-right: 0px;">
+              <label class="control-label text-left">Curriculum Vitae:</label>
+            </div>
+            <div class="col-lg-9">
+              <div *ngIf="config.botonCargarCV">
+                <label for="carga-cv" class="btn-green">
+                  <i class="fa fa-cloud-upload"></i>&nbsp;Cargar CV
+                </label>
+                {{nombreArchivo!=''?nombreArchivo:''}}
+                <input #inputFile id="carga-cv" (change)="createAttachment($event); inputFile.value = ''" type="file"
+                  accept=".pdf" style="display: none;" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content">
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Estado Laboral:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <ng-select [items]="listaEstadoLaboral" bindLabel="descripcion" bindValue="id" placeholder="Seleccione Item"
+            [clearable]="true" [disabled]="!config.comboEstadoLaboral" [(ngModel)]="estado">
+          </ng-select>
+        </div>
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Fecha de Ingreso:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [disabled]="!config.inputFechaIngreso">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Motivo de Cese:</label>
+        </div>
+        <div class="col-lg-7" style="padding-left: 0px;">
+          <ng-select [items]="listaMotivoCese" bindLabel="descripcion" bindValue="id" placeholder="Seleccione"
+            [clearable]="true" [disabled]="true" [(ngModel)]="motivoCese" [disabled]="!config.comboMotivoCese">
+          </ng-select>
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Fecha de Cese:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="fechaCese"
+              [disabled]="!config.inputFechaCese">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Observación:</label>
+        </div>
+        <div class="col-lg-7" style="padding-left: 0px;">
+          <textarea class='form-control' rows='5' [disabled]="!config.inputObservacionCese"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content">
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Codigo SEDAPAL:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <input type="text" class="form-control" value="" [disabled]="!config.inputCodigoSedapal" />
+        </div>
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Estado Código:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <ng-select [items]="listaEstados" bindLabel="descripcion" bindValue="id" placeholder="Seleccione Item"
+            [clearable]="true" [disabled]="!config.comboEstadoCodigo" [(ngModel)]="estado">
+          </ng-select>
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Fecha de Alta:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="fechaAlta"
+              [disabled]="!config.inputFechaAlta">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Fecha de Baja:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="fechaBaja"
+              [disabled]="!config.inputFechaBaja">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<br>
+
+<div class="row m-b-md" style="margin-bottom:15px;">
+  <div class="col-md-4">
+    <button style="right: 80%;" type="button" class="btn btn-gray-dark" (click)="Regresar()"
+    title="Regresar">
+    <i class="fa fa-arrow-left margin-right-10"></i><span>Regresar</span></button>
+  </div>
+</div>
+
+
+  </div>
+</div>

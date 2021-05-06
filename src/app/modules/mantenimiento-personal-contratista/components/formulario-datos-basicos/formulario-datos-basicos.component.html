@@ -1,0 +1,420 @@
+<!-- <pre>{{angForm.value | json}}</pre> -->
+<!-- <p>{{f.fechaNacimiento.value}}</p> -->
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content no-borders" style="padding-top: 0px;">
+      <div [formGroup]="angForm" #formDir="ngForm">
+        <div class="row">
+          <div class="col-lg-6" style="padding-top: 30px;">
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">D.N.I:</label>
+              </div>
+              <div class="col-lg-5">
+                <input appNumericOnly type="text" class="form-control" formControlName="dni" maxlength="8"
+                  [attr.disabled]="!config.inputDNI ? '' : null"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.dni.errors) || (f.dni.invalid && f.dni.errors && (f.dni.dirty || f.dni.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.dni.invalid && f.dni.errors.required && (f.dni.dirty || f.dni.touched)) ||
+                  (isSubmitted && f.dni.invalid && f.dni.errors.required)" class="text-danger">
+                  Debe ingresar el D.N.I
+                </small>
+                <small
+                  *ngIf="f.dni.invalid && (f.dni.errors.minlength || f.dni.errors.maxlength || f.dni.errors.pattern)"
+                  class="text-danger">
+                  El D.N.I es invalido
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Nombres:</label>
+              </div>
+              <div class="col-lg-9">
+                <input appWordsOnly type="text" class="form-control" formControlName="nombres" style="text-transform:uppercase"
+                  [attr.disabled]="!config.inputNombres ? '' : null" maxlength="30"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.nombres.errors) || (f.nombres.invalid && f.nombres.errors && (f.nombres.dirty || f.nombres.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.nombres.invalid && f.nombres.errors.required && (f.nombres.dirty || f.nombres.touched)) ||
+                  (isSubmitted && f.nombres.invalid && f.nombres.errors.required)" class="text-danger">
+                  Debe ingresar los Nombres
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Apellido Paterno:</label>
+              </div>
+              <div class="col-lg-9">
+                <input appWordsOnly type="text" class="form-control" formControlName="apellidoPaterno"
+                  style="text-transform:uppercase" [attr.disabled]="!config.inputApellidoPaterno ? '' : null"
+                  maxlength="20"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.apellidoPaterno.errors) || (f.apellidoPaterno.invalid && f.apellidoPaterno.errors && (f.apellidoPaterno.dirty || f.apellidoPaterno.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.apellidoPaterno.invalid && f.apellidoPaterno.errors.required && (f.apellidoPaterno.dirty || f.apellidoPaterno.touched)) ||
+	                      (isSubmitted && f.apellidoPaterno.invalid && f.apellidoPaterno.errors.required)"
+                  class="text-danger">
+                  Debe ingresar el Apellido paterno
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Dirección:</label>
+              </div>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" formControlName="direccion"
+                  [attr.disabled]="!config.inputDireccion ? '' : null" maxlength="100"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.direccion.errors) || (f.direccion.invalid && f.direccion.errors && (f.direccion.dirty || f.direccion.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.direccion.invalid && f.direccion.errors.required && (f.direccion.dirty || f.direccion.touched)) ||
+                          (isSubmitted && f.direccion.invalid && f.direccion.errors.required)" class="text-danger">
+                  Debe ingresar la dirección
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Tipo de Cargo:</label>
+              </div>
+              <div class="col-lg-9">
+                <select class="form-control" formControlName="tipoCargo" (change)="buscarCargo($event.target.value)"
+                  [attr.disabled]="!config.comboTipoCargo ? '' : null"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.tipoCargo.errors) || (f.tipoCargo.invalid && f.tipoCargo.errors && (f.tipoCargo.dirty || f.tipoCargo.touched)) }">
+                  <option value="" hidden>Seleccione Tipo de Cargo</option>
+                  <option *ngFor="let item of listaTipoCargo" value="{{item.id}}"
+                    [selected]="item.id === f.tipoCargo.value">{{item.descripcion}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.tipoCargo.invalid && f.tipoCargo.errors.required && (f.tipoCargo.dirty || f.tipoCargo.touched)) ||
+                  (isSubmitted && f.tipoCargo.invalid && f.tipoCargo.errors.required)" class="text-danger">
+                  Debe seleccionar Tipo de Cargo
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row" *ngIf="flagRegistroSedapal">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Contratista:</label>
+              </div>
+              <div class="col-lg-9">
+                <select class="form-control" formControlName="contratista" (change)="buscarItem($event.target.value)"
+                  [attr.disabled]="!config.comboTipoCargo ? '' : null"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.contratista.errors) || (f.contratista.invalid && f.contratista.errors && (f.contratista.dirty || f.contratista.touched)) }">
+                  <option value="" hidden>Seleccione Contratista</option>
+                  <option *ngFor="let item of listaContratistas" [value]="item.codigo"
+                    [selected]="item.codigo === f.contratista.value">{{item.descripcion}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row" *ngIf="flagVistaDetalle">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Contratista:</label>
+              </div>
+              <div class="col-lg-9">
+                <input type="text"
+                       class="form-control"
+                       formControlName="contratista"
+                       style="text-transform:uppercase"
+                       [attr.disabled]="true"/>
+              </div>
+            </div>
+            <div class="row" *ngIf="flagRegistroSedapal">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.contratista.invalid && f.contratista.errors.required && (f.contratista.dirty || f.contratista.touched)) ||
+                  (isSubmitted && f.contratista.invalid && f.contratista.errors.required)" class="text-danger">
+                  Debe seleccionar el contratista
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Item:</label>
+              </div>
+              <div class="col-lg-9">
+                <select class="form-control" formControlName="item" [attr.disabled]="!config.comboItem ? '' : null"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.item.errors) || (f.item.invalid && f.item.errors && (f.item.dirty || f.item.touched)) }">
+                  <option value="" hidden>Seleccione Item</option>
+                  <option *ngFor="let item of listaItems" value="{{item.id}}">{{item.descripcion}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.item.invalid && f.item.errors.required && (f.item.dirty || f.item.touched)) ||
+                    (isSubmitted && f.item.invalid && f.item.errors.required)" class="text-danger">
+                  Debe seleccionar Item
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Correo Electrónico:</label>
+              </div>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" formControlName="correoElectronico"
+                  [attr.disabled]="!config.inputCorreo ? '' : null" maxlength="50"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.correoElectronico.errors) || (f.correoElectronico.invalid && f.correoElectronico.errors && (f.correoElectronico.dirty || f.correoElectronico.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.correoElectronico.invalid && f.correoElectronico.errors.required && (f.correoElectronico.dirty || f.correoElectronico.touched)) ||
+	                          (isSubmitted && f.correoElectronico.invalid && f.correoElectronico.errors.required)"
+                  class="text-danger">
+                  Debe ingresar el Correo Electrónico
+                </small>
+                <small *ngIf="f.correoElectronico.invalid && f.correoElectronico.errors.pattern" class="text-danger">
+                  El formato del correo electrónico es inválido
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Nro. Telf. Personal:</label>
+              </div>
+              <div class="col-lg-5">
+                <input type="text" class="form-control" formControlName="telefonoPersonal" numberOnly maxlength="15"
+                  [attr.disabled]="!config.inputTelfonoPersonal ? '' : null" />
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Código del Contratista:</label>
+              </div>
+              <div class="col-lg-5">
+                <input type="text" class="form-control" formControlName="codigoContratista" maxlength="14"
+                  [attr.disabled]="!config.inputCodigoContratista ? '' : null" />
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Foto:</label>
+              </div>
+              <div class="col-lg-9">
+                <div class="form-inline">
+                  <div class="form-group">
+                    <img height="110" [src]="f.fotoData.value || fotoDefault" class="foto" />&nbsp;
+                    <label for="carga-foto" class="btn btn-primary btn-sm" *ngIf="config.botonCargarFoto">
+                      <i class="fa fa-cloud-upload"></i>&nbsp;Cargar Foto
+                    </label>
+                    <input id="carga-foto" #photoFileInput (change)="createPhotoAttachment($event);" type="file"
+                      accept=".jpg" style="display: none;" class="form-control" (click)="refreshPhotoFileInput()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.fotoData.invalid && f.fotoData.errors.required && (f.fotoData.dirty || f.fotoData.touched)) ||
+                  (isSubmitted && f.fotoData.invalid && f.fotoData.errors.required)" class="text-danger">
+                  Debe seleccionar la foto del personal
+                </small>
+                <small *ngIf="mensajeValidacionFoto" class="text-danger">
+                  {{mensajeValidacionFoto}}
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Apellido Materno:</label>
+              </div>
+              <div class="col-lg-9">
+                <input appWordsOnly type="text" class="form-control" formControlName="apellidoMaterno"
+                  style="text-transform:uppercase" [attr.disabled]="!config.inputApellidoMaterno ? '' : null"
+                  maxlength="20"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.apellidoMaterno.errors) || (f.apellidoMaterno.invalid && f.apellidoMaterno.errors && (f.apellidoMaterno.dirty || f.apellidoMaterno.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.apellidoMaterno.invalid && f.apellidoMaterno.errors.required && (f.apellidoMaterno.dirty || f.apellidoMaterno.touched)) ||
+                              (isSubmitted && f.apellidoMaterno.invalid && f.apellidoMaterno.errors.required)"
+                  class="text-danger">
+                  Debe ingresar el Apellido materno
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left" style="margin-bottom: 0px !important">Fecha de
+                  Nacimiento:</label>
+              </div>
+              <div class="col-lg-7">
+                <div class="input-group date">
+                  <input autocomplete="off" bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+                    name="fechaNacimiento" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" placeholder="dd/MM/yyyy"
+                    [attr.disabled]="!config.inputFechaNacimiento ? '' : null" formControlName="fechaNacimiento"
+                    appDateOnly
+                    [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.fechaNacimiento.errors) || (f.fechaNacimiento.invalid && f.fechaNacimiento.errors && (f.fechaNacimiento.dirty || f.fechaNacimiento.touched)) }" />
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.fechaNacimiento.invalid && f.fechaNacimiento.errors.required && (f.fechaNacimiento.dirty || f.fechaNacimiento.touched)) ||
+                  (isSubmitted && f.fechaNacimiento.invalid && f.fechaNacimiento.errors.required)" class="text-danger">
+                  Debe ingresar la fecha de nacimiento
+                </small>
+                <small *ngIf="f.fechaNacimiento.value == 'Invalid Date'" class="text-danger">
+                  Debe ingresar la fecha de nacimiento
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Cargo:</label>
+              </div>
+              <div class="col-lg-9">
+                <select class="form-control" formControlName="cargo" [attr.disabled]="!config.comboCargo ? '' : null"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.cargo.errors) || (f.cargo.invalid && f.cargo.errors && (f.cargo.dirty || f.cargo.touched)) }">
+                  <option value="" hidden>Seleccione Cargo</option>
+                  <option *ngFor="let item of listaCargos" value="{{item.id}}" [selected]="item.id === f.cargo.value">
+                    {{item.descripcion}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.cargo.invalid && f.cargo.errors.required && (f.cargo.dirty || f.cargo.touched)) ||
+                  (isSubmitted && f.cargo.invalid && f.cargo.errors.required)" class="text-danger">
+                  Debe seleccionar el Cargo
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row" *ngIf="flagRegistroSedapal">
+              <div class="col-lg-12">
+                <label></label>
+              </div>
+            </div>
+            <div class="row" *ngIf="flagRegistroSedapal">
+              <div class="col-lg-12"><label></label></div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Oficina:</label>
+              </div>
+              <div class="col-lg-9">
+                <select class="form-control" formControlName="oficina"
+                  [attr.disabled]="!config.comboOficina ? '' : null"
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.oficina.errors) || (f.oficina.invalid && f.oficina.errors && (f.oficina.dirty || f.oficina.touched)) }">
+                  <option value="" hidden>Seleccione Oficina</option>
+                  <option *ngFor="let item of listaOficinas" value="{{item.codigo}}">{{item.descripcion}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row" style="margin-bottom: 50px;">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.oficina.invalid && f.oficina.errors.required && (f.oficina.dirty || f.oficina.touched)) ||
+                  (isSubmitted && f.oficina.invalid && f.oficina.errors.required)" class="text-danger">
+                  Debe seleccionar la Oficina
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left" style="margin-bottom: 0px !important">Nro. Celular
+                  Asignado:</label>
+              </div>
+              <div class="col-lg-5">
+                <input #inputNroCelular type="text" class="form-control" formControlName="celularAsignado"
+                  [attr.disabled]="!config.inputCelularAsignado ? '' : null" maxlength="15" numberOnly
+                  [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.celularAsignado.errors) || (f.celularAsignado.invalid && f.celularAsignado.errors && (f.celularAsignado.dirty || f.celularAsignado.touched)) }" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.celularAsignado.invalid && f.celularAsignado.errors.required && (f.celularAsignado.dirty || f.celularAsignado.touched)) ||
+                  (isSubmitted && f.celularAsignado.invalid && f.celularAsignado.errors.required)" class="text-danger">
+                  Debe ingresar el N. Celular asignado
+                </small>
+              </div>
+            </div>
+            <p></p>
+            <div class="row">
+              <div class="col-lg-3" style="padding-right: 0px;">
+                <label class="control-label text-left">Curriculum Vitae:</label>
+              </div>
+              <div class="col-lg-9">
+                  <a (click)="descargarCV()" class="btn" title="Descargar curriculum vitae"
+                    *ngIf="config.botonDescargarCV || flagVistaDetalle"><i class="fa fa-download fa-lg" style="cursor: pointer"></i></a>
+                  <span *ngIf="config.botonCargarCV">
+                  <label for="carga-cv" class="btn btn-primary btn-sm" *ngIf="config.botonCargarCV">
+                    <i class="fa fa-cloud-upload"></i>&nbsp;Cargar CV
+                  </label>
+                  <input id="carga-cv" #cvFileInput (change)="createFileAttachment($event);" type="file" accept=".pdf"
+                    style="display: none;" (click)="refreshCVFileInput()" />
+                  <span *ngIf="indCambioCV" class="text-success">
+                    Nuevo Curriculum Vitae cargado.
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3"></div>
+              <div class="col-lg-9">
+                <small *ngIf="(f.cvData.invalid && f.cvData.errors.required && (f.cvData.dirty || f.cvData.touched)) ||
+                  (isSubmitted && f.cvData.invalid && f.cvData.errors.required)" class="text-danger">
+                  Debe seleccionar el PDF del curriculum del personal
+                </small>
+                <small *ngIf="mensajeValidacionCV" class="text-danger">
+                  {{mensajeValidacionCV}}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

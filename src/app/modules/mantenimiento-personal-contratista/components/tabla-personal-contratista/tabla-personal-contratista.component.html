@@ -1,0 +1,120 @@
+<div class="table-responsive">
+  <table class="small-text table table-bordered table-stripped table-hover issue-tracker">
+    <thead class="thead-dark">
+      <tr>
+        <th class="text-center">N°</th>
+        <!-- TODO: Ocultar si no hay registros en PENDIENTE ALTA -->
+        <th class="text-center" *ngIf="config.selPersonal">
+          <!-- Sel <br> <input type="checkbox"
+                          [(ngModel)]="checkAll"
+                          (change)="onCheckAll()"> -->
+            Sel <mat-checkbox color="primary"
+                              #checkBoxAll
+                              tooltip="Seleccionar todos"
+                              placement="top"
+                              [(ngModel)]="checkAll"
+                              (change)="onCheckAll()"></mat-checkbox>
+        </th>
+        <th class="text-center">D.N.I</th>
+        <th class="text-center">Apellidos y Nombres</th>
+        <th class="text-center" *ngIf="config.colContratista">Contratista</th>
+        <th class="text-center">Cargo</th>
+        <th class="text-center">Oficina Asignada</th>
+        <th class="text-center">Estado Código SEDAPAL</th>
+        <th class="text-center">Estado Laboral</th>
+        <th class="text-center">Fecha de Ingreso</th>
+        <th class="text-center">Fecha de Cese Laboral</th>
+        <th class="text-center" width="100px">Acciones</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="dataBandejaPersonal.length > 0">
+      <tr *ngFor="let personal of dataBandejaPersonal; let i = index"
+          (click)="onRowClicked(personal, i)"
+          [class.info]="i === selectedRow"
+          class="row-personal">
+        <td class="text-center">{{personal.nro}}</td>
+        <td class="text-center" *ngIf="config.selPersonal">
+          <mat-checkbox *ngIf="personal.estadoPersonal.id === getEstadosPersonal().PENDIENTE_DE_ALTA
+                              && (personal.oficina.codigo === codigoOficina || personal.oficina.codigo === getParametros().OFI_GRANDES_CLIENTES)"
+                        [value]="personal.numeroDocumento"
+                        [(ngModel)]="personal.checked"
+                        (change)="onPersonalChecked($event, personal)"
+                        [tooltip]="personal.indicadorAlta === getIndicadorAlta().PARCIAL ? 'Pendiente de Culminar Alta' : ''"
+                        placement="right"
+                        [disabled]="personal.indicadorAlta === getIndicadorAlta().PARCIAL"
+                        color="primary"></mat-checkbox>
+        </td>
+        <td class="text-center">{{personal.numeroDocumento}}</td>
+        <td class="text-center">{{personal.nombresCompletos.toUpperCase()}}</td>
+        <td class="text-center" *ngIf="config.colContratista">{{personal.contratista.descripcion}}</td>
+        <td class="text-center">{{personal.cargo.descripcion.toUpperCase()}}</td>
+        <td class="text-center">{{personal.oficina.descripcion.toUpperCase()}}</td>
+        <td class="text-center pad-1">
+          <span [class]="personal.estadoPersonal.id === getEstadosPersonal().PENDIENTE_DE_ALTA ? 'label label-warning' :
+                         personal.estadoPersonal.id === getEstadosPersonal().BAJA_DEFINITIVA ? 'label label-danger' :
+                         personal.estadoPersonal.id === getEstadosPersonal().BAJA_TEMPORAL ? 'label label-danger' : 'label label-primary'">
+            {{personal.estadoPersonal.descripcion}}
+          </span>
+        </td>
+        <td class="text-center pad-1">
+          <span [class]="personal.estadoLaboral.id === getEstadosLaboral().ACTIVO ? 'label label-info' : 'label label-danger'">
+            {{personal.estadoLaboral.descripcion}}
+          </span>
+        </td>
+        <td class="text-center">{{personal.fechaIngreso}}</td>
+        <td class="text-center">{{personal.fechaBaja}}</td>
+        <td>
+          <table style="margin: 0 auto">
+            <tr>
+              <td class="text-right">
+                <button *ngIf="config.btnEditar
+                               && validarBotonModificar(personal)"
+                        data-toggle="tooltip" [tooltip]="tooltipText" dropdownToggle type="button"
+                        class="btn btn-sm btn-success margin-right-10"
+                        (click)="editarPersonal(personal);">
+                        <i class="fa fa-edit"></i></button>
+              </td>
+              <td class="text-left">
+                <button *ngIf="config.btnVerDetalle"
+                        data-toggle="tooltip"
+                        tooltip="Ver Detalle"
+                        dropdownToggle type="button"
+                        class="btn btn-sm bg-btnDetail"
+                        (click)="verDetalle(personal)"><i class="fa fa-search"></i></button>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-sm-12 col-xs-12">
+    <pagination [(ngModel)]="paginacion.pagina"
+                [totalItems]="paginacion.totalRegistros"
+                [itemsPerPage]="paginacion.registros"
+                (pageChanged)="onCambioPagina($event)"
+                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+  <div class="col-md-4 col-sm-12 col-xs-12 text-center">
+    <pagination-info [totalItems]="paginacion.totalRegistros"
+                                 [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+  </div>
+  <div class="col-md-4 col-sm-12 col-xs-12 text-right">
+    <pagination-set (optionChanged)="onCambioRegistros($event)"></pagination-set>
+  </div>
+</div>
+
+<swal #modalVerDetalle
+      [showConfirmButton]="false"
+      [showCancelButton]="true"
+      [cancelButtonText]="'Cancelar'"
+      [allowOutsideClick]="false"
+      customClass="swal-modal-65">
+  <div *swalPartial>
+    <app-ver-detalle-personal [dataPersonal]="personalDetalle"></app-ver-detalle-personal>
+  </div>
+</swal>

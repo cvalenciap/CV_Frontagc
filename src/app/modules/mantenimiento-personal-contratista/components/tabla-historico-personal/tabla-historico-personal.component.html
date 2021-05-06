@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-bordered table-stripped table-hover issue-tracker">
+        <thead class="thead-dark">
+          <tr>
+            <th class="text-center vertical-align">Nro.</th>
+            <th class="text-center vertical-align">DNI</th>
+            <th class="text-center vertical-align">Nombres y Apellidos</th>
+            <th class="text-center vertical-align">Codigo SEDAPAL</th>
+            <th class="text-center vertical-align">Contratista</th>
+            <th class="text-center vertical-align">Fecha de Ingreso</th>
+            <th class="text-center vertical-align">Fecha de Alta Personal</th>
+            <th class="text-center vertical-align">Fecha de Baja Personal</th>
+            <th class="text-center vertical-align">Ver Ficha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataHistorico; let i = index">
+            <td class="text-center small-text">{{ item.nro }}</td>
+            <td class="text-center small-text">{{ item.numeroDocumento }}</td>
+            <td class="text-left small-text">{{ item.nombresCompletos }}</td>
+            <td class="text-center small-text">{{ item.codigoEmpleado }}</td>
+            <td class="text-center small-text">{{ item.contratista.descripcion }}</td>
+            <td class="text-center small-text">{{ item.fechaIngreso }}</td>
+            <td class="text-center small-text">{{ item.fechaAlta }}</td>
+            <td class="text-center small-text">{{ item.fechaBaja }}</td>
+            <td class="text-center small-text">
+              <button class="btn btn-primary btn-sm"
+                      (click)="verDetallePersonal(item)"
+                      tooltip="Ver Ficha">
+                <i class="fa fa-search"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="row" *ngIf="paginacion !== null && paginacion !== undefined">
+  <div class="col-md-12 vertical-align">
+    <div class="col-md-4 text-left">
+      <pagination [(ngModel)]="paginacion.pagina"
+                  [totalItems]="paginacion.totalRegistros"
+                  [itemsPerPage]="paginacion.registros"
+                  (pageChanged)="onCambioPagina($event)"
+                  [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                  firstText="&laquo;" lastText="&raquo;"></pagination>
+    </div>
+    <div class="col-md-4 text-center">
+      <pagination-info [totalItems]="paginacion.totalRegistros"
+                       [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+    </div>
+    <div class="col-md-4 text-right">
+      <pagination-set (optionChanged)="onCambioRegistros($event)"></pagination-set>
+    </div>
+  </div>
+</div>
+
+<swal #modalVerDetalle
+      [showConfirmButton]="false"
+      [showCancelButton]="true"
+      [cancelButtonText]="'Cancelar'"
+      [allowOutsideClick]="false"
+      customClass="swal-modal-65">
+  <div *swalPartial>
+    <app-ver-detalle-personal [dataPersonal]="personalDetalle"></app-ver-detalle-personal>
+  </div>
+</swal>
+

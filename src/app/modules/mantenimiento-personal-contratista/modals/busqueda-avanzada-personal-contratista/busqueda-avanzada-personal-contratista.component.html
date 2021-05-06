@@ -1,0 +1,349 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-9 text-center" style="padding-left: 0px">
+      <h3 class="font-bold" style="margin-left: 16rem !important;">Búsqueda Avanzada - Consulta de Personal Contratista</h3>
+    </div>
+    <div class="col-md-3 text-right pull-right">
+      <button type="button" class="btn-sm btn-default" style="background: #eee" (click)="onLimpiarFiltros()"><i
+          class="fa fa-eraser" title="Buscar"></i> Limpiar filtros</button>
+    </div>
+  </div>
+  <!-- Primera Fila -->
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">D.N.I:</label>
+      <div class="col-md-7">
+        <input type="text" class="form-control texto-ingresado"
+              [(ngModel)]="datosBusqueda.dni" (change)="onChangeInput($event, 'D.N.I')">
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding text-left control-label">Código Sedapal:</label>
+      <div class="col-md-4">
+        <input type="text" class="form-control texto-ingresado"
+              [(ngModel)]="datosBusqueda.codigoSedapal" (change)="onChangeInput($event, 'Código Sedapal')">
+      </div>
+    </div>
+  </div>
+  <!-- Segunda Fila -->
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">Nombres:</label>
+      <div class="col-md-7">
+        <input type="text" class="form-control texto-ingresado"
+              [(ngModel)]="datosBusqueda.nombres" (change)="onChangeInput($event, 'Nombres')">
+      </div>
+    </div>
+  </div>
+  <!-- Tercera Fila -->
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">Apellido Paterno:</label>
+      <div class="col-md-7">
+        <input type="text" class="form-control texto-ingresado"
+              [(ngModel)]="datosBusqueda.apePaterno" (change)="onChangeInput($event, 'Apellido Paterno')">
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Apellido Materno:</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control texto-ingresado"
+              [(ngModel)]="datosBusqueda.apeMaterno" (change)="onChangeInput($event, 'Apellido Materno')">
+      </div>
+    </div>
+  </div>
+  <!-- Inicio busqueda avanzada externos -->
+  <!-- Cuarta Fila -->
+  <div *ngIf="mostrarExternos">
+    <div class="row mt-2">
+      <!-- Cargo -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-5 no-right-padding  text-left control-label">Cargo:</label>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione"
+                    [items]="comboCargo"
+                    bindLabel="descripcion"
+                    [(ngModel)]="datosBusqueda.cargo"
+                    (change)="onChangeCombo($event, 'Cargo')"></ng-select>
+        </div>
+      </div>
+      <!-- Oficina -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-4 no-right-padding  text-left control-label">Oficina:</label>
+          <div class="col-md-8">
+            <ng-select placeholder="Seleccione"
+                      [items]="comboOficina"
+                      bindLabel="descripcion"
+                      [(ngModel)]="datosBusqueda.oficina"
+                      (change)="onChangeCombo($event, 'Oficina')"
+                      [clearable]="true"></ng-select>
+                      <!-- [clearable]="config.clearOficina"></ng-select> -->
+          </div>
+      </div>
+    </div>
+    <!-- Quinta fila -->
+    <div class="row mt-2">
+      <!-- Perido de Ingreso -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-5 no-right-padding text-left control-label">Periodo de Ingreso:</label>
+          <div class="col-md-5">
+            <input appFormatoPeriodo type="text" class="form-control texto-ingresado" [placeholder]="placeholderPeriodo"
+              [(ngModel)]="datosBusqueda.fecIngreso" (change)="onChangeInput($event, 'Periodo de ingreso')">
+            <!-- <div class="input-group date">
+              <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+                    [(ngModel)]="datosBusqueda.fecIngreso"
+                    (bsValueChange)="onChangeFecIngreso($event, 'Fecha de ingreso')"
+                    [bsConfig]="{ dateInputFormat: 'MMYYYY' }">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div> -->
+          </div>
+      </div>
+      <!-- Estado Laboral -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-4 no-right-padding  text-left control-label">Estado Laboral:</label>
+          <div class="col-md-8">
+            <ng-select placeholder="Seleccione"
+                      [items]="comboEstadoLaboral"
+                      bindLabel="descripcion"
+                      [(ngModel)]="datosBusqueda.estadoLaboral"
+                      (change)="onChangeCombo($event, 'Estado Laboral')"></ng-select>
+          </div>
+      </div>
+    </div>
+    <!-- Sexta Fila -->
+    <div class="row mt-2">
+      <!-- Estado Sedapal -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-5 no-right-padding  text-left control-label">Estado Código SEDAPAL:</label>
+          <div class="col-md-7">
+            <ng-select placeholder="Seleccione"
+                       [items]="comboEstadoSedapal"
+                       bindLabel="descripcion"
+                       [(ngModel)]="datosBusqueda.estadoPersonal"
+                       (change)="onChangeCombo($event, 'Estado Código SEDAPAL')"></ng-select>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fin busqueda avanzada externos -->
+  <!-- Inicio busqueda avanzada internos -->
+  <div *ngIf="mostrarInternos">
+    <!-- Cuarta Fila -->
+    <div class="row mt-2">
+      <!-- Contratista -->
+      <!-- <div class="col-md-6 no-lateral-padding" *ngIf="config.mostrarComboContratista"> -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-5 no-right-padding  text-left control-label">Contratista:</label>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione"
+                    [items]="comboContratista"
+                    bindLabel="descripcion"
+                    [(ngModel)]="datosBusqueda.empresa"
+                    (change)="onChangeCombo($event, 'Contratista')"></ng-select>
+        </div>
+      </div>
+      <!-- Oficina -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-4 no-right-padding  text-left control-label">Oficina:</label>
+          <div class="col-md-8">
+            <ng-select placeholder="Seleccione"
+                      [items]="comboOficina"
+                      bindLabel="descripcion"
+                      [(ngModel)]="datosBusqueda.oficina"
+                      (change)="onChangeCombo($event, 'Oficina')"
+                      [clearable]="true"></ng-select>
+                      <!-- [clearable]="config.clearOficina"></ng-select> -->
+          </div>
+      </div>
+    </div>
+    <!-- Quinta Fila -->
+    <div class="row mt-2">
+      <!-- Cargo -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-5 no-right-padding  text-left control-label">Cargo:</label>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione"
+                    [items]="comboCargo"
+                    bindLabel="descripcion"
+                    [(ngModel)]="datosBusqueda.cargo"
+                    (change)="onChangeCombo($event, 'Cargo')"></ng-select>
+        </div>
+      </div>
+      <!-- Estado Laboral -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-4 no-right-padding  text-left control-label">Estado Laboral:</label>
+          <div class="col-md-8">
+            <ng-select placeholder="Seleccione"
+                      [items]="comboEstadoLaboral"
+                      bindLabel="descripcion"
+                      [(ngModel)]="datosBusqueda.estadoLaboral"
+                      (change)="onChangeCombo($event, 'Estado Laboral')"></ng-select>
+          </div>
+      </div>
+    </div>
+    <!-- Sexta Fila -->
+    <div class="row mt-2">
+      <!-- Periodo de ingreso -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-5 no-right-padding text-left control-label">Periodo de Ingreso:</label>
+          <div class="col-md-5">
+            <input appFormatoPeriodo type="text" class="form-control texto-ingresado" [placeholder]="placeholderPeriodo"
+              [(ngModel)]="datosBusqueda.fecIngreso" (change)="onChangeInput($event, 'Periodo de ingreso')">
+            <!-- <div class="input-group date">
+              <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+                    [(ngModel)]="datosBusqueda.fecIngreso"
+                    (bsValueChange)="onChangeFecIngreso($event, 'Fecha de ingreso')"
+                    [bsConfig]="{ dateInputFormat: 'MMYYYY' }">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div> -->
+          </div>
+      </div>
+      <!-- Estado Sedapal -->
+      <div class="col-md-6 no-lateral-padding">
+        <label class="col-md-4 no-right-padding  text-left control-label">Estado Código SEDAPAL:</label>
+          <div class="col-md-8">
+            <ng-select placeholder="Seleccione"
+                       [items]="comboEstadoSedapal"
+                       bindLabel="descripcion"
+                       [(ngModel)]="datosBusqueda.estadoPersonal"
+                       (change)="onChangeCombo($event, 'Estado Código SEDAPAL')"></ng-select>
+          </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fin busqueda avanzada internos -->
+  <!-- Cuarta Fila -->
+  <!-- <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding" *ngIf="config.mostrarComboContratista">
+      <label class="col-md-5 no-right-padding  text-left control-label">Contratista:</label>
+      <div class="col-md-7">
+        <ng-select placeholder="Seleccione"
+                  [items]="comboContratista"
+                  bindLabel="descripcion"
+                  [(ngModel)]="datosBusqueda.empresa"
+                  (change)="onChangeCombo($event, 'Contratista')"></ng-select>
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Oficina:</label>
+        <div class="col-md-8">
+          <ng-select placeholder="Seleccione"
+                    [items]="comboOficina"
+                    bindLabel="descripcion"
+                    [(ngModel)]="datosBusqueda.oficina"
+                    (change)="onChangeCombo($event, 'Oficina')"
+                    [clearable]="config.clearOficina"></ng-select>
+        </div>
+    </div>
+  </div> -->
+  <!--  -->
+  <!-- <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">Cargo:</label>
+      <div class="col-md-7">
+        <ng-select placeholder="Seleccione"
+                  [items]="comboCargo"
+                  bindLabel="descripcion"
+                  [(ngModel)]="datosBusqueda.cargo"
+                  (change)="onChangeCombo($event, 'Cargo')"></ng-select>
+      </div>
+    </div>
+  </div> -->
+  <!-- Quinta Fila -->
+  <!-- <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding text-left control-label">Fecha de ingreso:</label>
+        <div class="col-md-5">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+                  [(ngModel)]="datosBusqueda.fecIngreso"
+                  (bsValueChange)="onChangeFecIngreso($event, 'Fecha de ingreso')"
+                  [bsConfig]="{ dateInputFormat: 'MMYYYY' }">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Estado Laboral:</label>
+        <div class="col-md-8">
+          <ng-select placeholder="Seleccione"
+                    [items]="comboEstadoLaboral"
+                    bindLabel="descripcion"
+                    [(ngModel)]="datosBusqueda.estadoLaboral"
+                    (change)="onChangeCombo($event, 'Estado Laboral')"></ng-select>
+        </div>
+    </div>
+  </div> -->
+  <!-- Sexta Fila -->
+  <!-- <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">Estado Código SEDAPAL:</label>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione"
+                     [items]="comboEstadoSedapal"
+                     bindLabel="descripcion"
+                     [(ngModel)]="datosBusqueda.estadoPersonal"
+                     (change)="onChangeCombo($event, 'Estado Código SEDAPAL')"></ng-select>
+        </div>
+    </div>
+  </div> -->
+  <!-- Septima Fila -->
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">Motivo de Cese:</label>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione"
+                     [items]="comboMotivoCese"
+                     bindLabel="descripcion"
+                     [(ngModel)]="datosBusqueda.motivoCese"
+                     (change)="onChangeCombo($event, 'Motivo de Cese')"></ng-select>
+        </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding text-left control-label">Fecha de Cese:</label>
+        <div class="col-md-5">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" placement="top"
+              [(ngModel)]="datosBusqueda.fecCese" (bsValueChange)="onChangeFecCese($event, 'Fecha de Cese')">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+    </div>
+  </div>
+  <!-- Octava Fila -->
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-5 no-right-padding  text-left control-label">Solicitud</label>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione"
+                     [items]="comboSolicitud"
+                     bindLabel="descripcion"
+                     [(ngModel)]="datosBusqueda.solicitud"
+                     (change)="onChangeCombo($event, 'Solicitud')"></ng-select>
+        </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Estado Solicitud</label>
+        <div class="col-md-8">
+          <ng-select placeholder="Seleccione"
+                    [items]="comboEstadoSolicitud"
+                    bindLabel="descripcion"
+                    [(ngModel)]="datosBusqueda.estadoSolicitud"
+                    [disabled]="(datosBusqueda.solicitud !== null && datosBusqueda.solicitud !== undefined)
+                                  ? (datosBusqueda.solicitud.id === null || datosBusqueda.solicitud.id === '0') : true"
+                    (change)="onChangeCombo($event, 'Estado Solicitud')"></ng-select>
+        </div>
+    </div>
+  </div>
+  <!-- Botones -->
+  <div class="row" style="margin-top: 2rem;">
+    <div class="col-md-12 text-center">
+      <button class="btn btn-success btn-sm" style="margin-right: 1rem;" (click)="busquedaAvanzada()">Buscar <i
+          class="fas fa fa-search"></i></button>
+      <button class="btn bg-custom-gray btn-sm" (click)="cerrarModal()">Cancelar <i
+          class="fas fa fa-times"></i></button>
+    </div>
+  </div>
+
+</div>

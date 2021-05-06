@@ -1,0 +1,19 @@
+.table {
+    tr {
+      th[data-col='number'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='minute'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='hour'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='dayofmonth'] {text-align: center; background:#efefef;}
+      th[data-col='month'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;vertical-align: middle;}
+      th[data-col='dayofweek'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;vertical-align: middle;}
+      th[data-col='url'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;vertical-align: middle;}
+      th[data-col='acciones'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;vertical-align: middle;}
+      td[data-col='number'] {text-align: center;}
+      td[data-col='minute'] {text-align: center;}
+      td[data-col='hour'] {text-align: center;}
+      td[data-col='dayofmonth'] {text-align: center;}
+      td[data-col='month'] {text-align: center;}
+      td[data-col='dayofweek'] {text-align: center; }
+      td[data-col='url'] {text-align: left; }
+    }
+  }

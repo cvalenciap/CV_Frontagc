@@ -1,0 +1,102 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox-content" [ngClass]="{ 'sk-loading': loading}">
+    <sk-three-bounce></sk-three-bounce>
+    <div class="row container-modal-cm" *ngIf="!showError" style="overflow-y:hidden;">
+      <form [formGroup]=" uploadForm " (ngSubmit)="uploadSubmit()">
+        <div class="col-md-12">
+          <div class="row margin-left-right-10">
+            <div class="drop-zone">
+              <div ng2FileDrop [uploader]="uploader" class="drop-zone" (mouseleave)="validateDisabled()">
+                <span class="text-center"><b><h1>Arrastra los archivos aquí.</h1></b></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 margin-top-10">
+              <button class="btn btn-sm btn-success" type="submit" [disabled]="disabledUpload">Subir Archivos</button>
+            </div>
+            <div class="col-md-6">
+              <p class="margin-top-20">Archivos seleccionados: {{uploader.queue.length}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 stuck">
+          <table class="table table-striped">
+            <thead class="thead-light ">
+            <tr>
+              <th width="50%">Archivo</th>
+              <th width="40%">Tamaño</th>
+              <th width="10%">Quitar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let file of uploader.queue ">
+              <td width="50%">{{file._file.name}}</td>
+              <td width="40%">{{file._file.size / 1024 | number:'1.1-2'}} Kb</td>
+              <td class="text-left" width="10%"><a class="padding-left-15" (click)="file.remove()"><i
+                class="fa fa-trash"></i></a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+
+    <div class="row" *ngIf="showError">
+      <form [formGroup]=" uploadForm " (ngSubmit)="uploadSubmit()">
+        <div class="col-md-12 container-modal-ee">
+          <h3>Resultado de Carga</h3>
+          <!-- <div *ngIf="cargaMasivaResponse.fallidos === 0" class="alert alert-success" role="alert">
+            <h3>{{cargaMasivaResponse.mensaje}}</h3>
+          </div> -->
+          <div *ngIf="totalFallidos === 0" class="alert alert-success" role="alert">
+            <h4>Los archivos se subieron correctamente</h4>
+          </div>
+          <!-- <div *ngIf="cargaMasivaResponse.fallidos > 0" class="alert alert-danger" role="alert">
+            <h3>{{cargaMasivaResponse.mensaje}}</h3>
+            <h4>{{cargaMasivaResponse.error.mensajeInterno}}</h4>
+          </div> -->
+          <div *ngIf="totalFallidos > 0" class="alert alert-danger" role="alert">
+            <h4>{{mensajeCarga}}</h4>
+          </div>
+          <table class="table table-striped table-bordered table-hover">
+            <tbody>
+            <tr>
+              <td width="20%" class="font-bold">Total de archivos</td>
+              <!-- <td width="80%" class="font-bold">{{cargaMasivaResponse.total}}</td> -->
+              <td width="80%" class="font-bold">{{totalArchivos}}</td>
+            </tr>
+            <tr>
+              <td width="20%" class="text-success font-bold">Subidos</td>
+              <!-- <td width="80%" class="text-success font-bold">{{cargaMasivaResponse.procesados}}</td> -->
+              <td width="80%" class="text-success font-bold">{{totalSubidos}}</td>
+            </tr>
+            <tr>
+              <td width="20%" class="text-danger font-bold">Fallidos</td>
+              <!-- <td width="80%" class="text-danger font-bold">{{cargaMasivaResponse.fallidos}}</td> -->
+              <td width="80%" class="text-danger font-bold">{{totalFallidos}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <!--<table class="table table-striped table-bordered table-hover">
+            <thead class="thead-light ">
+            <tr>
+              <th width="5%" class="text-center"><strong>Número</strong></th>
+              <th width="95%"><strong>Descripción</strong></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let error of errors; let indice = index">
+              <td width="5%" class="text-center text-danger">{{indice + 1 }}</td>
+              <td width="95%" class="text-danger">{{error.mensaje}}</td>
+            </tr>
+            </tbody>
+          </table>-->
+          <div class="col-md-6 margin-top-10 padding-0">
+            <button class="btn btn-sm btn-success" (click)="limpiar()">Limpiar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

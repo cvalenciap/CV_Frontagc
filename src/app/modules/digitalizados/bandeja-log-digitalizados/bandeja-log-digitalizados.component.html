@@ -1,0 +1,104 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+    <div class="col-lg-12">
+      <h4 class="padding-5">
+        <a routerLink="/inicio">Inicio</a> / Digitalizados / <strong>Consulta de Log Digitalizados</strong>
+      </h4>
+    </div>
+  </div>
+  <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row m-b-md">
+      <div class="ibox-content" [ngClass]="{'sk-loading': loading}">
+        <div class="row m-b-md">
+          <div class="col-lg-4">
+            <div class="input-group">
+              <input #buscar type="text" (keypress)="validacionNumero.validacionSoloNumeros($event)"  class="form-control" [(ngModel)]="numeroSuministro" placeholder="Ingrese Nro. Suministro" maxlength="9">
+              <span class="input-group-btn" dropdown>
+                <button type="button" class="btn btn-info" title="Buscar" [disabled]="!numeroSuministro" (click)="onObtenerLogDigitalizados('BANDEJA')"><i class="fa fa-search"></i></button>
+                <button dropdownToggle type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split"><i class="fa fa-caret-down"></i></button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+                  <li role="menuitem" [class.active]="true"><a>Número Suministro</a></li>
+                  <li class="divider dropdown-divider"></li>
+                  <li role="menuitem"><a [swal]="modalFiltrosBandejaLogDigitalizados">Búsqueda Avanzada</a></li>
+                </ul>
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-success" title="Exportar Registros" [disabled]="!verExportarExcel || logDigitalizados.length == 0"
+            (click)="generarArchivoExcel()">
+              <i class="fa fa-database margin-right-10"></i><span>Exportar</span>
+            </button>
+          </div>
+        </div>
+        <div class="row margin--left-right-6" *ngIf="mostrarFiltros">
+          <alert type="info" class="padding-0">
+            <div class="row">
+              <div class="col-md-10">
+                <span class="padding-0" [innerHtml]="filtrosTexto"></span>
+              </div>
+              <div class="col-md-offset-10">
+                <a (click)="eliminarFiltros()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+              </div>
+            </div>
+          </alert>
+        </div>
+        <sk-three-bounce></sk-three-bounce>
+        <div class="table-responsive">
+          <table class="table table-bordered table-stripped table-hover issue-tracker">
+            <thead>
+            <tr>
+                <th class="text-center">Nro. Suministro</th>
+                <th class="text-center">Actividad</th>
+                <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                <th class="text-center">Tipo de Archivo<br>JPG/PDF</th>
+                <th class="text-center">Fecha de Acción</th>
+                <th class="text-center">IP</th>
+                <th class="text-center">Usuario</th>
+                <th class="text-center">Tipo de Acción</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let log of logDigitalizados">
+                    <td class="text-center" data-col="suministro">{{log.suministro}}</td>
+                    <td class="text-center" data-col="actividad">{{log.actividad.descripcion}}</td>
+                    <td class="text-center" data-col="servicioTrabajoCedula">{{log.ordTrabOrdServCedu}}</td>
+                    <td class="text-center" data-col="tipologia">{{log.tipologia}}</td>
+                    <td class="text-center" data-col="tipoArchivo">{{log.tipoArchivo}}</td>
+                    <td class="text-center" data-col="fecha-realizacion">{{log.fechaHoraAccion}}</td>
+                    <td class="text-center" data-col="ip">{{log.ipAccion}}</td>
+                    <td class="text-center" data-col="usuario">{{log.usuarioAccion}}</td>
+                    <td class="text-center" data-col="accion" [ngSwitch]="log.tipoAccion">
+                      <span *ngSwitchCase="'I'" class="label label-success">IMPRIMIR</span>
+                      <span *ngSwitchCase="'D'" class="label label-info">DESCARGAR</span>
+                      <span *ngSwitchCase="'V'" class="label label-danger">VISUALIZAR</span>
+                    </td>
+                  </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row margin-top-20">
+          <div class="col-md-4 col-sm-12 col-xs-12">
+            <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="onPageChanged($event)" [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                        [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center m-a-sm">
+              <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-right m-a-sm">
+              <pagination-set (optionChanged)="onPageOptionChanged($event)"></pagination-set>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <swal #modalFiltrosBandejaLogDigitalizados [options]="alertOption" (confirm)="obtenerFiltrosModal()">
+    <div *swalPartial>
+        <app-filtros-bandeja-log></app-filtros-bandeja-log>
+    </div>
+  </swal>

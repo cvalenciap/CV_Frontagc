@@ -1,0 +1,227 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Asignación de Personal AGC a Grupos</strong></h4>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content">
+      <!-- Titulo -->
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h3 class="font-bold">Asignar Personal</h3>
+        </div>
+      </div>
+      <!--   Datos del Grupo   -->
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Datos del Grupo:</h4>
+        </div>
+        <div class="col-md-12">
+          <div class="form-horizontal margin-bottom-0">
+            <div class="col-md-12">
+              <!--  Combo Empresa  -->
+              <div class="form-group">
+                <label class="col-md-1 control-label">Empresa:</label>
+                <div class="col-md-3">
+                  <input type="text"
+                         class="form-control"
+                         disabled="disabled"
+                         [value]="datosBusqueda.empresa.descripcion">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <!--  Combo Oficina -->
+                <label class="col-md-1 control-label">Oficina:</label>
+                <div class="col-md-3">
+                  <input type="text"
+                         class="form-control"
+                         disabled="disabled"
+                         [value]="datosBusqueda.oficina.descripcion">
+                </div>
+                <!-- Combo Grupo Funcional -->
+                <label class="col-md-2 control-label">Grupo Funcional:</label>
+                <div class="col-md-4">
+                  <input type="text"
+                         class="form-control"
+                         disabled="disabled"
+                         [value]="datosBusqueda.grupo.descGrupo">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--   Panel de agregar personal   -->
+      <div class="panel panel-default" *ngIf="$enableMostrarPanelAgregar">
+        <div class="panel-body">
+          <!--   Buscar Personal   -->
+          <div class="row">
+            <div class="col-md-12 text-left">
+              <h4>Agregar Personal</h4>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-md-2 control-label">Cod. Usuario:</label>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="text" appMayusculas
+                           class="form-control"
+                           (keypress)="onCodigoBusquedaChange($event)"
+                           [(ngModel)]="codigoBusqueda">
+                    <span class="input-group-btn">
+                    <button class="btn btn-info"
+                            type="button"
+                            (click)="buscarPersonalPorCodigo()">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </span>
+                  </div>
+                </div>
+                <!-- Combo Grupo Funcional -->
+                <div *ngIf="$mostrarBuscado">
+                  <label class="col-md-1 control-label">Personal:</label>
+                  <div class="col-md-6">
+                    <input type="text"
+                           class="form-control"
+                           readonly="readonly"
+                           [(ngModel)]="datosPersonalBuscado">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12" *ngIf="$mostrarBuscado">
+              <div class="form-group">
+                <div class="col-md-offset-4 col-md-8" style="padding-left: 0; margin-top: 2rem;">
+                  <label class="col-md-1 control-label"
+                         style="margin-right: 3rem;">Perfil:</label>
+                  <div class="col-md-6">
+                    <input type="text"
+                           class="form-control"
+                           readonly="readonly"
+                           [(ngModel)]="personalBuscado.perfil.descripcion">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--   Botones de accion   -->
+          <div class="row" *ngIf="$mostrarBuscado">
+            <div class="col-md-12 m-t-md text-center">
+              <button class="btn btn-success"
+                      style="margin-right: 2rem;"
+                      (click)="mostrarMensajeAgregar()">
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button class="btn btn-info"
+                      (click)="limpiarInputCodUsuario()">
+                <i class="fa fa-trash"></i> Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--   Listado de Personal   -->
+      <div class="row m-b-md">
+        <div class="col-md-4 text-left">
+          <h4>Listado de Personal</h4>
+        </div>
+        <div class="col-md-offset-4 col-md-3 text-right">
+          <div class="input-group">
+            <input #inputBusqueda
+                   maxlength="8"
+                   type="text"
+                   class="form-control"
+                   placeholder="Buscar por Usuario"
+                   [(ngModel)]="filtroUsuario">
+            <span class="input-group-btn" dropdown>
+              <button type="button"
+                      class="btn btn-success"
+                      (click)="filtrarUsuarios()">
+                <i class="fa fa-search" title="Buscar"></i></button>
+              <button dropdownToggle
+                      type="button"
+                      class="btn btn-success dropdown-toggle dropdown-toggle-split">
+                <i class="fa fa-caret-down"></i></button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                <li><a (click)="seleccionarParametroBusqueda('U')">Usuario</a></li>
+              </ul>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!--   Tabla Lista Personal   -->
+      <div class="row">
+        <div class="col-md-12 ibox-content" [class.sk-loading]="$loading">
+          <sk-three-bounce></sk-three-bounce>
+          <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover issue-tracker">
+              <thead class="thead-dark">
+              <tr>
+                <th class="text-center">N°</th>
+                <th class="text-center">Código Personal</th>
+                <th class="text-center">Código Usuario</th>
+                <th class="text-center">Apellidos Y Nombres</th>
+                <th class="text-center">Perfil</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+              </thead>
+              <tbody *ngIf="$mostrarTabla">
+              <tr *ngFor="let item of listaPersonalEncontrado |
+                          paginate: paginacionConfig;">
+                <td class="text-center text-11">{{item.indice}}</td>
+                <td class="text-center text-11">{{item.trabajador.codigo}}</td>
+                <td class="text-center text-11">{{item.trabajador.codUsuario}}</td>
+                <td class="text-left text-11">{{item.trabajador.nombre}}</td>
+                <td class="text-center text-11">{{item.trabajador.perfil.descripcion}}</td>
+                <td class="text-center text-11">{{item.trabajador.estado}}</td>
+                <td class="text-center text-11">
+                  <button class="btn btn-danger"
+                          tooltip="Eliminar Personal"
+                          (click)="mostrarMensajeEliminarPersonal(item)">
+                    <i class="fa fa-trash text-11"></i></button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="$mostrarTabla">
+        <div class="col-md-4">
+          <pagination [(ngModel)]="paginacion.pagina"
+                      [totalItems]="paginacion.totalRegistros"
+                      [itemsPerPage]="paginacion.registros"
+                      [maxSize]="5"
+                      [boundaryLinks]="true"
+                      (pageChanged)="onCambiarPagina($event)"
+                      previousText="&lsaquo;" nextText="&rsaquo;"
+                      firstText="&laquo;" lastText="&raquo;"></pagination>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center m-a-sm">
+            <pagination-info [totalItems]="paginacion.totalRegistros"
+                             [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center m-a-sm">
+            <pagination-set (optionChanged)="onCambioRegistros($event)"></pagination-set>
+          </div>
+        </div>
+      </div>
+      <!--   Boton Regresar   -->
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <button class="btn btn-gray-dark"
+                  (click)="regresarBusquedaGrupos()">Regresar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

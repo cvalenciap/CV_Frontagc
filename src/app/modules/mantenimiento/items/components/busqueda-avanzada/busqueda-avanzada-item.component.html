@@ -1,0 +1,24 @@
+<div class="ibox-content" style="border: 0;">
+    <h4>Datos de Consulta</h4>
+    <hr class="hr-line" style="margin-top:0px;">
+    <div class="row">
+        <div class="col-lg-3 control-label">
+            <label>Estado:</label>
+        </div>
+        <div class="col-lg-4">
+            <ng-select [items]="listaEstados" bindLabel="descripcion" bindValue="id" placeholder="Seleccione estado"
+                [clearable]="true" [(ngModel)]="requestItem.estado">
+            </ng-select>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-3 control-label">
+            <label>Descripcion:</label>
+        </div>
+        <div class="col-lg-9">
+            <input #buscar type="text" maxlength="100" class="form-control texto-ingresado" name="descripcion"
+                [(ngModel)]="requestItem.descripcion">
+        </div>
+    </div>
+</div>

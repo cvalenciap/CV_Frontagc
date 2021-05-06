@@ -1,0 +1,144 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content no-borders">
+      <!-- Aprobar cambio de cargo -->
+      <div class="row mb-2" *ngIf="esAdmOficina">
+        <!-- <div class="col-md-2 no-right-padding" *ngIf="config.botonAprobarCargo && esAdmOficina">
+          <button class="btn btn-sm btn-primary" type="button" (click)="mostrarModalAprobar()"
+            [disabled]="!enableAprobarRechazar">
+            <i class="fa fa-check"></i> Aprobar Cargo</button>
+        </div>
+        <div class="col-md-2 no-left-padding" *ngIf="config.botonRechazarCargo && esAdmOficina">
+          <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalRechazo()"
+            [disabled]="!enableAprobarRechazar">
+            <i class="fa fa-times"></i> Rechazar Cargo</button>
+        </div> -->
+        <div class="col-md-2">
+          <table>
+            <tr>
+              <td *ngIf="config.botonAprobarCargo" style="padding-right: 8px;">
+                  <button class="btn btn-sm btn-primary" type="button" (click)="mostrarModalAprobar()"
+                  [disabled]="!enableAprobarRechazar">
+                  <i class="fa fa-check"></i> Aprobar Cargo</button>
+              </td>
+              <td *ngIf="config.botonRechazarCargo">
+                  <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalRechazo()"
+                  [disabled]="!enableAprobarRechazar">
+                  <i class="fa fa-times"></i> Rechazar Cargo</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <!-- Solicitar cambio de cargo -->
+      <div class="row">
+        <div class="col-md-2 no-right-padding" *ngIf="esAnalistaExterno">
+          <label class="control-label text-left">Codigo SEDAPAL:</label>
+        </div>
+        <div class="col-md-2 no-left-padding" *ngIf="esAnalistaExterno">
+          <input type="text" class="form-control" [(ngModel)]="personal.codigoEmpleado"
+            [disabled]="!config.inputCodigoSedapalCC" />
+        </div>
+        <div class="col-md-2 no-right-padding">
+          <label class="control-label text-left">Cargo Actual:</label>
+        </div>
+        <div class="col-md-5 no-left-padding">
+          <input type="text" class="form-control" [(ngModel)]="personal.cargo.descripcion"
+            [disabled]="!config.inputCargoActualCC" />
+        </div>
+      </div>
+      <br>
+      <div class="ibox-content">
+        <div class="row m-b-md" *ngIf="config.botonAgregarSolicitud && esAnalistaExterno">
+          <div class="col-md-4">
+            <button type="button" class="btn btn-sm btn-primary" [swal]="nuevaSolicitud"><i
+                class="fa fa-plus margin-right-10"></i><span>Añadir Solicitud</span></button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <p class="control-label text-left">Solicitudes de Cambio de Cargo:</p>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-stripped table-hover issue-tracker">
+            <thead>
+              <tr>
+                <th class="text-center">Solicitud</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Oficina Asignada</th>
+                <th class="text-center">Cargo Actual</th>
+                <th class="text-center">Nuevo Cargo</th>
+                <th class="col-lg-2 text-center">Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let solicitud of listaSolicitudesGrilla; let indice = index" class="row-hover"
+                [class.info]="indice === rowClick" (click)="onRowClick(solicitud, indice)">
+                <td class="text-center">{{solicitud.idSolicitud}}</td>
+                <td class="text-center">{{solicitud.fechaSolicitud}}</td>
+                <td class="text-center">{{solicitud.oficinaActual.descripcion}}</td>
+                <td class="text-center">{{solicitud.cargoActual.descripcion}}</td>
+                <td class="text-center">{{solicitud.cargoDestino.descripcion}}</td>
+                <td class="text-center">{{solicitud.estadoSolicitud.descripcion}}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-primary" [swal]="verDetalle" (click)="enviarDataDetalle(solicitud);"
+                    title="Ver detalle">
+                    <i class="fa fa-search"></i>
+                  </button>
+                  <!-- <button class="btn btn-sm btn-danger" (confirm)="eliminarSolicitud(solicitud)" title="Eliminar"
+                    [swal]="{ type:'question', title: '¿Está seguro de eliminar la solicitud seleccionada?', showCancelButton: true,
+                                  confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusCancel: false }">
+                    <i class="fa fa-trash"></i>
+                  </button> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row margin-top-20">
+          <div class="col-md-4 col-sm-12 col-xs-12">
+            <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="cambiarPagina($event)"
+              [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+              [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+            </pagination>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center m-a-sm">
+              <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                [page]="paginacion.pagina"></pagination-info>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-right m-a-sm">
+              <pagination-set (optionChanged)="cambiarRegistrosPorPagina($event)"></pagination-set>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #nuevaSolicitud [showCancelButton]="false" [showConfirmButton]="false" [allowOutsideClick]="false"
+  customClass="mantenimiento-personal-swal">
+  <div *swalPartial>
+    <app-solicitud-cambio-cargo (cerrarModal)="cerrarModal();"></app-solicitud-cambio-cargo>
+  </div>
+</swal>
+
+<swal #verDetalle [showCancelButton]="false" [showConfirmButton]="false" customClass="mantenimiento-personal-swal">
+  <div *swalPartial>
+    <app-consulta-solicitud-cambio-cargo (cerrarModal)="this.verDetalle.nativeSwal.close();">
+    </app-consulta-solicitud-cambio-cargo>
+  </div>
+</swal>
+
+<swal #rechazarSolicitudModal [options]="alertOptionRechazar" (confirm)="rechazarSolicitud($event)"></swal>
+
+<swal #aprobarSolicitudModal title="¿Desea aprobar la solicitud de Cambio de Cargo?" type="question"
+  [showCancelButton]="true " [focusCancel]="false " confirmButtonText="Si, Aprobar" cancelButtonText="No"
+  [allowOutsideClick]="true" (confirm)="aprobarSolicitud()">
+</swal>

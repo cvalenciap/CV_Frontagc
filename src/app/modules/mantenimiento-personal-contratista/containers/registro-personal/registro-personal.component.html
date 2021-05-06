@@ -1,0 +1,54 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento de Personal del Contratista / Mantenimiento de Personal
+      <strong>Nuevo Personal</strong></h4>
+  </div>
+</div>
+<!-- <p>Form is {{registerForm.status}}</p> -->
+<!-- <p>Form is {{registerForm.controls.datosBasicos.valid}}</p> -->
+<!-- <p>Form is {{registerForm.valid}}</p> -->
+<!-- <pre>{{registerForm.value | json}}</pre>  -->
+<!-- <p>status: {{formularioDatosBasicos.f.fechaNacimiento.value}}</p> -->
+<div [formGroup]="registerForm">
+  <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row m-b-md">
+      <div class="ibox-content" [class.sk-loading]="loading">
+        <div class="row m-b-md">
+          <div class="col-md-4">
+            <button class="btn btn-primary container-button"
+                    (click)="submit()"><i
+                class="fa fa-check margin-right-10"></i><span>Guardar</span></button>
+            <button type="button" class="btn btn-gray-dark" (click)="regresar();"><i
+                class="fa fa-arrow-left margin-right-10"></i><span>Regresar</span></button>
+          </div>
+        </div>
+        <div class="row m-b-md" *ngIf="!flagRegistroSedapal">
+          <div class="col-lg-1">
+            <label class="control-label text-left">Contratista:</label>
+          </div>
+          <div class="col-lg-6">
+            <input type="text" class="form-control" value="{{empresaUsuarioSesion.descripcion}}" disabled />
+          </div>
+        </div>
+
+        <div [@.disabled]="true">
+          <mat-tab-group>
+            <mat-tab label="Datos Básicos">
+              <app-formulario-datos-basicos formControlName="datosBasicos" (buscarCargoEmit)="obtenerCargos($event)"></app-formulario-datos-basicos>
+            </mat-tab>
+            <mat-tab label="Datos de Planilla">
+              <app-formulario-datos-planilla formControlName="datosPlanilla"></app-formulario-datos-planilla>
+            </mat-tab>
+            <mat-tab label="Datos de SEDAPAL">
+              <app-formulario-datos-sedapal formControlName="datosSedapal"></app-formulario-datos-sedapal>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<swal #confirmacionGuardar type="question" title="¿Está seguro de registrar los datos del nuevo personal? "
+  confirmButtonText="Sí " cancelButtonText="No " [showCancelButton]="true " [focusCancel]="false "
+  (confirm)="guardar() " [allowOutsideClick]="true"></swal>

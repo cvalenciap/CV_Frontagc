@@ -1,0 +1,24 @@
+label.btn-green {
+    cursor: pointer;
+    padding: 7px 10px;
+    background-color: #28B699; //#18A689;
+    color: #fff;
+    border: 0px solid #fff;
+    vertical-align: middle;
+    border-radius: 5px;
+  }
+
+label.btn-green:hover{
+    background-color: #18A689;
+  } 
+
+
+.foto {
+  min-width: 100px;
+  min-height: 105px;
+  max-width: 115px;
+  max-height: 120px;
+  border: 1px solid #bbb;
+  box-shadow: 2px 3px #ddd;
+}
+  

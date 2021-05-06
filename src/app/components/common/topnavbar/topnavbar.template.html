@@ -1,0 +1,53 @@
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="minimalize-styl-2 btn btn-primary " (click)="toggleNavigation()"><i class="fa fa-bars"></i> </a>
+        </div>
+        <ul class="nav navbar-top-links navbar-left">
+            <li>
+                <span class="m-r-sm text-muted welcome-message"><strong>{{nombre}}</strong></span>
+        <span *ngIf="!descOficina.includes('NOF')"
+              class="m-r-sm text-muted welcome-message">| Oficina : <strong>{{descOficina}}</strong></span>
+                <span class="m-r-sm text-muted welcome-message">| Usuario : <strong>{{nick}}</strong></span>
+                <span class="m-r-sm text-muted welcome-message">| Login : <strong>{{login}}</strong></span>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info">
+                    <i class="fa fa-cog fa-spin"></i>
+                </a>
+            </li>
+        </ul>
+        <!-- <ul class="nav navbar-top-links navbar-left">
+            <li><button class="btn btn-success margin-right-10"><i class="fa fa-arrows-alt"></i></button></li>
+            <li><button class="btn btn-warning margin-right-10"><i class="fa fa-edit"></i></button></li>
+            <li><button class="btn btn-info margin-right-10"><i class="fa fa-etsy"></i></button></li>
+            <li><button class="btn btn-primary margin-right-10"><i class="fa fa-circle"></i></button></li>
+            <li><button class="btn btn-danger"><i class="fa fa-user"></i></button></li>
+        </ul> -->
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown" dropdown>
+                <a dropdownToggle>
+                    <!--<i class="fa fa-user"></i>-->
+                    <img src="assets/images/user.png" title="Mi Perfil" width="36px" height="36px">
+                </a>
+                <ul class="dropdown-menu animated fadeInRight" *dropdownMenu>
+                    <li>
+                        <div class="text-center p-m">
+                            <strong class="font-bold">{{nick}}</strong>
+                            <span class="text-muted text-xs block">{{nombrePerfil}}</span>
+                            <hr>
+                            Login : <strong class="font-bold">{{login}}</strong><br />
+                            Cod. Personal : <strong class="font-bold">{{idPers}}</strong>
+                        </div>
+                    </li>
+                    <!--<li><a routerLink="/inicio"><i class="fa fa-arrows-alt"></i> Pantalla completa</a></li>
+                    <li><a routerLink="/inicio"><i class="fa fa-gear"></i> Configuración</a></li>-->
+                    <li class='text-center' style="margin: auto 0;">
+                        <a (click)="logout()"><i class="fa fa-sign-out"></i> Cerrar sesión</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </nav>
+</div>

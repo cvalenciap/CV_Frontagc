@@ -1,0 +1,22 @@
+<div class="row main-content">
+  <div class="col-lg-5">
+    <div class="input-group">
+      <div>
+        <input type="text" class="form-control" placeholder="Ingrese Descripción" maxlength="100"
+          [(ngModel)]="requestItem.descripcion">
+      </div>
+      <span class="input-group-btn" dropdown>
+        <button type="button" class="btn btn-info" (click)="buscar()">
+          <i class="fa fa-search" title="Buscar"></i></button>
+        <button dropdownToggle type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split">
+          <i class="fa fa-caret-down"></i></button>
+        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+          <li role="menuitem" class="active">
+            <a>Descripción</a></li>
+          <li role="menuitem">
+            <a (click)="buscarAvanzado()">Búsqueda Avanzada</a></li>
+        </ul>
+      </span>
+    </div>
+  </div>
+</div>

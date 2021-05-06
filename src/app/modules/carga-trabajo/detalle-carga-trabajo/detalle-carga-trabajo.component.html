@@ -1,0 +1,106 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+      <h4>
+          <a routerLink="/inicio">Inicio</a> / Envío y Recepción / Cargas de Trabajo /
+          <strong>Detalles</strong>
+      </h4>
+  </div>
+</div>
+<br>
+<div class="ibox-content" style="padding: 5px;" [ngClass]="{'sk-loading': loading}">
+  <sk-three-bounce></sk-three-bounce>
+  <div class="row m-b-md">
+      <div class="col-lg-12" style="margin-left: 8px;margin-top: 7px;">
+          <a *ngIf="acciones.includes('AN') && (esSedapal==true && esContratista==false) && (datos.uidEstado == 'PE' || datos.uidEstado == 'OC')" class="btn btn-danger m-r" [swal]="comentarSwal2">
+              <span class="glyphicon glyphicon-remove"></span> Anular</a>
+          <a *ngIf="acciones.includes('GU') && (esSedapal==true && esContratista==false) && (datos.uidEstado == 'PE' || datos.uidEstado == 'OC')" class="btn btn-primary m-r" (click)="onGuardar()">
+              <i class="fa fa-check"></i> Guardar</a>
+          <a *ngIf="acciones.includes('EN') && (esSedapal==true && esContratista==false) && (datos.uidEstado == 'PE' || datos.uidEstado == 'OC')" class="btn btn-success m-r" [swal]="enviarSwal">
+              <span class="glyphicon glyphicon-send"></span> Enviar</a>
+          <!-- <a *ngIf="(esSedapal==true && esContratista==false)  && acciones.includes('DT') && datos.uidActividad!='SG' && (datos.uidEstado == 'EPC' || datos.uidEstado == 'AC' || datos.uidEstado == 'OS' || datos.uidEstado == 'ES' || datos.uidEstado == 'CE' || datos.uidEstado == 'EC' || datos.uidEstado == 'OC')" -->
+          <a *ngIf="(esSedapal==true && esContratista==false)  && acciones.includes('DT') && datos.uidActividad!='SG' && (datos.uidEstado == 'EPC' || datos.uidEstado == 'ES' || datos.uidEstado == 'CE' || datos.uidEstado == 'EC' || datos.uidEstado == 'OC')"
+              class="btn btn-danger m-r" [swal]="descargarTramaSedapalSwal">
+              <span class="glyphicon glyphicon-download"></span> Descargar Trama</a>
+          <a *ngIf="(esSedapal==false && esContratista==true)  && acciones.includes('DT') && datos.uidActividad!='SG' && (datos.uidEstado == 'EPC' || datos.uidEstado == 'AC' || datos.uidEstado == 'OS' || datos.uidEstado == 'ES' || datos.uidEstado == 'CE' || datos.uidEstado == 'EC' || datos.uidEstado == 'OC')"
+              class="btn btn-danger m-r" [swal]="descargarTramaSwal">
+              <span class="glyphicon glyphicon-download"></span> Descargar Trama</a>
+
+          <a *ngIf="acciones.includes('EN') && (esSedapal==false && esContratista==true) && (datos.uidActividad!='SG' && (datos.uidEstado == 'EPC' || datos.uidEstado == 'AC' || datos.uidEstado == 'OS'))" class="btn btn-success m-r" [swal]="enviarEjecutadoSwal">
+              <span class="glyphicon glyphicon-floppy-saved"></span>
+              Enviar Ejecutado</a>
+          <a *ngIf="acciones.includes('OB') && ((esContratista==true && datos.uidEstado == 'ES') || (esSedapal==true && datos.uidEstado == 'EC')|| (esSedapal==true && datos.uidEstado == 'EPC'))" class="btn btn-success m-r" [swal]="observarSwal">
+              <span class="glyphicon glyphicon-floppy-saved"></span>
+              Observar</a>
+          <a *ngIf="acciones.includes('AC') && esContratista==true && esSedapal==false && datos.uidEstado == 'ES'" class="btn btn-primary m-r" [swal]="aceptarSwal">
+              <span class="glyphicon glyphicon-wrench"></span> Aceptado</a>
+          <a *ngIf="acciones.includes('CE') && esContratista==false && esSedapal==true && datos.uidEstado == 'EC'" class="btn btn-primary m-r" [swal]="cerrarSwal">
+              <span class="glyphicon glyphicon-send"></span> Cerrar Carga</a>
+          <a routerLink="/carga-trabajo" class=" btn btn-gray-dark m-r ">
+              <i class="fa fa-arrow-left "></i> Regresar</a>
+      </div>
+  </div>
+  <!-- Información General -->
+  <app-datos-consulta #datosConsulta [datosRegistro]="datos" (emitEventContratista)="enviaContratista($event)" (emitEventFechas)="enviaFechas($event)" (emitEventAdjuntos)='onEjecutarFiltro($event)'></app-datos-consulta>
+  <!-- Carga Trama -->
+  <ng-container *ngIf="esContratista==true && (datos.uidEstado == 'OS'||datos.uidEstado == 'AC'||datos.uidEstado == 'EPC'||datos.uidActividad =='SG')">
+      <app-carga-masiva-trama #cargaTramaEjec [datosRegistro]="datos" (emitEventEjecucionCarga)="onActivarLoanding($event)" (emitEventCargaMasivaTrama)="onBuscarItemDetalleTrabajo($event)"></app-carga-masiva-trama>
+  </ng-container>
+  <!-- Datos Grilla-->
+  <ng-container *ngIf="datos.uidActividad == 'ME'">
+      <app-detalle-carga-medidores #cargaMedidores [itemCargaTrabajo]="datos"></app-detalle-carga-medidores>
+  </ng-container>
+  <ng-container *ngIf="datos.uidActividad == 'DC'">
+      <app-detalle-carga-distribucion-comunicaciones #distribucionComunicaciones [itemCargaTrabajo]="datos"></app-detalle-carga-distribucion-comunicaciones>
+  </ng-container>
+  <ng-container *ngIf="datos.uidActividad == 'IC'">
+      <app-detalle-carga-inspecciones-comerciales #inspeccionesComerciales [itemCargaTrabajo]="datos"></app-detalle-carga-inspecciones-comerciales>
+  </ng-container>
+  <ng-container *ngIf="datos.uidActividad == 'TE'">
+      <app-detalle-carga-toma-estados #tomaEstados [itemCargaTrabajo]="datos"></app-detalle-carga-toma-estados>
+  </ng-container>
+  <ng-container *ngIf="datos.uidActividad == 'DA'">
+      <app-detalle-aviso-cobranza #avisoCobranza [itemCargaTrabajo]="datos"></app-detalle-aviso-cobranza>
+  </ng-container>
+  <!-- Archivos  -->
+  <app-carga-archivos *ngIf="datos.uidActividad!='SG'" [datosRegistro]="datos"></app-carga-archivos>
+  <!-- Modales -->
+  <swal #enviarSwal html="<h3>¿Está seguro que desea enviar la Carga de Trabajo?</h3>" imageUrl= "assets/images/advertencia.png" imageWidth=50 confirmButtonText="Sí, enviar "
+      cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true" [focusConfirm]="false" (confirm)="onEnviar() "></swal>
+  <swal #descargarTramaSwal html="<h3>¿Desea descargar la trama de la carga de trabajo?</h3>"  imageUrl= "assets/images/download.svg" imageWidth=50 confirmButtonText="Sí, descargar "
+      cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true " [focusConfirm]="false" (confirm)="onDescargarTrama() "></swal>
+
+  <swal #descargarTramaSedapalSwal imageUrl= "assets/images/download.svg" imageWidth=50 [allowOutsideClick]="false "  confirmButtonText="Descargar "
+      cancelButtonText="Cancelar " [showCancelButton]="true " [focusCancel]="false " [focusConfirm]="true" (confirm)="onDescargarTrama() " (cancel)="onCancelarDescargaTrama() ">
+      <div *swalPartial>
+            <div>
+                <label for=""><strong><u>Descargar:</u></strong></label>
+            </div>
+            <div class="radio radio-info">
+                  <input type="radio" id="r1" name="grupo1" [value]="1" [(ngModel)]="tipoDescagaTrama">
+                  <label for="r1"><strong>Ejecución pendiente de descarga</strong></label>
+           </div>
+           <div class="radio radio-info">
+                  <input type="radio" id="r2" name="grupo1" [value]="2" [(ngModel)]="tipoDescagaTrama">
+              <label for="r2"><strong>Todas las ejecuciones</strong></label>
+           </div>
+      </div>
+  </swal>
+
+  <swal #enviarEjecutadoSwal html="<h3>¿Está seguro que desea enviar la Carga de Trabajo?</h3>"  imageUrl= "assets/images/advertencia.png" imageWidth=50 confirmButtonText="Sí, enviar "
+      cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true " [focusConfirm]="false" (confirm)="onEnviarEjecutado() "></swal>
+  <swal #observarSwal [options]="alertOptionObservar" (confirm)="onObservar($event)" imageUrl= "assets/images/advertencia.png" imageWidth=50 ></swal>
+  <swal #aceptarSwal html="<h3>¿Está seguro que desea aceptar la Carga de Trabajo?</h3>"  imageUrl= "assets/images/advertencia.png" imageWidth=50 confirmButtonText="Sí, aceptar "
+      cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true" [focusConfirm]="false" (confirm)="onAceptar() "></swal>
+  <swal #cerrarSwal html="<h3>¿Está seguro que desea cerrar la Carga de Trabajo?</h3>"  imageUrl= "assets/images/advertencia.png" imageWidth=50 confirmButtonText="Sí, cerrar "
+      cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true" [focusConfirm]="false" (confirm)="onCerrar() "></swal>
+
+</div>
+
+<swal #comentarSwal2 title="Anular Registro" imageUrl= "assets/images/advertencia.png" imageWidth=50
+confirmButtonText="Aceptar " [allowOutsideClick]="true" cancelButtonText="Cancelar " [showCancelButton]="true "
+(confirm)="OnAnular($event) ">
+  <div *swalPartial>
+      <carga-anular></carga-anular>
+  </div>
+</swal>
+

@@ -1,0 +1,66 @@
+/* You can add global styles to this file, and also import other style files */
+/* Import main Inspinia style */
+@import "assets/styles/style";
+
+
+#time-picker-wrapper{
+    z-index: 10000 !important; 
+  }
+
+.example-stretched-tabs {
+    max-width: 800px;
+  }
+  
+  /* active tab */
+  .mat-tab-list .mat-tab-labels .mat-tab-label-active {
+    color:#ffffff;  
+    background-color: rgb(0,110,170);//#303f9f;
+    opacity: 1;
+    height: 40px;
+  }
+  
+  .mat-tab-list .mat-tab-labels {
+    height: 40px;
+  }
+  
+  .mat-tab-list .mat-tab-label {
+    height: 40px;
+  }
+  
+  
+
+//add color mat-dialog
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+    border-color:rgb(66, 134, 244); 
+  }
+  
+  .mat-radio-button.mat-accent .mat-radio-inner-circle{
+    color:rgb(66, 134, 244);
+    background-color:rgb(66, 134, 244) ;
+  }
+  
+  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+      background-color:rgba(24, 67, 209, 0.671)
+  }
+
+  @import "../node_modules/material-icons/iconfont/material-icons.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "../node_modules/ng2-image-viewer/imageviewer.scss";
+
+///////////////////////////
+
+.ng-select.auto-grow{
+  .ng-dropdown-panel { width: auto !important; max-width: 550px; } 
+}
+
+.cdk-overlay-backdrop {
+  display: none !important;
+}
+.cdk-overlay-container {
+  z-index: 10000000 !important;
+}
+.cdk-overlay-pane{
+ width: 500px !important;
+}
+/* Add application styles & imports to this file! */
+//@import "~ng-zorro-antd/ng-zorro-antd.min.css";

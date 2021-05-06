@@ -1,0 +1,170 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4>
+      <a routerLink="/inicio">Inicio</a> / Contratista / Reportes / Efectividad en la Reapertura Simple
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+  <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <div class="row">
+      <div class="col-sm-12" style="display: inline-flex;">
+        <button class="btn btn-info container-button" (click)="OnFiltrar()"> <i class="fa fa-search"></i>
+          Buscar</button>
+          <app-button-return></app-button-return>
+          <button class="btn btn-success container-button" (click)="OnLimpiar()"> <i class="fa fa-trash"></i>
+          Limpiar</button>
+        <span class="input-group-btn" dropdown *ngIf="itemsPagination.length>0">
+          <button type="button" class="btn btn-gray-blue">
+            <i class="fa fa-database" title="Buscar"></i> Exportar</button>
+          <button dropdownToggle type="button" class="btn btn-gray-blue dropdown-toggle dropdown-toggle-split">
+            <i class="fa fa-caret-down"></i></button>
+          <!-- Lista de Opciones -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+            <li role="menuitem">
+              <a (click)="OnPDF(); $event.stopPropagation();">PDF</a></li>
+            <li role="menuitem" *ngIf="codigoPerfil===6 || codigoPerfil===1">
+              <a (click)="OnExcel()">Excel</a></li>
+          </ul>
+        </span>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Oficina:</label>
+          <div class="col-md-9">
+            <select class="form-control" [(ngModel)]="oficina"  type="text" name="oficina">
+              <option value="0">TODOS</option>
+              <option *ngFor="let oficina of lista.oficinas;" [ngValue]="oficina.codigo">{{oficina.descripcion}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Contratista:</label>
+          <div class="col-md-9">
+            <select class="form-control" [(ngModel)]="empresa"  type="text" name="empresa">
+              <option *ngFor="let empresa of listaParametros.listaEmpresa;" [ngValue]="empresa.codigo">
+                {{empresa.descripcion}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <label class="col-md-2 text-right control-label" style="padding-top: 8px;" >F.Inicial:</label>
+        <div class="col-md-4" id="fechaControl">
+            <form [formGroup]="myForm" novalidate>
+                <month-date-picker name="fechaI" formControlName="fechaI" (periodo)="onPerriodoI($event)"></month-date-picker>
+            </form>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <label class="col-md-2 text-right control-label" style="padding-top: 8px;" >F.Final:</label>
+        <div class="col-md-4" id="fechaControl">
+            <form [formGroup]="myForm" novalidate>
+                <month-date-picker name="fechaF" formControlName="fechaF" (periodo)="onPerriodoF($event)"></month-date-picker>
+            </form>
+        </div>
+      </div>
+    </div>
+        <!-- Table report-->
+        <div class="row mt-2">
+          <div class="col-lg-12">
+            <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+              <sk-three-bounce></sk-three-bounce>
+              <div class="table-responsive">
+                <table class="table table-stripped table-hover issue-tracker">
+                  <thead>
+                    <tr>
+                      <th rowspan="3" data-col="fecha">Item</th>
+                      <th rowspan="3" data-col="oficina">Oficina</th>
+                      <th rowspan="3" data-col="oficina">Contratista</th>
+                      <th rowspan="3" data-col="oficina">Fecha Emisión</th>
+                      <th rowspan="3" data-col="oficina">Carga Entregada</th>
+                      <th colspan="3" data-col="segundo">Reapertura Simples</th>
+                      <th colspan="3" data-col="tercero">%</th>
+                    </tr>
+                    <tr>
+                      <th colspan="1" rowspan="2" data-col="fecha">Ejecutados</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Imposibilidades</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Pendientes</th>
+
+                      <th colspan="1" rowspan="2" data-col="fecha">Ejecutados</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Imposibilidades</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Pendientes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of itemsPagination; let i = index">
+                      <td class="text-center">
+                        {{i+1}}
+                      </td>
+                      <td class="text-center">
+                        {{item.v_descofic}}
+                      </td>
+                      <td class="text-center">
+                        {{item.v_nombreempr}}
+                      </td>
+                      <td class="text-center">
+                        {{item.v_fecha}}
+                      </td>
+                      <td class="text-center">
+                        {{item.carga_entrega}}
+                      </td>
+                      <td class="text-center">
+                        {{item.ejecutada}}
+                      </td>
+                      <td class="text-center">
+                        {{item.imposibilidad}}
+                      </td>
+                      <td class="text-center">
+                        {{item.pendiente}}
+                      </td>
+                      <td class="text-center">
+                        {{item.porc_ejecutada}}
+                      </td>
+                      <td class="text-center">
+                        {{item.porc_imposibilidad}}
+                      </td>
+                      <td class="text-center">
+                        {{item.porc_pendiente}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-md-4 col-sm-12 col-xs-12">
+                  <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)"
+                    [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+                    [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+                  </pagination>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="text-center m-a-sm">
+                    <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                      [page]="paginacion.pagina"></pagination-info>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="text-right m-a-sm">
+                    <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>
+<swal #reportePdfSwal [showCloseButton]="true" [allowOutsideClick]="false" [showConfirmButton]="false"
+  customClass="pdf-swal">
+  <form *swalPartial>
+    <visor-pdf url="{{urlReportePdf}}" download="true"></visor-pdf>
+  </form>
+</swal>

@@ -1,0 +1,8 @@
+.table {
+    tr {
+      th[data-col='primero'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='segundo'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='tercero'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='cuarto'] {text-align: center; background:#efefef;}
+    }
+  }

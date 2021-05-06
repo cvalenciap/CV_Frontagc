@@ -1,0 +1,595 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+    <div class="col-lg-12">
+        <h4 class="padding-5">
+            <a routerLink="/inicio">Inicio</a> / Monitoreo /
+            <strong>Monitoreo de Toma de Estado</strong>
+        </h4>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight" *ngIf="mostrarPrincipal">
+    <!-- wrapper monitoreo principal -->
+    <!-- fila de botones -->
+    <div class="row m-b-lg">
+        <div class="col-lg-12">
+                <button *ngIf="mostrarAddBtn" type="button" class="btn btn-success limite" title="Agregar" (click)="agregarTrabajo()">
+                    <i class="fa fa-plus margin-right-10"></i>
+                    <span>Agregar</span>
+                </button>
+
+                <button type="button" class="btn btn-default limite" title="Regresar" (click)="regresarPrincipal()">
+                    <i class="fa fa-reply margin-right-10"></i>
+                    <span>Regresar</span>
+                </button>
+
+                <button type="button" class="btn btn-success limite" title="Limpiar" (click)="onLimpiarFiltros()">
+                    <i class="fa fa-eraser margin-right-10" title="Limpiar"></i>
+                    <span>Limpiar</span>
+                </button>
+
+                <button type="button" class="btn btn-info limite" title="Buscar" (click)="onObtenerMonitoreo()">
+                    <i class="fa fa-search margin-right-10"></i>
+                    <span>Buscar</span>
+                </button>
+
+                <button type="button" class="btn btn-success limite" title="Exportar" [disabled]="!verExportarExcel" (click)="onExportar()">
+                    <i class="fa fa-database margin-right-10"></i>
+                    <span>Exportar</span>
+                </button>
+
+        </div>
+    </div>
+    <!-- fin de fila de botones -->
+    <!-- Inicio filtros -->
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Contratista: *</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametrosMonitoreo.listaEmpresa" bindLabel="descripcion" bindValue="codigo" name="contratistas" placeholder="Seleccione Contratista"
+                        #selectContratista [clearable]=clrEmpresa [(ngModel)]="filtros.contratista.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarViewContratistas($event)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Incidencia:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaImposibilidad" bindLabel="detalle" bindValue="codigo" name="imposibilidad" placeholder="Seleccione Incidencia"
+                        #selectCiclo [clearable]=true [(ngModel)]="filtros.imposibilidad.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarViewImposibilidad($event)">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+
+            <label class="col-lg-2 control-label">Oficina: *</label>
+              <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaOficina" bindLabel="descripcion" bindValue="codigo" placeholder="Seleccione Oficina"
+                          name="oficina" #selectOficina [clearable]=true [(ngModel)]="filtros.oficina.codigo" [ngModelOptions]="{standalone: true}"
+                          dropdownPosition="bottom"   (change)="onSeleccionarOficina($event)">
+                </ng-select>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Foto:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaExisteFoto" bindLabel="detalle" bindValue="codigo" placeholder="Seleccione Foto"
+                        name="foto" #selectFoto [clearable]="true" [(ngModel)]="filtros.foto.codigo" [ngModelOptions]="{standalone: true}"
+                        (change)="onSeleccionarFoto($event)">
+                    </ng-select>
+                </div>
+            </div>
+<!--             <label class="col-lg-2" style="text-align: left">Estado:</label>
+            <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaEstado" bindLabel="detalle" bindValue="codigo" name="estado" #selectEstado
+                    placeholder="Seleccione Estado" [clearable]="true" [(ngModel)]="filtros.estado.codigo" [ngModelOptions]="{standalone: true}"
+                    dropdownPosition="bottom" (change)="seleccionarviewEstado($event)">
+                </ng-select>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="row m-b-mb" >
+        <div class="col mb 12">
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Período:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaPeriodo" bindLabel="detalle" bindValue="codigo" placeholder="Seleccione Período"
+                        name="periodo" #selectPeriodo [clearable]="true" [(ngModel)]="filtros.periodo.codigo" [ngModelOptions]="{standalone: true}"
+                        [disabled]="!comboPeriodo" (change)="onSeleccionarPeriodo($event)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Ciclo:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaCiclo" bindLabel="detalle" bindValue="codigo" name="ciclo" placeholder="Seleccione Ciclo"
+                        #selectCiclo [clearable]=true [(ngModel)]="filtros.ciclo.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" [disabled]="!comboCiclo" (change)="seleccionarViewCiclo($event)">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-mb" >
+        <div class="col mb 12">
+            <!-- <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Act. Operativa:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaActOperativa" bindLabel="detalle" bindValue="codigo" name="actOperativa" placeholder="Seleccione Act. Operativa"
+                        #selectCiclo [clearable]=true [(ngModel)]="filtros.actOperativa.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarViewActOperativa($event)">
+                    </ng-select>
+                </div>
+            </div> -->
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Sub Actividad:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="listaParametros.listaSubActividadTE" bindLabel="detalle" bindValue="codigo" placeholder="Seleccione Sub Actividad"
+                        name="tipoActividad" #selectTipoActividad [clearable]="true" [(ngModel)]="filtros.tipoActividad. id" [ngModelOptions]="{standalone: true}"
+                        (change)="onSeleccionarTipoActividad($event)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col 6 " >
+                <!-- Toma de estado -->
+            <label class="col-lg-2" style="text-align: left" >Num. Medidor:</label>
+            <div class="col-lg-3">
+                <input type="text"  (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control" [(ngModel)]="filtros.numMedidor"
+                [ngModelOptions]="{standalone: true}" />
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <label class="col-lg-2" style="text-align: left">Cod. Operario:</label>
+            <div class="col-lg-3">
+                <input type="text" maxlength="9" (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control" [(ngModel)]="filtros.operario.codigo"
+                [ngModelOptions]="{standalone: true}" />
+            </div>
+
+            <label class="col-lg-2" style="text-align: left">Suministro:</label>
+            <div class="col-lg-3">
+                <input type="text" (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control" [(ngModel)]="filtros.suministro"
+                [ngModelOptions]="{standalone: true}" maxlength="9"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-mb" *ngIf="mostrarVarios">
+        <div class="col mb 12">
+            <label class="col-lg-2" style="text-align: left">Orden Trabajo:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" [(ngModel)]="filtros.ordenTrabajo"
+                [ngModelOptions]="{standalone: true}" />
+            </div>
+
+            <label class="col-lg-2" style="text-align: left">Orden servicio:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" [(ngModel)]="filtros.ordenServicio"
+                [ngModelOptions]="{standalone: true}" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-mb">
+        <div class="col-mb-12">
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">F. Programación Inicio:</label>
+                <div class="col-lg-3">
+                    <div class="input-group date">
+                        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name=" fechaProgramacionInicio" [(bsValue)]="filtros. fechaProgramacionInicio"
+                            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="detectarCambioFechas()">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">F. Programación Fin:</label>
+                <div class="col-lg-3">
+                    <div class="input-group date">
+                        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name=" fechaProgramacionFin" [(bsValue)]="filtros. fechaProgramacionFin"
+                            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="detectarCambioFechas()">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-lg" >
+        <div class="col mb 12">
+
+
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Semáforo:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaSemaforo" bindLabel="detalle" bindValue="codigo" placeholder="Seleccione Semáforo"
+                        name="foto" #selectSemaforo [clearable]="true" [(ngModel)]="filtros.semaforo.codigo" [ngModelOptions]="{standalone: true}"
+                        (change)="onSeleccionarSemaforo($event)">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin filtros -->
+
+
+
+    <div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true">
+
+        <div class="row margin--left-right-6" *ngIf="mostrarFiltros">
+            <alert type="info" class="padding-0">
+              <div class="row">
+                <div class="col-md-10">
+                  <span class="padding-0" [innerHtml]="filtrosTexto"></span>
+                </div>
+                <div class="col-md-offset-10">
+                  <a (click)="eliminarFiltros()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+                </div>
+              </div>
+            </alert>
+          </div>
+          <sk-three-bounce></sk-three-bounce>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover issue-tracker">
+                <thead>
+                    <tr>
+                        <th class="text-center padding8">Id</th>
+                        <th class="text-center padding8">Código</th>
+                        <th class="text-center" >Nombre</th>
+                        <th class="text-center padding-left-15">Actividad</th>
+                        <th class="text-center">Carga Programada</th>
+                        <th class="text-center">Carga Ejecutada</th>
+                        <th class="text-center">Carga Pendiente</th>
+                        <th class="text-center">% Avance</th>
+                        <th class="text-center">Semáforo</th>
+                        <th class="text-center">Fecha Programación</th>
+                        <th class="text-center">F. Ejecución Inicio</th>
+                        <th class="text-center">H. Ejecución Inicio</th>
+                        <th class="text-center">F. Ejecución Fin</th>
+                        <th class="text-center">H. Ejecución Fin</th>
+                        <th class="text-center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr *ngFor="let monitoreo of onListarMonitoreos(); let indice = index">
+                            <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                            <td class="text-center" data-col="nombre">{{monitoreo.trabajador.codigo}}</td>
+                            <td class="text-center" data-col="nombre">{{monitoreo.trabajador.nombre}}</td>
+                            <td class="text-center" data-col="actividad">{{monitoreo.actividad.descripcion}}</td>
+                            <td class="text-center" data-col="carga-programada">{{monitoreo.cargaProgramada}}</td>
+                            <td class="text-center" data-col="carga-ejecutada">{{monitoreo.cargaEjecutada}}</td>
+                            <td class="text-center" data-col="carga-pendiente">{{monitoreo.cargaProgramada - monitoreo.cargaEjecutada}}</td>
+                            <td class="text-center" data-col="avance">{{getAvance(monitoreo)}}</td>
+                            <td class="text-center" data-col="semaforo">
+                                <div *ngIf="monitoreo.semaforo == 4">
+                                    <span style="font-size: 25px; color: rgb(29, 219, 22);"><i class="fa fa-circle margin-right-10"></i></span>
+                                 </div>
+                                <div *ngIf="monitoreo.semaforo == 3">
+                                    <span style="font-size: 25px; color: rgb(255, 230, 0);"><i class="fa fa-circle margin-right-10"></i></span>
+                                </div>
+                                <div *ngIf="monitoreo.semaforo == 2">
+                                    <span style="font-size: 25px; color: rgb(255, 38, 0);"><i class="fa fa-circle margin-right-10"></i></span>
+                                </div>
+                            </td>
+                            <td class="text-center" data-col="fecha-programacion">{{monitoreo.fechaProgramacion}}</td>
+                            <td class="text-center" data-col="fecha-ejecucion-inicio">{{monitoreo.fechaEjecucionInicio}}</td>
+                            <td class="text-center" data-col="hora-ejecucion-inicio">{{monitoreo.horaEjecucionInicio}}</td>
+                            <td class="text-center" data-col="fecha-ejecucion-fin">{{monitoreo.fechaEjecucionFin}}</td>
+                            <td class="text-center" data-col="hora-ejecucion-fin">{{monitoreo.horaEjecucionFin}}</td>
+                            <td class="text-center" data-col="accion">
+                                <!-- <div *ngIf="monitoreo.estado.codigo != 6"> -->
+                                    <button  class="btn btn-sm btn-info margin-right-10" title="Buscar" (click)="eliminarMonitoreo(monitoreo);">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                    <button  class="btn btn-sm btn-success margin-right-10" title="Detalle" (click)="buscarDetalle(monitoreo);">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                <!-- </div> -->
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row margin-top-20">
+            <!-- inicio paginación -->
+            <div class="col-md-4 col-sm-12 col-xs-12">
+                <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="onPageChanged($event)" [totalItems]="paginacion.totalRegistros"
+                    [itemsPerPage]="paginacion.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                    firstText="&laquo;" lastText="&raquo;"></pagination>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-center m-a-sm">
+                    <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-right m-a-sm">
+                    <pagination-set (optionChanged)="onPageOptionChanged($event)"></pagination-set>
+                </div>
+            </div>
+        </div>
+        <!-- final de paginación -->
+    </div>
+    <!-- final del recuadro de la tabla -->
+
+
+</div>
+<!-- final del wrapper monitoreo principal -->
+
+
+<!-- inicio del wrapper monitoreo detalle -->
+
+<div class="wrapper wrapper-content animated fadeInRight" *ngIf="mostrarDetalle">
+    <!-- wrapper monitoreo principal -->
+    <!-- fila de botones -->
+    <div class="row m-b-lg">
+        <div class="col-lg-12">
+
+            <button type="button" class="btn btn-info limite" title="Buscar" (click)="onObtenerDetalles()">
+                <i class="fa fa-search margin-right-10"></i>
+                <span>Buscar</span>
+            </button>
+
+            <button type="button" class="btn btn-default limite" title="Regresar" (click)="regresarDetalle()">
+                <i class="fa fa-reply margin-right-10"></i>
+                <span>Regresar</span>
+            </button>
+
+            <button type="button" class="btn btn-success limite" title="Limpiar" (click)="onLimpiarFiltrosDetalle()">
+                <i class="fa fa-eraser margin-right-10" title="Limpiar"></i>
+                <span>Limpiar</span>
+            </button>
+
+
+            <button type="button" class="btn btn-success limite" title="Exportar" (click)="onExportarDetalle()">
+                <i class="fa fa-database margin-right-10"></i>
+                <span>Exportar</span>
+            </button>
+
+        </div>
+    </div>
+    <!-- fin de fila de botones -->
+    <!-- Inicio filtros -->
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Contratista:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.contratista.descripcion"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Fecha Programada:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.fechaProgramacion"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Período:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.periodo.detalle"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Ciclo:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.ciclo.detalle"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+
+            <div class="col 6">
+                <label class="col-lg-2 control-label" style="text-align: left">Operario:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" [(ngModel)]="filtrosDetalle.operarioCodNombre"
+                    [ngModelOptions]="{standalone: true}" [readonly]="true" maxlength="9" (keypress)="validacionNumero.validacionSoloNumeros($event)"/>
+                </div>
+            </div>
+            <label class="col-lg-2" style="text-align: left">Incidencia:</label>
+            <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaIncidencia" bindLabel="detalle" bindValue="codigo" name="incidencia" #selectIncidencia
+                    placeholder="Seleccione Incidencia" [clearable]="true" [(ngModel)]="filtrosDetalle.incidencia.codigo" [ngModelOptions]="{standalone: true}"
+                    dropdownPosition="bottom" (change)="seleccionarviewIncidencia($event)">
+                </ng-select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row m-b-mb">
+        <div class="col mb 12">
+            <!-- <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Sub Incidencia:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaSubIncidencia" bindLabel="detalle" bindValue="codigo" name="subIncidencia" placeholder="Seleccione Sub Incidencia"
+                         [clearable]=true [(ngModel)]="filtrosDetalle.subIncidencia.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarViewSubIncidencia($event)">
+                    </ng-select>
+                </div>
+            </div> -->
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Foto:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaExisteFoto" bindLabel="detalle" bindValue="codigo" name="foto2" placeholder="Seleccione Foto"
+                        #selectCiclo [clearable]=true [(ngModel)]="filtrosDetalle.foto.codigo" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarViewExisteFoto($event)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col 6">
+                <label class="col-lg-2" style="text-align: left">Estado:</label>
+                <div class="col-lg-3">
+                    <ng-select [items]="this.listaParametros.listaEstado" bindLabel="detalle" bindValue="codigo" name="estado" #selectEstado
+                        placeholder="Seleccione Estado" [clearable]="true" [(ngModel)]="filtrosDetalle.estado.id" [ngModelOptions]="{standalone: true}"
+                        dropdownPosition="bottom" (change)="seleccionarviewEstado($event)">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-b-lg">
+        <div class="col mb 12">
+
+            <label class="col-lg-2" style="text-align: left">Suministro:</label>
+            <div class="col-lg-3">
+                <input type="text" (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control" [(ngModel)]="filtrosDetalle.suministro"
+                [ngModelOptions]="{standalone: true}" maxlength="9"/>
+            </div>
+
+           <label class="col-lg-2 control-label" style="text-align: left">Cumplimiento:</label>
+            <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaCumplimiento" bindLabel="detalle" bindValue="codigo" placeholder="Seleccione Cumplimiento"
+                    name="cumplimiento" #selectCumplimiento [clearable]="true" [(ngModel)]="filtrosDetalle.cumplimiento.codigo" [ngModelOptions]="{standalone: true}"
+                    (change)="onSeleccionarCumplimiento($event)">
+                </ng-select>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Fin filtros -->
+
+
+
+    <div class="ibox-content" [ngClass]="{'sk-loading': loading}" [@.disabled]="true">
+
+        <div class="row margin--left-right-6" *ngIf="mostrarFiltrosDetalle">
+            <alert type="info" class="padding-0">
+              <div class="row">
+                <div class="col-md-10">
+                  <span class="padding-0" [innerHtml]="filtrosTextoDetalle"></span>
+                </div>
+                <div class="col-md-offset-10">
+                  <a (click)="eliminarFiltrosDetalle()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+                </div>
+              </div>
+            </alert>
+          </div>
+        <sk-three-bounce></sk-three-bounce>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover issue-tracker">
+                <thead>
+                    <tr>
+                        <th class="text-center padding8">Ítem</th>
+                        <th class="text-center padding-left-15">Suministro</th>
+                        <th class="text-center" >Dirección</th>
+                        <th class="text-center">Medidor</th>
+                        <th class="text-center">Lectura</th>
+                        <th class="text-center">Incidencia lectura 1</th>
+                        <th class="text-center">Incidencia lectura 2</th>
+                        <th class="text-center">Incidencia lectura 3</th>
+                        <th class="text-center">Medidor observado</th>
+                        <th class="text-center">F. Ejecución</th>
+                        <th class="text-center">H. Ejecución</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Zona</th>
+                        <th class="text-center">Cumplimiento</th>
+                        <th class="text-center">Foto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr *ngFor="let detalle of onListarDetalles(); let indice = index">
+                            <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion2.pagina - 1) * paginacion2.registros)}}</td>
+                            <td class="text-center" data-col="suministro">{{detalle.suministro}}</td>
+                            <td class="text-center" data-col="direccion">{{detalle.direccion}}</td>
+                            <td class="text-center" data-col="medidor">{{detalle.medidor}}</td>
+                            <td class="text-center" data-col="lectura">{{detalle.lectura}}</td>
+                            <td class="text-center" data-col="incidencia-lectura-1">{{detalle.incLectura1}}</td>
+                            <td class="text-center" data-col="incidencia-lectura-2">{{detalle.incLectura2}}</td>
+                            <td class="text-center" data-col="incidencia-lectura-3">{{detalle.incLectura3}}</td>
+                            <td class="text-center" data-col="medidor-observado">{{detalle.medidorObservado}}</td>
+                            <td class="text-center" data-col="fecha-ejecucion">{{detalle.fechaEjecucion}}</td>
+                            <td class="text-center" data-col="hora-ejecucion">{{detalle.horaEjecucion}}</td>
+                            <td class="text-center" data-col="estado">{{detalle.estado.descripcion}}</td>
+                            <td class="text-center" data-col="zona">{{detalle.zona.detalle}}</td>
+                            <td class="text-center" data-col="cumplimiento">{{detalle.cumplimiento.detalle}}</td>
+                            <td class="text-center" data-col="foto">
+                                <div *ngIf="detalle.foto.detalle != 0">
+                                    <button class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarImagen(detalle, 'V');">
+                                        <i class="fa fa-file-image-o"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row margin-top-20">
+            <!-- inicio paginación -->
+            <div class="col-md-4 col-sm-12 col-xs-12">
+                <pagination [(ngModel)]="paginacion2.pagina" (pageChanged)="onPageChangedDetalle($event)" [totalItems]="paginacion2.totalRegistros"
+                    [itemsPerPage]="paginacion2.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                    firstText="&laquo;" lastText="&raquo;"></pagination>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-center m-a-sm">
+                    <pagination-info [totalItems]="paginacion2.totalRegistros" [itemsPerPage]="paginacion2.registros" [page]="paginacion2.pagina"></pagination-info>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-right m-a-sm">
+                    <pagination-set (optionChanged)="onPageOptionChangedDetalle($event)"></pagination-set>
+                </div>
+            </div>
+        </div>
+        <!-- final de paginación -->
+    </div>
+    <!-- final del recuadro de la tabla -->
+
+
+</div>
+
+<!-- final del wrapper monitoreo detalle -->
+
+
+
+<swal #visorImgSwal [showConfirmButton]="false" customClass="img-swal" (cancel)="eliminarArchivoFileServer();">
+    <form *swalPartial class="ajuste">
+        <app-image-viewer [images]=arrayImagenes
+        [idContainer]=sumVisor
+        [loadOnInit]="true"
+        [download]="true"
+        [showPDFOnlyOption]="false"
+        [showOptions]="true"
+        ></app-image-viewer>
+    </form>
+</swal>
+
+<swal #comentarSwal2 title="Anular Registro" imageUrl= "assets/images/advertencia.png" imageWidth=50
+    confirmButtonText="Aceptar " [allowOutsideClick]="true" cancelButtonText="Cancelar " [showCancelButton]="true "
+    (confirm)="anularDetalle()">
+</swal>

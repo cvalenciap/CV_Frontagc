@@ -1,0 +1,24 @@
+.pad-1 {
+  padding: 1rem;
+}
+
+.bg-btnDetail {
+  background-color: #00bfa5;
+  color: #fff;
+}
+
+.row-personal {
+  &:hover {
+    cursor: pointer;
+    background-color: #E1ECF4;
+  }
+}
+
+::ng-deep .mat-checkbox .mat-checkbox-inner-container {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: #286090 !important;
+}

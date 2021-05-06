@@ -1,0 +1,114 @@
+.contenedor-botones {
+ height: 300px;
+  padding-top: 60px;
+}
+
+.contenedor-boton {
+  height: 150px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.table th, .table td {
+  border-top: none !important;
+  border-left: none !important;
+}
+
+.table th, .table td {
+  cursor: default;
+  -moz-user-select: none; 
+  -webkit-user-select: none; 
+  -ms-user-select:none; 
+  user-select:none;
+  -o-user-select:none;
+}
+.width-100 {
+  width: 100px;
+}
+
+.highlight {
+  background-color:lighten(#ED5565, 4%);
+  color: white;
+}
+
+.highlight_origen{
+  background-color:lighten(#1ab394, 4%);
+  color: white;
+}
+
+.highlight_seleccion {
+  background-color:lighten(#1f659b, 4%);
+  color: white;
+}
+
+.boton-azul{
+  border: 1px solid #aaa;
+  border-radius: 50%;
+  width: 40%;
+  height: 45%;
+  background-color: dodgerblue;
+  margin: 30px auto;
+  box-shadow: 1px 1.5px 8px #aaa;
+}
+
+.boton-rojo{
+  border: 1px solid #aaa;
+  border-radius: 50%;
+  width: 40%;
+  height: 45%;
+  background-color: red;
+  margin: 0px auto;
+  box-shadow: 1px 1.5px 8px #aaa;
+}
+
+.icon {
+  margin-left: 12px;
+  margin-top: 8px;
+}
+
+.bg-default {
+  background: gray;
+  color: white;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

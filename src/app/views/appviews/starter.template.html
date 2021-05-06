@@ -1,0 +1,118 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+          <div class="col-sm-12">
+            <h1>Bienvenido(a), {{proper(item.nombre)}}</h1>
+            <hr>
+      <div class="ibox-content" [class.sk-loading]="isLoading">
+        <sk-three-bounce></sk-three-bounce>
+            <ul class="nav nav-second-level">
+            <li *ngFor="let item of modulos; let i=index">
+              <h2>{{proper(item.descripcion)}}</h2>
+              <div class="row">
+              <ul class="nav nav-second-level">
+              <li *ngFor="let subitem of item.formularios">
+                 <div class="col-sm-4">
+                    <a (click)="session()" class="animated-widget" routerLink="{{proper(subitem.url)}}">
+                      <div class="{{
+                                  proper(subitem.descripcion)=='Empresa' ? 'widget style1 aqua-bg' :
+                                  proper(subitem.descripcion)=='Responsables' ? 'widget style1 yellow-bg' :
+                                  proper(subitem.descripcion)=='Parámetros' ? 'widget style1 red-bg' :
+                                  proper(subitem.descripcion)=='Items' ? 'widget style1 bg-custom-gray' :
+                                  proper(subitem.descripcion)=='Carga de Trabajo' ? 'widget style1 blue-bg' :
+                                  proper(subitem.descripcion)=='Consulta de Documentos Digitalizados' ? 'widget style1 red-bg' :
+                                  proper(subitem.descripcion)=='Consulta de Log Visor' ? 'widget style1 navy-bg' :
+                                  proper(subitem.descripcion)=='Grupo Personal' ? 'widget style1 navy-bg' :
+                                  proper(subitem.descripcion)=='Mantenimiento de Personal' ? 'widget style1 teal-bg' :
+                                  proper(subitem.descripcion)=='Consulta de Personal' ? 'widget style1 teal-bg' :
+                                  proper(subitem.descripcion)=='Consulta Historico de Personal' ? 'widget style1 m-personal-1' :
+                                  proper(subitem.descripcion)=='Consulta Hist. de Movimientos de Cargos' ? 'widget style1 m-personal-2' :
+                                  proper(subitem.descripcion)==='Cargos Opensgc' ? 'widget style1 m-cargos' :
+
+                                  proper(subitem.descripcion)=='Asignacion de Trabajo' ? 'widget style1 blue-bg' :
+                                  proper(subitem.descripcion)=='Toma de Estado' ? 'widget style1 red-bg' :
+                                  proper(subitem.descripcion)=='Inspecciones Comerciales' ? 'widget style1 lazur-bg' :
+                                  proper(subitem.descripcion)=='Distribución de Comunicaciones' ? 'widget style1 yellow-bg' :
+                                  proper(subitem.descripcion)=='Distribución de Avisos y Cobranza' ? 'widget style1 blue-bg' :
+                                  proper(subitem.descripcion)=='Medidores' ? 'widget style1 navy-bg' :
+                                  proper(subitem.descripcion)=='Cierres y Reaperturas' ? 'widget style1 red-bg' :
+                                  proper(subitem.descripcion)=='Sostenibilidad' ? 'widget style1 lazur-bg' : 'widget style1 red-bg'
+
+
+                                }}">
+                      <div class="row">
+                        <div class="col-xs-4">
+
+                            <div [ngSwitch] = "proper(subitem.descripcion)">
+                              <i *ngSwitchCase = "'Empresa'" class="fa fa-building fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Responsables'" class="fa fa-user-circle fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Parámetros'" class="fa fa-wrench fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Items'" class="fa fa-list fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Carga de Trabajo'" class="fa fa-inbox fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Consulta de Documentos Digitalizados'"class="fa fa-file-image-o fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Consulta de Log Visor'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Grupo Personal'" class="fa fa-users fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Mantenimiento de Personal'"
+                                class="fa fa-address-card fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Consulta de Personal'"
+                                class="fa fa-address-card fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Consulta Historico de Personal'"
+                                class="fa fa-address-book-o fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Consulta Hist. de Movimientos de Cargos'"
+                                class="fa fa-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Cargos Opensgc'" class="fa fa-tags fa-5x infinite bounce"></i>
+                              <!-- INICIO - MONITOREO -->
+                              <i *ngSwitchCase = "'Asignacion de Trabajo'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Toma de Estado'"class="fa fa-address-card fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Inspecciones Comerciales'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Distribución de Comunicaciones'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Distribución de Avisos y Cobranza'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Medidores'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Cierres y Reaperturas'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Sostenibilidad'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <!-- FIN - MONITOREO -->
+                              <!-- Reportes - Inicio -->
+                              <i *ngSwitchCase = "'Informe Actividad Ejecutada'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Actividad Toma Estado'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Cumplimiento Ciclo Lector'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad en la Sostenibilidad'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Actividad Ejecutada Consolidado'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Lector Toma Estado'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Cumplimiento Notificacion'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad Notificaciones'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Cumplimiento Recibido'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad Inspeccion Comercial'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Cumplimiento Inspeccion Comercia'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad Aviso Cobranza'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Cumplimiento Cierre'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad Inspeccion Interna'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Cumplimiento Reapertura'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad Cierre'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Programa Mensual'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Informe Efectividad Reapertura'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Rendimiento'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Ciclos'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <!-- Reportes - Fin -->
+                              <!-- Alertas - Inicio -->
+                              <i *ngSwitchCase = "'Mantenimiento de Plantillas de Alertas'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <i *ngSwitchCase = "'Programacion de Alertas'"class="fa fa-address-book fa-5x infinite bounce"></i>
+                              <!-- Alertas - Fin -->
+                          </div>
+
+                        </div>
+                        <div class="col-xs-8 text-right">
+                          <h2 class="font-bold" name="count_eingresado"></h2>
+                          <span>{{proper(subitem.descripcion)}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                 </div>
+               </li>
+              </ul>
+             </div>
+           </li>
+          </ul>
+            </div>
+          </div>
+        </div>
+      </div>

@@ -1,0 +1,57 @@
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+        <div class="row mt-2">
+            <div class="col-md-6 padding-0">
+                <div class="form-group">
+                    <label class="col-md-2 padding-0 text-right control-label">Tipo Alerta:</label>
+                    <div class="col-md-9">
+                        <select class="form-control" [(ngModel)]="tipoAlerta" type="text" name="alerta" (change)="obtenerAlertaQueries();">
+                            <option *ngFor="let alerta of listAlerta" [ngValue]="alerta.v_id_alerta">{{alerta.v_description}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 padding-0">
+                <div class="form-group">
+                    <label class="col-md-2 padding-0 text-right control-label">Tipo Template:</label>
+                    <div class="col-md-9" *ngIf="listAlertaQueries.length>0">
+                        <select class="form-control" [(ngModel)]="tipoTemplate" type="text" name="tipoTemplate">
+                            <option *ngFor="let tipoTemplate of listAlertaQueries" [ngValue]="tipoTemplate.n_sec_queries">{{tipoTemplate.v_query_title_columns}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-9" *ngIf="listAlertaQueries.length==0">
+                        <select class="form-control" [(ngModel)]="tipoTemplate" type="text" name="tipoTemplate">
+                            <option >----
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6 padding-0">
+                <div class="form-group">
+                    <label class="col-md-2 padding-0 text-right control-label">Nombre Template:</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" [(ngModel)]="nombreTemplate"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 padding-0">
+                <div class="form-group">
+                    <label class="col-md-2 padding-0 text-right control-label">Contenido Template:</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" [(ngModel)]="contenidoTemplate"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row mt-1 text-center" style="margin-bottom: 40px;">
+      <div class="col-sm-6">
+          <button class="btn btn-primary container-button" (click) = "onCrear()" ><i class="fa fa-plus"></i>  Agregar</button> </div>
+        <div class="col-sm-6">  <button class="btn btn-default container-button" (click) = "onCancel()" ><i class="fa fa-times"></i> Cancelar</button>        
+        </div>
+    </div>
+</div>

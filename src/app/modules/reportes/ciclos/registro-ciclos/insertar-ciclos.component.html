@@ -1,0 +1,36 @@
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <label class="col-md-2 padding-0 text-right control-label">Oficina:</label>
+                <select class="form-control" [(ngModel)]="oficina" type="text" name="oficina" [disabled]="estadoLista">
+                    <option *ngFor="let oficina of lista.oficinas;" [ngValue]="oficina.codigo">{{oficina.descripcion}}
+                    </option>
+                  </select>
+            </div>
+        </div> 
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;"> 
+                <label class="col-md-2 text-right control-label" style="padding-top: 8px;" >Periodo Inicial:</label>
+                <div class="col-md-4" id="fechaControl">
+                    <form [formGroup]="myForm" novalidate>
+                        <month-date-picker name="fecha" formControlName="fecha" (calculate)="onCalcular($event)" [disabled]="true"></month-date-picker>
+                    </form>
+                </div>
+                <label class="col-md-2 text-right control-label" style="padding-top: 2px;" >Cant Periodos:</label>
+                <div class="col-md-3" id="progTotal">
+                    <input type="number" class="form-control" name="cantPeriodos" id="cantPeriodos" (change) = "onChangePeriodos()" [(ngModel)]="cantPeriodos" (keypress)="numberOnly($event)" max="{{valorPeriodo}}" min="0" />
+                </div>  
+                
+            </div>
+        </div>    
+    </div>
+    <div class="row mt-1 text-center">
+        <div class="col-sm-12">
+            <button class="btn btn-success container-button" (click) = "onCrear()" ><i class="fa fa-save"></i> Grabar</button>        
+            <button class="btn btn-default container-button" (click) = "onCancel()" ><i class="fa fa-times"></i> Cancelar</button>        
+        </div>
+    </div>
+</div>
+
+

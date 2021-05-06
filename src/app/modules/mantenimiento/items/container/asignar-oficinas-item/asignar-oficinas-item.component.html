@@ -1,0 +1,111 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4 style="color: black;"><a routerLink="/inicio">Inicio</a> / Mantenimiento / Items /
+      <strong>Registro de Oficinas</strong></h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content" [class.sk-loading]="loading">
+      <div class="row m-b-md" style="margin-bottom:15px;">
+        <div class="col-md-4">
+          <button type="button" [swal]="guardarCambios" [disabled]="false" class="btn container-button btn-primary"
+            title="Guardar Cambios">
+            <i class="fa fa-check margin-right-10"></i><span>Guardar</span></button>
+          <button type="button" class="btn btn-gray-dark" (click)="regresar()" title="Regresar">
+            <i class="fa fa-arrow-left margin-right-10"></i><span>Regresar</span></button>
+        </div>
+      </div>
+      <div class="row m-b-md">
+        <div class="col-md-12">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="col-lg-1">
+                <label class="control-label text-left">Item:</label>
+              </div>
+              <div class="col-lg-4">
+                <input type="text" class="form-control" value="{{item.descripcion}}" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{listaFinal | json}} -->
+      <div class="row m-b-md">
+        <div class="ibox-content" style="padding-top: 0px" [ngClass]="{'sk-loading': loading}">
+          <sk-three-bounce></sk-three-bounce>
+          <div class="row m-b-md">
+            <br>
+            <div class="col-md-5">
+              <div class="ibox-content padding-0">
+                <div class="container-fluid bg-custom-gray-dark">
+                  <h4 class="text-left">LISTA DE OFICINAS DISPONIBLES</h4>
+                </div>
+                <div class="table-responsive container-lista-responsable">
+                  <!-- {{listaSeleccionTempLeft | json}} -->
+                  <!-- {{listaOficinasDisponibles | json}} -->
+                  <table class="table table-stripped table-hover">
+                    <thead>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let oficina of listaOficinasDisponibles; let indice = index">
+                        <td id="{{oficina.codigo}}" (click)="seleccionarOficinaLeft(oficina, indice)" class="text-left"
+                          data-col="nombre" [ngClass]="{highlight_seleccion: oficina.estadoSeleccion === 'S',
+                                                                highlight_origen: oficina.estadoSeleccion === 'A'}">
+                          {{ (indice + 1) + '. ' + oficina.codigo + ' - ' + oficina.descripcion }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- [disabled]="permisos ('CREAR') && (items==null || items.length==0)" -->
+            <div class="col-md-2" style="padding-top: 100px">
+              <div class="row text-center">
+                <button class="btn btn-success width-100 margin-bot-tom-10" [disabled]="false"
+                  (click)="agregarOficinas()">
+                  <i class="fa fa-arrow-right margin-right-10"></i>
+                  Agregar</button>
+              </div>
+              <br>
+              <!-- [disabled]="permisos('ELIMINAR') && (itemeSeleccionados==null || itemeSeleccionados. length==0)" -->
+              <div class="row text-center">
+                <button class="btn btn-danger width-100" [disabled]="false" (click)="quitarOficinaItem()">
+                  <i class="fa fa-arrow-left margin-right-10"></i>
+                  Quitar</button>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="ibox-content padding-0">
+                <div class="container-fluid bg-custom-gray-dark">
+                  <h4 class="text-left">LISTA DE OFICINAS DEL ITEM</h4>
+                </div>
+                <!-- {{listaSeleccionTempRigth | json}} -->
+                <div class="table-responsive container-lista-responsable">
+                  <table class="table table-stripped table-hover">
+                    <thead>
+                      <tr>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of listaItemOficinas; let indice = index">
+                        <td id="{{item.oficina.codigo}}" (click)="seleccionarOficinaRigth(item.oficina, indice)"
+                          class="text-left" [ngClass]="{highlight_seleccion: item.estadoSeleccion === 'S',
+                                                                     highlight_origen: item.estadoSeleccion === 'A'}">
+                          {{ (indice + 1) + '. ' + item.oficina.codigo+ ' - ' + item.oficina.descripcion }}
+                          <!-- {{ oficinae.descripcion.toUpperCase() }} -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<swal #guardarCambios type="question" title="¿Esta seguro de guardar los cambios?" confirmButtonText="Aceptar"
+  cancelButtonText="Cancelar" [showCancelButton]="true" (confirm)="guardar()" [allowOutsideClick]="true"></swal>

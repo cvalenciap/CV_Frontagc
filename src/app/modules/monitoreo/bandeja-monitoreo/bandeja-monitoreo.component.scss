@@ -1,0 +1,48 @@
+  .boton-regresar{
+    
+    margin-left: 12px !important;
+  }.boton-exportar{
+  
+    margin-left: 10px !important;
+  }.boton-detalle{
+    margin-left: 27px !important
+  }.boton-reasignar{
+    margin-left: 55px !important
+  }.boton-20{
+    margin-left: 22px !important
+  }.boton-final{
+    margin-left: 80px !important
+  }.limite{
+    margin: 3px !important;
+  }
+
+    .upload {
+      display: none;
+  }
+  
+  .uploader {
+    border: 1px solid #ccc;
+    width: 100%;
+    position: relative;
+    height: 32px;
+    display: flex;
+    border-radius: 5px;
+  }
+  
+  .uploader .input-value {
+    width: 100%;
+    padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 25px;
+  }
+  
+  .uploader label {
+      cursor: pointer;
+      margin: 0;
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      right: 0;
+      background: #ddd url('../../../../assets/images/folder.png') no-repeat center;
+  }

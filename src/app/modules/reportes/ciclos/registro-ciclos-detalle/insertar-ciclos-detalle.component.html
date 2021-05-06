@@ -1,0 +1,89 @@
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+      <div class="row mt-1" style="margin-left: 10px;">
+        <div class="col-sm-2" style="display: inline-flex;">
+            <label class="col-md-12 padding-0 control-label">Ciclo: {{ idCiclo }}</label>
+        </div>
+        <div class="col-sm-5" style="display: inline-flex;">
+          <div class="form-group">
+            <label class="col-md-3 padding-0 control-label">Actividad:</label>
+            <div class="col-md-9">
+              <select class="form-control" [(ngModel)]="actividad"  type="text"
+                name="actividad">
+                <option value="">Seleccione actividad</option>
+                <option *ngFor="let actividad of listaActividad" [ngValue]="actividad.codigo">
+                  {{actividad.descripcion}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5" style="display: inline-flex;">
+          <div class="form-group">
+            <label class="col-md-4 padding-0 control-label">Acción:</label>
+            <div class="col-md-8">
+              <select class="form-control" [(ngModel)]="acciones" type="text" name="acciones"
+              (ngModelChange)="selectedValue=$event;">
+              <option *ngFor="let accion of accionesKeys" [ngValue]="acciones">{{accionesType[accion]}}</option>
+            </select>
+            </div>
+          </div>
+        </div>
+    </div> 
+    <div class="row mt-1 text-center">
+      <div class="col-sm-12">
+          <button class="btn btn-primary container-button" (click) = "onCrear()" ><i class="fa fa-plus"></i>  Agregar</button> </div>
+  </div>
+      <!-- Table report-->
+    <div style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px;width: 100%; height: 200px; overflow-y: scroll;">
+    <div class="row mt-2">
+        <div class="col-lg-12">
+          <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+            <sk-three-bounce></sk-three-bounce>
+            <div class="table-responsive">
+              <table class="table table-stripped table-hover issue-tracker">
+                <thead>
+                  <tr>
+                    <th data-col="item">Item</th>
+                    <th data-col="codigo">Código</th>
+                    <th data-col="oficina">Ciclo</th>
+                    <th data-col="periodo">Actividad</th>
+                    <th data-col="ciclo">Actividad Acción</th>
+                    <th data-col="estado">Estado</th>
+                    <th data-col="acciones">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of itemsDetalle; let i = index">
+                    <td class="text-center">
+                      {{i+1}}
+                    </td>
+                    <td class="text-center">
+                      {{item.n_idciclodet}}
+                    </td>
+                    <td class="text-center">
+                      {{item.n_idciclo}}
+                    </td>
+                    <td class="text-center">
+                      {{item.v_idacti}}
+                    </td>
+                    <td class="text-center">
+                      {{item.v_idaccion}}
+                    </td>
+                    <td class="text-center">
+                      {{item.n_id_estado}}
+                    </td>
+                    <td> <button class="btn btn-danger container-button" (click)="OnEliminar(i)"><i class="fa fa-times"></i></button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="row mt-1 text-center">
+        <div class="col-sm-12">  <button class="btn btn-default container-button" (click) = "onCancel()" ><i class="fa fa-times"></i> Cancelar</button>        
+        </div>
+    </div>
+</div>

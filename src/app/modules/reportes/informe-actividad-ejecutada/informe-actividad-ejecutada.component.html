@@ -1,0 +1,219 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4>
+      <a routerLink="/inicio">Inicio</a> / Contratista / Reportes / Informe de Actividades Ejecutadas / Detallado
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+  <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <div class="row">
+      <div class="col-sm-12" style="display: inline-flex;">
+        <button class="btn btn-info container-button" (click)="OnFiltrar()"> <i class="fa fa-search"></i>
+          Buscar</button>
+        <app-button-return></app-button-return>
+        <button class="btn btn-success container-button" (click)="OnLimpiar()"> <i class="fa fa-trash"></i>
+          Limpiar</button>
+        <span class="input-group-btn" dropdown *ngIf="itemsPagination.length>0">
+          <button type="button" class="btn btn-gray-blue">
+            <i class="fa fa-database" title="Buscar"></i> Exportar</button>
+          <button dropdownToggle type="button" class="btn btn-gray-blue dropdown-toggle dropdown-toggle-split">
+            <i class="fa fa-caret-down"></i></button>
+          <!-- Lista de Opciones -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+            <li role="menuitem">
+              <a (click)="OnPDF(); $event.stopPropagation();">PDF</a></li>
+            <li role="menuitem" *ngIf="codigoPerfil===6 || codigoPerfil===1">
+              <a (click)="OnExcel()">Excel</a></li>
+          </ul>
+        </span>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Oficina:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.lista.oficinas" bindLabel="descripcion" bindValue="codigo" name="oficina" placeholder="Seleccione Oficina"
+            #selectContratista [(ngModel)]="oficina" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom"  (change)="obtenerUsuario();obtenerSubactividad();" >
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Contratista:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.listaParametros.listaEmpresa" bindLabel="descripcion" bindValue="codigo" name="empresa" placeholder="Seleccione Contratista"
+            #selectContratista [(ngModel)]="empresa" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom"  (change)="obtenerUsuario();" >
+           </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Actividad:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo" name="actividad" placeholder="Seleccione Actividad"
+            #selectContratista [(ngModel)]="actividad" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom"   (change)="obtenerUsuario(); obtenerSubactividad();" >
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Sub Actividad:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.subaticList" bindLabel="title" bindValue="key" name="subactividad" placeholder="Seleccione una Sub Actividad"
+            #selectContratista [(ngModel)]="subactividad" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom" >
+           </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0" *ngIf="codigoPerfil===6 || codigoPerfil===1">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Perfil:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.perfilReporteKeys" bindLabel="descripcion" bindValue="codigo" name="perfilReporte" placeholder="Seleccione Perfil"
+            #selectContratista [(ngModel)]="perfilReporte" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom">
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Periodo:</label>
+          <div class="col-md-9">
+            <form [formGroup]="myForm" novalidate>
+              <month-date-picker name="data" formControlName="data" (periodo)="onPeriodo($event)" ></month-date-picker>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2" *ngIf="codigoPerfil===6 && usuarioList.length > 0">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Usuario:</label>
+          <div class="col-md-9">
+            <ng-select [items]="usuarioList" bindLabel="vnombres" bindValue="vcodusuario" [clearable]="false"
+              placeholder="Seleccione Usuario" name="usuario" [(ngModel)]="usuario">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table report-->
+    <div class="row mt-2">
+      <div class="col-lg-12">
+        <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+          <sk-three-bounce></sk-three-bounce>
+          <div class="table-responsive">
+            <table class="table table-stripped table-hover issue-tracker">
+              <thead>
+                <tr>
+                  <th class="text-center" data-col="item">Item</th>
+                  <th class="text-center" data-col="oficina">Oficina</th>
+                  <th class="text-center" data-col="perfil">Perfil</th>
+                  <th class="text-center" data-col="usuario">Usuario</th>
+                  <th class="text-center" data-col="actividad">Actividad Op.</th>
+                  <th class="text-center" data-col="subactividad">Sub Actividad </th>
+                  <th class="text-center" data-col="um">U/m</th>
+                  <th class="text-center" data-col="progmes">Prog. Mes</th>
+                  <th class="text-center" data-col="ejecmes">% Ejec. Mes</th>
+                  <th class="text-center" data-col="pendiente">Pendiente Mes</th>
+                  <th class="text-center" data-col="avance">% Avance</th>
+                  <th class="text-center" data-col="programacion">Programación Total</th>
+                  <th class="text-center" data-col="ejectotal">% Ejec. Total</th>
+                  <th class="text-center" data-col="avancetotal">% AvanceTotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of itemsPagination; let i = index">
+                  <td class="text-center">
+                    {{i+1}}
+                  </td>
+                  <td class="text-center">
+                    {{item.v_descOfic}}
+                  </td>
+                  <td class="text-center">
+                    {{item.v_perfil}}
+                  </td>
+                  <td class="text-center">
+                    {{item.a_v_usucre}}
+                  <td class="text-center">
+                    {{item.v_descacti}}
+                  </td>
+                  <td class="text-center">
+                    {{item.v_idsubacti}}
+                  </td>
+                  <td class="text-center">
+                    {{item.um}}
+                  </td>
+                  <td class="text-center">
+                    {{item.prog_Mes}}
+                  </td>
+                  <td class="text-center">
+                    {{item.ejecMes}}
+                  </td>
+                  <td class="text-center">
+                    {{item.pendiente}}
+                  </td>
+                  <td class="text-center">
+                    {{item.porc_Avance}}
+                  </td>
+                  <td class="text-center">
+                    {{item.prog_Total}}
+                  </td>
+                  <td class="text-center">
+                    {{item.ejecTotal}}
+                  </td>
+                  <td class="text-center">
+                    {{item.ava_Total}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-12 col-xs-12">
+              <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)"
+                [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+                [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+              </pagination>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="text-center m-a-sm">
+                <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                  [page]="paginacion.pagina"></pagination-info>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="text-right m-a-sm">
+                <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+<swal #reportePdfSwal [showCloseButton]="true" [allowOutsideClick]="false" [showConfirmButton]="false"
+  customClass="pdf-swal">
+  <form *swalPartial>
+    <visor-pdf url="{{urlReportePdf}}" download="true"></visor-pdf>
+  </form>
+</swal>

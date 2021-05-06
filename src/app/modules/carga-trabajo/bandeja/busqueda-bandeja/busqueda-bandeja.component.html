@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-content">
+            <h4><b>Datos de Consulta</b></h4>
+            <hr class="hr-line-dashed">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Nro. Carga:</label>
+                    <div class="col-sm-3">
+                        <input #buscar type="text" class="form-control texto-ingresado" name="numero-carga" (click)="OnConfigurarBusqueda()" [(ngModel)]="uidCarga">
+                    </div>
+                    <label class="col-sm-1 control-label">Contratista:</label>
+                    <div class="col-sm-3">
+                         <ng-select [items]="listaParametros.listaEmpresa" bindLabel="descripcion" placeholder="Seleccione Empresa" name="empresas" [clearable]="true" [(ngModel)]="empresa">
+                        </ng-select>
+                    </div>
+                    <label class="col-sm-1 control-label">Oficina:</label>
+                    <div class="col-sm-3">
+                        <ng-select [items]="listaParametros.listaOficina" 
+                                    bindLabel="descripcion" 
+                                    placeholder="Seleccione Oficina" 
+                                    name="oficina" 
+                                    [clearable]="true" 
+                                    [(ngModel)]="oficina">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Actividad:</label>
+                    <div class="col-sm-3">
+                        <ng-select [items]="listaParametros.listaActividad" bindLabel="descripcion" placeholder="Seleccione Actividad" name="actividades" [clearable]="true" [(ngModel)]="actividad">
+                        </ng-select>
+                    </div>
+
+                    <label class="col-sm-1 control-label">Estado:</label>
+                    <div class="col-sm-3">
+                        <ng-select [items]="listaParametros.listaEstado" bindLabel="detalle" placeholder="Seleccione estado" name="estado" [clearable]="true" [(ngModel)]="estadoParametro">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Fecha Carga de:</label>
+                    <div class="col-sm-3">
+                        <div class="input-group date">
+                            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"  [(bsValue)]="fechaInicial" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="DetectChange()" >
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <label class="col-sm-1 control-label">Al :</label>
+                    <div class="col-sm-3">
+                        <div class="input-group date">
+                            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaFin"  [(bsValue)]="fechaFinal" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="DetectChange()">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <label class="col-sm-1 control-label"></label>
+                    <div class="col-sm-3">
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" (click)="realizarBusqueda()" title="Buscar"><i class="fa fa-search"></i><span> Buscar</span></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

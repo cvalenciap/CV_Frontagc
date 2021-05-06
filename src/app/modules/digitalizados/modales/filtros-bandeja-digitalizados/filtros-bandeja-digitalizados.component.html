@@ -1,0 +1,105 @@
+<form class="container-filtros">
+  <div class="row" style="margin-bottom: 15px;">
+    <div class="col-md-9">
+    </div>
+    <div class="col-md-3">
+      <a type="button" class="btn-sm btn-default" style="background: #eee" (click)="onLimpiarFiltros()"><i
+          class="fa fa-eraser" title="Buscar"></i> Limpiar filtros</a>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Número Suministro:</label>
+    <div class="col-xs-6 col-sm-10 col-md-10">
+      <input type="text" (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control"
+        [(ngModel)]="filtros.suministro" [ngModelOptions]="{standalone: true}" maxlength="9" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Nro. Carga:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="20"
+        [disabled]="!estadoComponentes.inputNumeroCarga" type="text" class="form-control"
+        [(ngModel)]="filtros.numeroCarga" [ngModelOptions]="{standalone: true}" />
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Actividad:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <ng-select [items]="this.listaParametros.listaActividad"
+                 bindLabel="descripcion"
+                 bindValue="codigo"
+                 placeholder="Seleccione Actividad"
+                 name="actividades"
+                 #selectActividad
+                 [clearable]="false"
+                 [(ngModel)]="filtros.actividad.codigo"
+                [ngModelOptions]="{standalone: true}" (change)="onSeleccionarActividad($event)"></ng-select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Orden Servicio:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input (keypress)="validacionNumero.validacionSoloNumeros($event)" maxlength="9"
+        [disabled]="!estadoComponentes.inputOrdenServicio" type="text" class="form-control"
+        [(ngModel)]="filtros.ordenServicio" [ngModelOptions]="{standalone: true}" />
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Orden Trabajo:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input (keypress)="validacionNumero.validacionSoloNumeros($event)" maxlength="10"
+        [disabled]="!estadoComponentes.inputOrdenTrabajo" type="text" class="form-control"
+        [(ngModel)]="filtros.ordenTrabajo" [ngModelOptions]="{standalone: true}" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Número Cédula:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="50"
+        [disabled]="!estadoComponentes.inputNumeroCedula" type="text" class="form-control"
+        [(ngModel)]="filtros.numeroCedula" [ngModelOptions]="{standalone: true}" />
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Número Reclamo:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="15"
+        [disabled]="!estadoComponentes.inputNumeroReclamo" type="text" class="form-control"
+        [(ngModel)]="filtros.numeroReclamo" [ngModelOptions]="{standalone: true}" />
+    </div>
+  </div>
+  <div class="form-group row">
+
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Oficina:</label>
+    <div class="col-xs-6 col-sm-10 col-md-10">
+      <ng-select [items]="this.listaParametros.listaOficina"
+                bindLabel="descripcion"
+                bindValue="codigo"
+                placeholder="Seleccione Oficina"
+                name="oficina"
+                 #selectOficina
+                [clearable]="clrOficina"
+                [(ngModel)]="filtros.oficina.codigo"
+                [ngModelOptions]="{standalone: true}"
+                (change)="onSeleccionarOficina($event)"
+                dropdownPosition="bottom">
+      </ng-select>
+   </div>
+
+
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Fecha Inicio:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <div class="input-group date">
+        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+          [(bsValue)]="filtros.fechaInicio" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+          (bsValueChange)="detectarCambioFechas()">
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+      </div>
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label">Fecha Fin:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <div class="input-group date">
+        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+          [(bsValue)]="filtros.fechaFin" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+          (bsValueChange)="detectarCambioFechas()">
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+      </div>
+    </div>
+  </div>
+</form>

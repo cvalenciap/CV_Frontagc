@@ -1,0 +1,23 @@
+.control-label{
+    margin-top:8px;
+}
+
+.table {
+    tr {
+      th[data-col='item'] {width: 2%}
+      th[data-col='oficina'] {width: 5%}
+      th[data-col='perfil'] {width: 5%}
+      th[data-col='usuario'] {width: 5%}
+      th[data-col='actividad'] {width: 15%;}
+      th[data-col='subactividad'] {width: 10%;}
+      th[data-col='um'] {width: 3%;}
+      th[data-col='porgmes'] {width: 5%;}
+      th[data-col='ejecmes'] {width: 5%;}
+      th[data-col='pendiente'] {width: 5%;}
+      th[data-col='avance'] {width: 5%;}
+      th[data-col='programacion'] {width: 5%;}
+      th[data-col='ejectotal'] {width: 5%;}
+      th[data-col='avancetotal'] {width: 5%;}
+
+    }
+  }

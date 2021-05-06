@@ -1,0 +1,43 @@
+<div class="input-group">
+  <!-- Input buscar por nroCarga -->
+  <input *ngIf="opcionSeleccionada.tipoOpcion === getTipoOpcion().TEXTO"
+          appWordsOnly
+          type="text" class="form-control"
+          [(ngModel)]="textoIngresado"
+          [placeholder]="opcionSeleccionada.placeholder"
+          (ngModelChange)="onChangeTextoIngresado()">
+  <input *ngIf="opcionSeleccionada.tipoOpcion === getTipoOpcion().NUMERICO"
+          appNumericOnly
+          type="text" class="form-control"
+          [(ngModel)]="textoIngresado"
+          [placeholder]="opcionSeleccionada.placeholder"
+          (ngModelChange)="onChangeTextoIngresado()">
+  <select *ngIf="opcionSeleccionada.tipoOpcion === getTipoOpcion().COMBO"
+          class="form-control"
+          [(ngModel)]="valorCombo"
+          (change)="onChangeCombo()">
+    <option [value]="null" disabled>Seleccione</option>
+    <option *ngFor="let item of opcionSeleccionada.data" [value]="item.codigo">{{item.descripcion}}</option>
+  </select>
+  <span class="input-group-btn" dropdown>
+    <button type="button"
+            class="btn btn-info"
+            (click)="onBuscar()"
+            [disabled]="enabledButton">
+      <i class="fa fa-search" title="Buscar"></i></button>
+    <button dropdownToggle
+            type="button"
+            class="btn btn-info dropdown-toggle dropdown-toggle-split">
+      <i class="fa fa-caret-down"></i></button>
+    <!-- Lista de Opciones -->
+    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+      <li *ngFor="let option of customDataList; let i = index"
+          class="menu-item" [class.active]="listClicked === i" role="list">
+        <a class="dropdown-item" (click)="onSeleccionarOpcion(option, i)">{{option.descripcion}}</a>
+      </li>
+      <li class="menu-item" role="menuitem" *ngIf="busquedaAvanzada">
+        <a class="dropdown-item" (click)="onMostrarBusquedaAvanzada()">Busqueda Avanzada</a>
+      </li>
+    </ul>
+  </span>
+</div>

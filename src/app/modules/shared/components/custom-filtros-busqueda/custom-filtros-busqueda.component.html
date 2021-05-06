@@ -1,0 +1,20 @@
+<alert type="info">
+
+  <div class="row">
+    <div class="col-md-3 text-left">
+      <strong>Búsqueda Por:</strong>
+    </div>
+    <div class="col-md-9 text-right">
+      <a (click)="onLimpiarFiltros()" title="Eliminar filtro"><i class="fa fa-trash"></i></a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngFor="let filtro of dataFiltros">
+        <strong>{{filtro.tipoFiltro}}: </strong>{{filtro.value}}
+      </div>
+    </div>
+  </div>
+
+</alert>

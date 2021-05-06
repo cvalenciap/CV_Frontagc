@@ -1,0 +1,39 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-10">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / Parámetro / <strong>Nuevo Tipo de Parámetro</strong></h4>    
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+  <div class="row m-b-md">
+      <div class="ibox-content">
+        <div class="row m-b-md">
+            <div class="col-sm-4">
+              <a class="btn btn-primary m-r" (click)="OnGuardar()" title="Guardar Cambios"><i class="fa fa-check"></i> Guardar</a>
+              <a [routerLink]="'..'" class="btn btn-gray-dark m-r"><i class="fa fa-arrow-left"></i> Regresar</a>
+              </div>
+        </div>      
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-md-3">
+                <label class="control-label pull-right">Nombre de Tipo de Parametro :</label>
+            </div>
+            <div class="col-md-8">
+              <input type="text" [tooltip]="errors?.detalle" placement="top" class="form-control" name="detalle-param" #detalle="ngModel" [ngClass]="{'ng-dirty ng-invalid':errors?.detalle}" maxlength="100" [(ngModel)]="item.detalle">
+            </div>
+          </div> 
+          <div class="form-group">
+              <div class="col-md-3">
+                  <label class="control-label pull-right">Estado :</label>
+              </div>              
+              <div class="col-sm-8">
+                    <ui-switch name="switch" size="medium" [(ngModel)]="enable"></ui-switch>
+              </div>
+            </div>         
+        </form>
+      </div>
+  </div>
+</div>

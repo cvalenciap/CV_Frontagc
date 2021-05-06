@@ -1,0 +1,8 @@
+
+<select id='cmbMotivo' name='cmbMotivo' class='form-control' (change)='OnChange()' [(ngModel)]='motivo'>
+        <option value='0' selected>Error de Envío</option>
+        <option value='1'>Carga Duplicada</option>
+        <option value='2'>Otros Motivos</option>
+</select>
+<br />
+<textarea id='txtMotivo' *ngIf="boolCaja" class='form-control' rows='5' [(ngModel)]="txtMotivo" autofocus></textarea>

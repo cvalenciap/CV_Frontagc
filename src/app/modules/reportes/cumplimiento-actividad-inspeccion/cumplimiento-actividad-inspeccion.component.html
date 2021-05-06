@@ -1,0 +1,199 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4>
+      <a routerLink="/inicio">Inicio</a> / Contratista / Reportes / Cumplimiento en los Rendimientos Inspecciones Diarias
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+  <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <div class="row">
+      <div class="col-sm-12" style="display: inline-flex;">
+        <button class="btn btn-info container-button" (click)="OnFiltrar()"> <i class="fa fa-search"></i>
+          Buscar</button>
+          <app-button-return></app-button-return>
+          <button class="btn btn-success container-button" (click)="OnLimpiar()"> <i class="fa fa-trash"></i>
+          Limpiar</button>
+        <span class="input-group-btn" dropdown *ngIf="itemsPagination.length>0">
+          <button type="button" class="btn btn-gray-blue">
+            <i class="fa fa-database" title="Buscar"></i> Exportar</button>
+          <button dropdownToggle type="button" class="btn btn-gray-blue dropdown-toggle dropdown-toggle-split">
+            <i class="fa fa-caret-down"></i></button>
+          <!-- Lista de Opciones -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+            <li role="menuitem">
+              <a (click)="OnPDF(); $event.stopPropagation();">PDF</a></li>
+            <li role="menuitem" *ngIf="codigoPerfil===6 || codigoPerfil===1">
+              <a (click)="OnExcel()">Excel</a></li>
+          </ul>
+        </span>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Oficina:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.lista.oficinas" bindLabel="descripcion" bindValue="codigo" name="oficina" placeholder="Seleccione Oficina"
+            #selectContratista [(ngModel)]="oficina" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom"  (change)="obtenerItems();cargarDato(oficina);" >
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Item:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.valorItmes" bindLabel="ITEM" bindValue="ITEM" name="ITEM" 
+            #selectContratista [(ngModel)]="itemcp" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom" [disabled]="eitems">
+           </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Actividad:</label>
+          <div class="col-md-9">
+           <ng-select [items]="this.listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo" name="actividad" 
+            #selectContratista [(ngModel)]="actividadcp" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom" [disabled]="eactividad" >
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col 6">
+        <label class="col-lg-2 control-label" style="text-align: left">Fecha de Emisión:</label>
+        <div class="col-lg-3">
+          <div class="input-group date">
+            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaEmision"  [(bsValue)]="fechaEmision" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="DetectChange()" >
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+           </div>
+        </div>
+    </div>
+    </div>
+        <!-- Table report-->
+        <div class="row mt-2">
+          <div class="col-lg-12">
+            <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+              <sk-three-bounce></sk-three-bounce>
+              <div class="table-responsive">
+                <table class="table table-stripped table-hover issue-tracker">
+                  <thead>
+                    <tr>
+                      <th rowspan="2" data-col="fecha">Item</th>
+                      <th rowspan="2" data-col="oficina">Oficina</th>
+                      <th rowspan="2" data-col="carga">Contratista</th>
+                      <th rowspan="2" data-col="carga">Cod. Inspector</th>
+                      <th rowspan="2" data-col="carga">Nombre Inspector</th>
+                      <th rowspan="2" data-col="carga">Fecha</th>
+                      <th rowspan="2" data-col="carga">Rend. Diario</th>
+                      <th rowspan="2" data-col="carga">Carga Entregada</th>
+                      <th rowspan="2" data-col="carga">% Cumplimiento</th>
+                      <th colspan="9" data-col="oficina">Tipo de Inspecciones</th>
+                    </tr>
+                    <tr>
+                      <th colspan="1" rowspan="2" data-col="fecha">Reclamos Uso Único</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Reclamos Uso Multiple</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Internas Uso Único</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Internas Uso Multiple</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Geofono</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Externas y/o Anomalía</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Externas y/o Anomalía con Boroscopio</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Empad.</th>
+                      <th colspan="1" rowspan="2" data-col="fecha">Mant. Catastral</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of itemsPagination; let i = index">
+                      <td class="text-center">
+                        {{i+1}}
+                      </td>
+                      <td class="text-center">
+                        {{datoOficina[0].descripcion}}
+                      </td>
+                      <td class="text-center">
+                        {{datoUsuarioContratista.descripcion}}
+                      </td>
+                      <td class="text-center">
+                        {{item.cod_inspector}}
+                      </td>
+                      <td class="text-center">
+                        {{item.inspector}}
+                      </td>
+                      <td class="text-center">
+                        {{item.v_fecha}}
+                      </td>
+                      <td class="text-center">
+                        {{item.rendimiento}}
+                      </td>
+                      <td class="text-center">
+                        {{item.carga_entrega}}
+                      </td>
+                      <td class="text-center">
+                        {{item.porc_cumplimiento}}
+                      </td>
+                      <td class="text-center">
+                        {{item.reclamo_unico}}
+                      </td>
+                      <td class="text-center">
+                        {{item.reclamo_multi}}
+                      </td>
+                      <td class="text-center">
+                        {{item.internas_unico}}
+                      </td>
+                      <td class="text-center">
+                        {{item.internas_multi}}
+                      </td>
+                      <td class="text-center">
+                        {{item.geofono}}
+                      </td>
+                      <td class="text-center">
+                        {{item.externa_anomalia}}
+                      </td>
+                      <td class="text-center">
+                        {{item.externa_anomalia_boroscopio}}
+                      </td>
+                      <td class="text-center">
+                        {{item.empad}}
+                      </td>
+                      <td class="text-center">
+                        {{item.catastral}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-md-4 col-sm-12 col-xs-12">
+                  <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)"
+                    [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+                    [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+                  </pagination>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="text-center m-a-sm">
+                    <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                      [page]="paginacion.pagina"></pagination-info>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="text-right m-a-sm">
+                    <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>    
+  </div>
+</div>
+<swal #reportePdfSwal [showCloseButton]="true" [allowOutsideClick]="false" [showConfirmButton]="false"
+  customClass="pdf-swal">
+  <form *swalPartial>
+    <visor-pdf url="{{urlReportePdf}}" download="true"></visor-pdf>
+  </form>
+</swal>

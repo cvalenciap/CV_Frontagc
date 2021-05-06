@@ -1,0 +1,84 @@
+<!-- {{ angForm.value | json}} -->
+<div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0px;padding-top: 2px">
+  <div class="row">
+    <h3 class="text-center text-muted font-bold ">
+      Nueva Solicitud de Cambio de Cargo
+    </h3>
+  </div>
+  <form [formGroup]="angForm" (ngSubmit)="guardar()">
+    <div class="row ">
+      <div class="ibox-content no-borders">
+        <!-- Fecha de Solicitud -->
+        <div class="row">
+          <div class="col-lg-3" style="padding-right: 0px;">
+            <label class="control-label text-left">Fecha de Solicitud:</label>
+          </div>
+          <div class="col-lg-4" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="fechaSolicitud" readonly>
+          </div>
+        </div>
+        <p></p>
+        <!-- Nuevo Cargo -->
+        <div class="row">
+          <div class="col-lg-3" style="padding-right: 0px;">
+            <label class="control-label text-left">Nuevo Cargo:</label>
+          </div>
+          <div class="col-lg-9" style="padding-left: 0px;">
+            <select class="form-control" formControlName="cargoNuevo" [attr.disabled]="guardarRegistro ? '' : null"
+              [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.cargoNuevo.errors) || (f.cargoNuevo.invalid && f.cargoNuevo.errors && (f.cargoNuevo.dirty || f.cargoNuevo.touched)) }">
+              <option value="" hidden>Seleccione Cargo</option>
+              <option *ngFor="let item of listaCargos" value="{{item.id}}">{{item.descripcion}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3" style="padding-right: 0px;"></div>
+          <div class="col-lg-9" style="padding-left: 0px;">
+            <p *ngIf="(f.cargoNuevo.invalid && f.cargoNuevo.errors.required && (f.cargoNuevo.dirty || f.cargoNuevo.touched)) ||
+                (isSubmitted && f.cargoNuevo.invalid && f.cargoNuevo.errors.required)" class="text-danger">
+              Debe seleccionar el nuevo cargo a solicitar
+            </p>
+          </div>
+        </div>
+        <p></p>
+        <!-- Descripcion -->
+        <div class="row">
+          <div class="col-lg-3" style="padding-right: 0px;">
+            <label class="control-label text-left">Descripción:</label>
+          </div>
+          <div class="col-lg-9" style="padding-left: 0px;">
+            <textarea class="form-control" formControlName="descripcion" rows="3" maxlength="100" [attr.disabled]="guardarRegistro ? '' : null">
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 0px;margin-bottom: 10px" *ngIf="!guardarRegistro">
+      <div class="col-md-12 text-center">
+        <!-- <button type="submit" [disabled]="angForm.pristine || angForm.invalid" class="btn btn-success btn-sm"
+          style="margin-right: 1rem;" (click)="guardar()">Guardar <i class="fas fa fa-save"></i></button>
+        <button class="btn btn-basic btn-sm" (click)="cancelar()">Cancelar <i class="fas fa fa-times"></i></button> -->
+        <button type="submit" class="btn btn-success btn-sm" style="margin-right: 1rem;">Guardar <i
+            class="fas fa fa-save"></i></button>
+        <button class="btn btn-basic btn-sm" (click)="cancelar()">Cancelar <i class="fas fa fa-times"></i></button>
+      </div>
+    </div>
+    <div *ngIf="guardarRegistro">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <label class="text-danger">¿Está seguro de registrar la solicitud de cambio de cargo?</label>
+        </div>
+      </div>
+      <p></p>
+      <div class="row" style="margin-top: 0px;margin-bottom: 10px">
+        <div class="col-md-12 text-center">
+          <button class="btn btn-primary btn-sm" style="margin-right: 1rem;" (click)="aceptar()">Aceptar <i
+              class="fas fa fa-check"></i></button>
+          <button class="btn btn-basic btn-sm" (click)="cancelarRegistro()">Cancelar <i
+              class="fas fa fa-times"></i></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

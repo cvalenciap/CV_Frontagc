@@ -1,0 +1,183 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4>
+      <a routerLink="/inicio">Inicio</a> / Contratista / Reportes / Rendimiento Monitoreo
+    </h4>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+  <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <div class="row mt-2">
+      <div class="col-sm-12" style="display: inline-flex;">
+        <button class="btn btn-success container-button" [swal]="registrar"> <i class="fa fa-list"></i> Registrar
+          Nuevos</button>
+<!--         <button *ngIf="items.length > 0" class="btn btn-danger container-button"
+          [swal]="{ title: '¿Estás seguro que desea eliminar el archivo adjunto?', showCancelButton: true,
+          confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false, focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }"
+          (confirm)="OnEliminar()"> <i class="fa fa-trash"></i> Eliminar Registros</button> -->
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="form-group">
+        <label class="col-md-1 padding-0 text-right control-label">Ítem:</label>
+        <div class="col-lg-3">
+          <ng-select [items]="this.arrayItems" bindLabel="detalle" bindValue="codigo" placeholder="Seleccione Ítem"
+            name="item" #selectItem [clearable]="false" [(ngModel)]="item.codigo" [ngModelOptions]="{standalone: true}"
+            (change)="OnChange(4, $event);">
+          </ng-select>
+        </div>
+
+        <label class="col-md-1 padding-0 text-right control-label">Actividad:</label>
+        <div class="col-lg-3">
+          <ng-select [items]="listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo"
+            placeholder="Seleccione Actividad" name="actividad" #selectActividad [clearable]="false"
+            [(ngModel)]="actividad.codigo" [ngModelOptions]="{standalone: true}" (change)="OnChange(3, $event);">
+          </ng-select>
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-info container-button" (click)="OnListarRendimiento()"> <i class="fa fa-search"></i>
+            Buscar</button>
+        </div>
+      </div>
+    </div>
+    <!-- Table report-->
+    <div class="row mt-2">
+      <div class="col-lg-12">
+        <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+          <sk-three-bounce></sk-three-bounce>
+          <div class="row mt-2">
+            <div class="table-responsive">
+              <table class="table table-bordered table-stripped table-hover issue-tracker">
+                <thead>
+                  <tr>
+                    <th class="text-center" style="width:  6%" data-col="secuencial">Secuencial</th>
+                    <th class="text-center" style="width: 15%" data-col="sedapal">Actividad Sedapal</th>
+                    <th class="text-center" data-col="item">Ítem</th>
+                    <th class="text-center" style="width: 18%" data-col="subactividad">Subactividad</th>
+                    <th class="text-center"style="width:  6%" data-col="unidadmedida">Unidad Medida</th>
+                    <th class="text-center" data-col="cuadrilla">Cuadrilla/Día</th>
+                    <th class="text-center" data-col="cuadrilla">Trabajador/Día</th>
+                    <th class="text-center" data-col="cuadrilla">Suministro/Día</th>
+                    <th class="text-center" data-col="acciones">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let rendimiento of onListarRendimientos(); let indice = index">
+                    <td class="text-center" data-col="codigo">
+                      {{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+
+                    <td data-col="sedapal" class="text-center">
+                      {{rendimiento.v_idacti_seda_desc}}
+                    </td>
+<!--                     <td *ngIf="rendimiento.v_editable==1" data-col="sedapal" class="text-center">
+                      <input type="text" name="sedapal" id="sedapal" 
+                      [(ngModel)]="rendimiento.v_idacti_seda_desc" class="form_control">
+                    </td> -->
+
+                    <td data-col="numitem" *ngIf="rendimiento.v_editable==0" class="text-center">
+                      {{rendimiento.n_numitem}}
+                    </td>
+                    <td *ngIf="rendimiento.v_editable==1" data-col="numitem" class="text-center">
+                      <input type="text" name="numitem" id="numitem" [(ngModel)]="rendimiento.n_numitem"
+                      (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form_control">
+                    </td>
+
+                    <td data-col="subactividad1" class="text-center">
+                      {{rendimiento.v_idsubacti_1}}
+                    </td>
+
+                    <td *ngIf="rendimiento.v_editable==0" data-col="v_uni_medida" class="text-center">
+                      {{rendimiento.v_uni_medida}}
+                    </td>
+                    <td *ngIf="rendimiento.v_editable==1" data-col="v_uni_medida" class="text-center">
+                      <input type="text" name="v_uni_medida" id="v_uni_medida" [(ngModel)]="rendimiento.v_uni_medida"
+                      class="form_control">
+                    </td>
+
+                    <td *ngIf="rendimiento.v_editable==0 || cuadrillaBlock==1" data-col="n_numcuad" class="text-center">
+                      {{rendimiento.n_numcuad}}
+                    </td>
+                    <td *ngIf="rendimiento.v_editable==1 && cuadrillaBlock==0" data-col="n_numcuad" class="text-center">
+                      <input type="text" name="n_numcuad" id="n_numcuad" [(ngModel)]="rendimiento.n_numcuad"
+                      (keypress)="validacionNumero.validacionSoloNumeros($event)" (blur)="onBlurCuadrilla(rendimiento.n_numcuad)" class="form_control">
+                    </td>
+
+                    <td *ngIf="rendimiento.v_editable==0 || trabajadorBlock==1" data-col="v_trabajador" class="text-center">
+                      {{rendimiento.n_valor_trabajador}}
+                    </td>                    
+                    <td *ngIf="rendimiento.v_editable==1 && trabajadorBlock==0" data-col="v_trabajador" class="text-center">
+                      <input type="text" name="v_trabajador" id="v_trabajador" [(ngModel)]="rendimiento.n_valor_trabajador"
+                      (keypress)="validacionNumero.validacionSoloNumeros($event)" (blur)="onBlurTrabajador(rendimiento.n_valor_trabajador)" class="form_control">
+                    </td>
+
+                    <td *ngIf="rendimiento.v_editable==0 || suministroBlock==1" data-col="Suministro" class="text-center">
+                      {{rendimiento.n_valor_suministro}}
+                    </td>
+                    <td *ngIf="rendimiento.v_editable==1 && suministroBlock==0" data-col="Suministro" class="text-center">
+                      <input type="text" name="Suministro" id="Suministro" [(ngModel)]="rendimiento.n_valor_suministro"
+                      (keypress)="validacionNumero.validacionSoloNumeros($event)" (blur)="onBlurSuministro(rendimiento.n_valor_suministro)" class="form_control">
+                    </td>
+
+                    <td data-col="acciones" *ngIf="rendimiento.v_editable==0 && editando==false" class="text-center">
+                      <button class="btn btn-info container-button" title="Editar"
+                        (click)="OnEditar((indice )+((paginacion.pagina - 1) * paginacion.registros))"><i
+                          class="fa fa-edit"></i> </button>
+                          <button  class="btn btn-sm btn-error margin-right-10" title="Eliminar" 
+                          [swal]="{ title: '¿Estás seguro que desea eliminar el registro?', showCancelButton: true,
+                          confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false, focusCancel: true,
+                           imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }"  (confirm)="OnEliminar(rendimiento)">
+                         <i class="fa fa-trash-o"></i>
+                     </button>
+                    </td>
+                    <td data-col="acciones" *ngIf="rendimiento.v_editable==1 && editando==true" class="text-center">
+                      <button class="btn btn-success container-button"title="Actualiar"
+                        (click)="OnUpdate((indice)+((paginacion.pagina - 1) * paginacion.registros))"><i
+                          class="fa fa-save"></i></button>
+                      <button class="btn btn-danger container-button"title="Cancelar"
+                        (click)="OnCancel((indice)+((paginacion.pagina - 1) * paginacion.registros))"><i
+                          class="fa fa-times"></i></button>
+                    </td>
+
+                  </tr>
+
+
+
+                </tbody>
+              </table>
+            </div>
+            <div class="row margin-top-20">
+              <!-- inicio paginación -->
+              <div class="col-md-4 col-sm-12 col-xs-12">
+                  <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="onPageChanged($event)" [totalItems]="paginacion.totalRegistros"
+                      [itemsPerPage]="paginacion.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                      firstText="&laquo;" lastText="&raquo;"></pagination>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+                  </div>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged($event)"></pagination-set>
+                  </div>
+              </div>
+          </div>
+          <!-- final de paginación -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #registrar title="Registrar Rendimiento" customClass="insertar-rendimiento-swal" [showConfirmButton]="false"
+  [showCancelButton]="false" [allowOutsideClick]="false" confirmButtonText="Grabar" cancelButtontext="Cancelar">
+  <div *swalPartial>
+    <app-insertar-rendimiento  (emisor)="onCancelRegistrar()"
+      (emisorItems)="listarItems($event)"></app-insertar-rendimiento>
+  </div>
+</swal>

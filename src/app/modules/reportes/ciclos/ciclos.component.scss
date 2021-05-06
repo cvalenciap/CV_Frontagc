@@ -1,0 +1,13 @@
+.table {
+    tr {
+      th[data-col='item'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='codigo'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='oficina'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='periodo'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='ciclo'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='estado'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='acciones'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+
+      
+    }
+  }

@@ -1,0 +1,164 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content no-borders">
+      <!-- <div class="row mb-2">
+        <div class="col-md-2 no-right-padding" *ngIf="config.btnAprobarMovimiento && esAdmOficina">
+          <button class="btn btn-sm btn-primary" type="button" (click)="mostrarModalAprobar()"
+            [disabled]="!enableAprobarRechazar">
+            <i class="fa fa-check"></i> Aprobar Movimiento</button>
+        </div>
+        <div class="col-md-2 no-left-padding" *ngIf="config.btnRechazarMovimiento && esAdmOficina">
+          <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalRechazo()"
+            [disabled]="!enableAprobarRechazar">
+            <i class="fa fa-times"></i> Rechazar Movimiento</button>
+        </div>
+      </div> -->
+      <div class="row mb-2" *ngIf="esAdmOficina">
+        <div class="col-md-2">
+          <table>
+            <tr>
+              <td *ngIf="config.btnAprobarMovimiento" style="padding-right: 8px;">
+                <button class="btn btn-sm btn-primary" type="button" (click)="mostrarModalAprobar()"
+                  [disabled]="!enableAprobarRechazar">
+                  <i class="fa fa-check"></i> Aprobar Movimiento</button>
+              </td>
+              <td *ngIf="config.btnRechazarMovimiento">
+                <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalRechazo()"
+                  [disabled]="!enableAprobarRechazar">
+                  <i class="fa fa-times"></i> Rechazar Movimiento</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;" *ngIf="esAnalistaExterno">
+          <label class="control-label text-left">Codigo SEDAPAL:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;" *ngIf="esAnalistaExterno">
+          <input type="text" class="form-control" [(ngModel)]="personal.codigoEmpleado"
+            [disabled]="!config.inputCodigoSedapalMov" />
+        </div>
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Cargo Actual:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <input type="text" class="form-control" [(ngModel)]="personal.cargo.descripcion"
+            [disabled]="!config.inputCargoActual" />
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Oficina Actual:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <input type="text" class="form-control" [(ngModel)]="personal.oficina.descripcion"
+            [disabled]="!config.inputOficinaActual" />
+        </div>
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <label class="control-label text-left">Item Actual:</label>
+        </div>
+        <div class="col-lg-3" style="padding-left: 0px;">
+          <input type="text" class="form-control" [(ngModel)]="personal.item.descripcion"
+            [disabled]="!config.inputItemActual" />
+        </div>
+      </div>
+      <br>
+      <div class="ibox-content">
+        <div class="row m-b-md" *ngIf="config.btnSolicitarMovimiento && esAnalistaExterno">
+          <div class="col-md-4">
+            <button type="button" class="btn btn-primary container-button" [swal]="nuevaSolicitud"><i
+                class="fa fa-plus margin-right-10"></i><span>Añadir Solicitud</span></button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <p class="control-label text-left">Solicitudes de Movimiento de Personal:</p>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-stripped table-hover issue-tracker">
+            <thead>
+              <tr>
+                <th class="text-center">Solicitud</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Motivo</th>
+                <th class="text-center">Nuevo Item</th>
+                <th class="text-center">Nueva Oficina</th>
+                <th class="text-center">Nuevo Cargo</th>
+                <th class="col-lg-2 text-center">Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let solicitud of listaSolicitudesGrilla; let indice = index" class="row-hover"
+                (click)="onRowClick(solicitud, indice)" [class.info]="rowClick === indice">
+                <td class="text-center">{{solicitud.idSolicitud}}</td>
+                <td class="text-center">{{solicitud.fechaSolicitud}}</td>
+                <td class="text-center">{{solicitud.motivoSolicitud.descripcionCorta}}</td>
+                <td class="text-center">{{solicitud.itemDestino.descripcion}}</td>
+                <td class="text-center">{{solicitud.oficinaDestino.descripcion}}</td>
+                <td class="text-center">{{solicitud.cargoDestino.descripcion}}</td>
+                <td class="text-center">{{solicitud.estadoSolicitud.descripcion}}</td>
+                <td class="text-center"><button class="btn btn-sm btn-primary margin-right-10" [swal]="verDetalle"
+                    (click)="enviarDataDetalle(solicitud);" title="Ver detalle">
+                    <i class="fa fa-search"></i>
+                  </button>
+                  <!-- <button class="btn btn-sm btn-danger" (confirm)="eliminarMovimiento(movimiento)" title="Eliminar"
+                    [swal]="{ type:'question', title: '¿Está seguro de eliminar la solicitud seleccionada?', showCancelButton: true,
+                              confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusCancel: false }">
+                    <i class="fa fa-trash"></i>
+                  </button> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row margin-top-20">
+          <div class="col-md-4 col-sm-12 col-xs-12">
+            <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="cambiarPagina($event)"
+              [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+              [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+            </pagination>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center m-a-sm">
+              <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                [page]="paginacion.pagina"></pagination-info>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-right m-a-sm">
+              <pagination-set (optionChanged)="cambiarRegistrosPorPagina($event)"></pagination-set>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #nuevaSolicitud [showConfirmButton]="false" [showCancelButton]="false" [allowOutsideClick]="false"
+  customClass="mantenimiento-personal-swal">
+  <div *swalPartial>
+    <app-solicitud-movimiento-personal (cerrarModal)="cerrarModal();">
+    </app-solicitud-movimiento-personal>
+  </div>
+</swal>
+
+<swal #verDetalle cancelButtonText="Cerrar " [showCancelButton]="false" [showConfirmButton]="false"
+  [allowOutsideClick]="true" customClass="mantenimiento-personal-swal">
+  <div *swalPartial>
+    <app-detalle-solicitud-movimiento-personal (cerrarModal)="this.verDetalle.nativeSwal.close();">
+    </app-detalle-solicitud-movimiento-personal>
+  </div>
+</swal>
+
+<swal #rechazarSolicitudModal [options]="alertOptionRechazar" (confirm)="rechazarSolicitud($event)"></swal>
+
+<swal #aprobarSolicitudModal title="¿Desea aprobar la solicitud de Movimiento de Personal?" type="question"
+  [showCancelButton]="true " [focusCancel]="false " confirmButtonText="Si, Aprobar" cancelButtonText="No"
+  [allowOutsideClick]="true" (confirm)="aprobarSolicitud()">
+</swal>

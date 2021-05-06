@@ -1,0 +1,117 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / Parámetros / <strong>Consultar Tipos de Parámetro</strong></h4>    
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+      
+
+      <div class="ibox-content" [ngClass]="{'sk-loading': loading}">
+      <div class="row m-b-md">
+          <div class="col-lg-1">
+            <button [routerLink]="['nuevo']" [disabled]="permisos('CREAR')" class="btn btn-success" title="Agregar Registro"><i class="fa fa-plus"></i> Agregar</button>
+          </div>
+          <div class="col-lg-3">
+            <div class="input-group">
+              <input #buscar type="text" placeholder="Nombre" class="form-control" [(ngModel)]="textoBusqueda">
+              <span class="input-group-btn" dropdown>
+                <button title="Buscar" [disabled]="permisos('BUSCAR')" type="button" class="btn btn-info" (click)="OnBuscar()" title="Buscar"><i class="fa fa-search"></i></button>
+                <button dropdownToggle [disabled]="permisos('BUSCAR')" type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split"><i class="fa fa-caret-down"></i></button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+                  <li role="menuitem" [class.active]="parametroBusqueda == 'detalle'"><a (click)="parametroBusqueda = 'detalle'; OnConfigurarBusqueda()">Nombre</a></li>
+                  <li role="menuitem"><a [swal]="busquedaAvanzadaSwal">Búsqueda avanzada</a></li>
+                </ul>
+              </span>
+            </div>
+          </div>
+      </div>
+        <div class="row margin--left-right-6" *ngIf="showMessage">
+          <alert type="info" class="padding-0">
+            <div class="row">
+              <div class="col-md-10">
+                <span class="padding-0" [innerHtml]="message"></span>
+              </div>
+              <div class="col-md-offset-10">
+                <a (click)="leaveFilters()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+              </div>
+            </div>
+          </alert>
+        </div>
+        <sk-three-bounce></sk-three-bounce>
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover issue-tracker">
+            <thead>
+            <tr>
+              <th class="text-center">Código</th>
+              <th class="text-center">Nombre</th>
+              <th class="text-center">Fecha de Registro</th>
+              <th class="text-center">Usuario Generador</th>
+              <th class="text-center">Fecha de Modificacion</th>
+              <th class="text-center">Usuario Modificador</th>
+              <th class="text-center">Estado</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--<tr *ngFor="let item of items; let i = index" (click)="selectRow(i)" [class.info]="i == selectedRow">-->
+            <tr *ngFor="let item of items; let i = index" (click)="selectRow(i)">
+              <td class="text-center">{{item.codigo}}</td>
+              <td class="text-left">{{item.detalle}}</td>
+              <td class="text-center">{{item.fechaCreacion}}</td>
+              <td class="text-center">{{item.usuarioCreacion}}</td>
+              <td class="text-center">{{item.fechaModificacion}}</td>
+              <td class="text-center" >{{item.usuarioModificacion}}</td>
+              <td class="text-center" style="padding-left: 0">
+                <span class="label" [class.label-primary]="item.estado=='ACTIVO'">{{item.estado}}</span>
+              </td>
+              <td class="text-center" width="90px">
+                <button title="Ver Detalle" (click)="OnVerDetalle(i)" class="btn btn-sm btn-primary margin-right-10"><i class="fa fa-search"></i></button>
+                <button title="Editar" [disabled]="permisos('MODIFICAR')" (click)="OnEditar(i)" class="btn btn-sm btn-success margin-right-10"><i class="fa fa-edit"></i></button>
+                <span  *ngIf="item.estado == 'ACTIVO'">
+                  <button title="Eliminar" [disabled]="permisos('ELIMINAR')" [swal]="{title: '¿Está seguro que desea eliminar el registro?', confirmButtonText:'Sí, eliminar',cancelButtonText:'No, cancelar',showCancelButton: true, focusConfirm: false, focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }" (confirm)="OnEliminar(i)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-12 col-xs-12">
+              <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)" [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="text-center m-a-sm">
+                <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="text-right m-a-sm">
+                <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+  </div>
+</div>
+
+
+
+
+
+<swal
+  #busquedaAvanzadaSwal
+  title="Búsqueda Avanzada"
+  customClass="buscar-parametro-swal"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [allowOutsideClick]="true"
+  confirmButtonText="Buscar"
+  cancelButtonText="Cancelar"
+  (confirm)="OnBusquedaAvanzada()">
+  <div *swalPartial>
+    <buscar-parametro></buscar-parametro>
+  </div>
+</swal>

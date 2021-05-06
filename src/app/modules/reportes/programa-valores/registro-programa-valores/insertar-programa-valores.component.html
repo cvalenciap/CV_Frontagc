@@ -1,0 +1,58 @@
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <label class="col-md-2 padding-0 text-right control-label">Contratista:</label>
+                <div class="col-md-8">{{empresa.descripcion}}</div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <label class="col-md-2 padding-0 text-right control-label">Oficina:</label>
+                <div class="col-md-8">{{oficina.descripcion}}</div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <label class="col-md-2 padding-0 text-right control-label">Actividad:</label>
+                <div class="col-md-4">{{actividad.descripcion}}</div>
+                <label class="col-md-2 padding-0 text-right control-label">Sub Actividad:</label>
+                <div class="col-md-4">
+                    <ng-select [items]="this.subaticList" bindLabel="title" bindValue="key" name="subactividad" placeholder="Seleccione una Sub Actividad"
+                    #selectContratista [(ngModel)]="subactividad" [ngModelOptions]="{standalone: true}"
+                    dropdownPosition="bottom" >
+                   </ng-select>
+                </div>
+
+            </div>
+        </div>    
+
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">                
+                <label class="col-md-2 text-right control-label" style="padding-top: 2px;" >Programación Total:</label>
+                <div class="col-md-3" id="progTotal">
+                    <input type="number" class="form-control" name="progtotal" id="progtotal" [(ngModel)]="progTotal" min="{{cantPeriodos}}"/>
+                </div>  
+                <label class="col-md-2 text-right control-label" style="padding-top: 8px;" >Periodo Inicial:</label>
+                <div class="col-md-4" id="fechaControl">
+                    <form [formGroup]="myForm" novalidate>
+                        <month-date-picker name="fecha" formControlName="fecha" (calculate)="onCalcular($event)"></month-date-picker>
+                    </form>
+                </div>
+                <label class="col-md-2 text-right control-label" style="padding-top: 2px;" >Cant Periodos:</label>
+                <div class="col-md-3" id="progTotal">
+                    <input type="number" class="form-control" name="cantPeriodos" id="cantPeriodos" (change) = "onChangePeriodos()" [(ngModel)]="cantPeriodos" (keypress)="numberOnly($event)" max="{{valorPeriodo}}" min="0" />
+                </div>  
+                
+            </div>
+        </div>    
+    </div>
+    <div class="row mt-1 text-center">
+        <div class="col-sm-12">
+            <button class="btn btn-success container-button" (click) = "onCrear()" ><i class="fa fa-save"></i> Grabar</button>        
+            <button class="btn btn-default container-button" (click) = "onCancel()" ><i class="fa fa-times"></i> Cancelar</button>        
+        </div>
+    </div>
+</div>
+
+

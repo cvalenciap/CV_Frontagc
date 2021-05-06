@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-bordered table-stripped table-hover issue-tracker">
+        <thead class="thead-dark">
+          <tr>
+            <th class="text-center vertical-align">Id Mov</th>
+            <th class="text-center vertical-align">DNI</th>
+            <th class="text-center vertical-align">Nombres y Apellidos</th>
+            <th class="text-center vertical-align">Codigo SEDAPAL</th>
+            <th class="text-center vertical-align">Contratista</th>
+            <th class="text-center vertical-align">Motivo</th>
+            <th class="text-center vertical-align">Cargo Origen</th>
+            <th class="text-center vertical-align">Oficina Origen</th>
+            <th class="text-center vertical-align">Item Origen</th>
+            <th class="text-center vertical-align">Cargo Destino</th>
+            <th class="text-center vertical-align">Oficina Destino</th>
+            <th class="text-center vertical-align">Item Destino</th>
+            <th class="text-center vertical-align">Fecha de Alta Cargo</th>
+            <th class="text-center vertical-align">Fecha de Baja Cargo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataHistorico; let i = index">
+            <td class="text-center small-text">{{ item.idMovimiento }}</td>
+            <td class="text-center small-text">{{ item.numeroDocumento }}</td>
+            <td class="text-left small-text">{{ item.nombreEmpleado }}</td>
+            <td class="text-center small-text">{{ item.codigoEmpleado }}</td>
+            <td class="text-center small-text">{{ item.empresa.descripcion }}</td>
+            <td class="text-center small-text">{{ item.solicitud.descripcionSolicitud }}</td>
+            <td class="text-center small-text">{{ item.cargoActual.descripcion }}</td>
+            <td class="text-center small-text">{{ item.oficinaActual.descripcion }}</td>
+            <td class="text-center small-text">{{ item.itemActual.descripcion }}</td>
+            <td class="text-center small-text">{{ item.cargoDestino.descripcion }}</td>
+            <td class="text-center small-text">{{ item.oficinaDestino.descripcion }}</td>
+            <td class="text-center small-text">{{ item.itemDestino.descripcion }}</td>
+            <td class="text-center small-text">{{ item.fechaAltaCargo }}</td>
+            <td class="text-center small-text">{{ item.fechaBajaCargo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="row" *ngIf="paginacion !== null && paginacion !== undefined">
+  <div class="col-md-12 vertical-align">
+    <div class="col-md-4 text-left">
+      <pagination [(ngModel)]="paginacion.pagina"
+                  [totalItems]="paginacion.totalRegistros"
+                  [itemsPerPage]="paginacion.registros"
+                  (pageChanged)="onCambioPagina($event)"
+                  [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                  firstText="&laquo;" lastText="&raquo;"></pagination>
+    </div>
+    <div class="col-md-4 text-center">
+      <pagination-info [totalItems]="paginacion.totalRegistros"
+                       [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+    </div>
+    <div class="col-md-4 text-right">
+      <pagination-set (optionChanged)="onCambioRegistros($event)"></pagination-set>
+    </div>
+  </div>
+</div>

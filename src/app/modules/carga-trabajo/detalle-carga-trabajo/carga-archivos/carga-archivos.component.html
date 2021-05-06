@@ -1,0 +1,165 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-12" *ngIf="datosRegistro.uidEstado != 'SGIO'">
+      <div class="ibox-content">
+        <h3>Archivos adjuntos Sedapal</h3>
+        <hr class="hr-line-solid">
+        <div class="row" *ngIf="esSedapal==true && esContratista==false && (datosRegistro.uidEstado == 'PE' || datosRegistro.uidEstado=='OC' || datosRegistro.uidEstado=='EC')">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-xs-12 col-sm-3 col-md-3 control-label">Adjuntar archivo(s):</label>
+              <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="uploader">
+                  <div id="input-sedapal" class="input-value"><span>{{nombreSedapal}}</span></div>
+                  <label for="file-sedapal"></label>
+                  <input #FileInputSedapal (click)="resetFileSedapal()" accept=".jpg,.pdf" (change)="seleccionarArchivoSedapal($event)" id="file-sedapal" class="upload" type="file">
+                </div>
+              </div>
+              <div *ngIf="acciones.includes('CA')" class="col-xs-12 col-sm-2 col-md-3">
+                <button class="btn btn-success" [disabled]="!archivosSeleccionados" (click)="saveDocument('S')">Cargar Archivo Adjunto</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="row">
+          <div class="table-responsive padding-left-right-15">
+            <table class="table table-sm table-bordered table-stripped table-hover issue-tracker">
+              <thead>
+                <tr>
+                  <th><strong>Nombre Archivo</strong></th>
+                  <th class="text-center"><strong>Usuario</strong></th>
+                  <th class="text-center"><strong>Fecha Carga</strong></th>
+                  <th class="text-center"><strong>Tipo</strong></th>
+                  <th class="text-center"><strong>Acción</strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let attachFile of adjuntosSedapal; let indice=index">
+                  <td class="text-left">{{attachFile.nombre}}</td>
+                  <td class="text-center">{{attachFile.usuarioCreacion}}</td>
+                  <td class="text-center">{{attachFile.fechaCarga}}</td>
+                  <td class="text-center">{{attachFile.extension}}</td>
+                  <td class="text-center" width="100px">
+                    <!-- <a dropdownToggle type="button" class="btn btn-sm btn-primary m-r" [href]="endpointFileServer + attachFile.ruta + '?download=1'" *ngIf="acciones.includes('DA') && (datosRegistro.uidEstado == 'EPC' || datosRegistro.uidEstado == 'AC' || datosRegistro.uidEstado == 'ES' || datosRegistro.uidEstado == 'CE' || datosRegistro.uidEstado == 'OS' || datosRegistro.uidEstado == 'EC'|| datosRegistro.uidEstado == 'OC' || datosRegistro.uidEstado == 'PE')">
+                      <i class="fa fa-download icon"></i>
+                    </a> -->
+                    <a dropdownToggle type="button" class="btn btn-sm btn-primary m-r" (click)="getFile(attachFile.nombre, attachFile.extension, attachFile.ruta)" *ngIf="acciones.includes('DA') && (datosRegistro.uidEstado == 'EPC' || datosRegistro.uidEstado == 'AC' || datosRegistro.uidEstado == 'ES' || datosRegistro.uidEstado == 'CE' || datosRegistro.uidEstado == 'OS' || datosRegistro.uidEstado == 'EC'|| datosRegistro.uidEstado == 'OC' || datosRegistro.uidEstado == 'PE')">
+                      <i class="fa fa-download icon"></i>
+                    </a>
+                    <span *ngIf="acciones.includes('EA')">
+                      <button dropdownToggle type="button" class="btn btn-sm btn-danger" [swal]="{ title: '¿Estás seguro que desea eliminar el archivo adjunto?', showCancelButton: true,
+                      confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false, focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }" (confirm)="deleteAttachFile(attachFile)" *ngIf="datosRegistro.uidEstado == 'PE'  ||datosRegistro.uidEstado == 'OC' ||datosRegistro.uidEstado == 'EC'">
+                      <i class="fa fa-trash icon"></i>
+                      </button>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row container-pagination margin-top-20">
+    <div class="col-md-4 col-sm-12 col-xs-12">
+      <pagination [(ngModel)]="pagSedapal.pagina" (pageChanged)="OnPageChangedSedapal($event)" [totalItems]="pagSedapal.totalRegistros" [itemsPerPage]="pagSedapal.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+                  lastText="&raquo;"></pagination>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="text-center m-a-sm">
+        <pagination-info [totalItems]="pagSedapal.totalRegistros" [itemsPerPage]="pagSedapal.registros" [page]="pagSedapal.pagina"></pagination-info>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="text-right m-a-sm">
+        <pagination-set (optionChanged)="OnPageOptionChangedSedapal($event)"></pagination-set>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="ibox-content">
+        <h3>Archivos adjuntos Contratista</h3>
+        <hr class="hr-line-solid">
+        <div class="row" *ngIf="esContratista==true && esSedapal==false && (datosRegistro.uidEstado == 'OS' || datosRegistro.uidEstado == 'AC' || datosRegistro.uidEstado == 'EPC')">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-xs-12 col-sm-3 col-md-3 control-label">Adjuntar archivo:</label>
+              <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="uploader">
+                  <div id="input-contratista" class="input-value"><span>{{nombreContratista}}</span></div>
+                  <label for="file-contratista"></label>
+                  <input #FileInputContratista (click)="resetFileConstratista()" accept=".jpg,.pdf" (change)="seleccionarArchivoContratista($event)" id="file-contratista" class="upload" type="file">
+                </div>
+              </div>
+              <div *ngIf="acciones.includes('CA')" class="col-xs-12 col-sm-2 col-md-3">
+                <button class="btn btn-success" [disabled]="!archivosSeleccionados" (click)="saveDocument('C')">Cargar Archivo Adjunto</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="row">
+          <div class="table-responsive padding-left-right-15">
+            <table class="table table-sm table-bordered table-stripped table-hover issue-tracker">
+              <thead>
+              <tr>
+                <th><strong>Nombre Archivo</strong></th>
+                <th class="text-center"><strong>Usuario</strong></th>
+                <th class="text-center"><strong>Fecha Carga</strong></th>
+                <th class="text-center"><strong>Tipo</strong></th>
+                <th class="text-center"><strong>Acción</strong></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let attachFile of adjuntosContratista; let indice = index">
+                <td class="text-left">{{attachFile.nombre}}</td>
+                <td class="text-center">{{attachFile.usuarioCreacion}}</td>
+                <td class="text-center">{{attachFile.fechaCarga}}</td>
+                <td class="text-center">{{attachFile.extension}}</td>
+                <td class="text-center" width="100px">
+                  <!-- <a *ngIf="acciones.includes('DA')" dropdownToggle type="button" class="btn btn-sm btn-primary" [href]="endpointFileServer + attachFile.ruta + '?download=1'">
+                    <i class="fa fa-download icon"></i>
+                  </a> -->
+                  <a *ngIf="acciones.includes('DA')" dropdownToggle type="button" class="btn btn-sm btn-primary" (click)="getFile(attachFile.nombre, attachFile.extension, attachFile.ruta)">
+                    <i class="fa fa-download icon"></i>
+                  </a>
+                  &nbsp;
+                  <span *ngIf="acciones.includes('EA') && (esSedapal==false && esContratista==true)">
+                    <button dropdownToggle type="button" class="btn btn-sm btn-danger"  [swal]="{ title: '¿Está seguro que desea eliminar el archivo adjunto?', showCancelButton: true,
+                          confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false, focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }" (confirm)="deleteAttachFile(attachFile)" *ngIf="datosRegistro.uidEstado == 'PE' || datosRegistro.uidEstado == 'OS' || datosRegistro.uidEstado == 'AC'||datosRegistro.uidEstado == 'EPC'" >
+                      <i class="fa fa-trash icon"></i>
+                    </button>
+                  </span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row container-pagination margin-top-20">
+    <div class="col-md-4 col-sm-12 col-xs-12">
+      <pagination [(ngModel)]="pagContratista.pagina" (pageChanged)="OnPageChangedContratista($event)" [totalItems]="pagContratista.totalRegistros" [itemsPerPage]="pagContratista.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+                  lastText="&raquo;"></pagination>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="text-center m-a-sm">
+        <pagination-info [totalItems]="pagContratista.totalRegistros" [itemsPerPage]="pagContratista.registros" [page]="pagContratista.pagina"></pagination-info>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="text-right m-a-sm">
+        <pagination-set (optionChanged)="OnPageOptionChangedContratista($event)"></pagination-set>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #descartarSwal title="¿Está seguro que desea anular el cargo? " confirmButtonText="Sí, anular " cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true " (confirm)="OnRegresar() " imageUrl= "assets/images/advertencia.png" imageWidth=50 ></swal>
+<swal #enviarSwal title="¿Está seguro que desea enviar el cargo? " confirmButtonText="Sí, enviar " cancelButtonText="No " [showCancelButton]="true " [focusCancel]="true " (confirm)="OnEnviar() "></swal>
+<swal #comentarSwal type="info " input="textarea " title="Detalle de observacion: " width="600px " confirmButtonText="Aceptar " cancelButtonText="Cancelar " [showCancelButton]="true " (confirm)="OnObservar($event) "></swal>

@@ -1,0 +1,72 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+    <div class="col-lg-12">
+        <h4>
+            <a routerLink="/inicio">Inicio</a> / Alertas / Registro de Template de Alertas
+        </h4>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+        <div class="row mt-2">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <button  class="btn btn-primary container-button" [swal]="registrar"> <i class="fa fa-plus"></i>
+                    Nuevo Template</button>   
+            </div>
+          </div>
+        <div class="row mt-2">
+            <div class="col-lg-12">
+                <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+                    <sk-three-bounce></sk-three-bounce>
+                    <div class="row mt-2">
+                        <div class="table-responsive">
+                            <table class="table table-stripped table-hover issue-tracker">
+                                <thead>
+                                    <tr>
+                                        <th data-col="item">Item</th>
+                                        <th data-col="codigo">Código</th>
+                                        <th data-col="actividad">Actividad</th>
+                                        <th data-col="nombre">Nombre Template</th>
+                                        <th data-col="contenido">Contenido del Template</th>
+                                        <th class="text-center" data-col="acciones">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let template of items; let i = index">
+                                        <td data-col="item">{{i+1}}</td>
+                                        <td data-col="codigo" >{{template.n_sec_template}}</td>
+                                        <td data-col="actividad" >{{template.v_act_template}}</td>
+                                        <td data-col="nombre" *ngIf="template.v_editable==null">{{template.v_nom_template}}</td>
+                                        <td data-col="nombre" *ngIf="template.v_editable==1">
+                                            <input type="text" class="form-control" [(ngModel)]="nombreTemplate"/>
+                                        </td>
+                                        <td data-col="contenido" *ngIf="template.v_editable==null">{{template.v_con_template_ca}}</td>
+                                        <td data-col="nombre" *ngIf="template.v_editable==1">
+                                            <input type="text" class="form-control" [(ngModel)]="contenidoTemplate"/>
+                                        </td>
+                                       <td class="text-center">
+                                            <button *ngIf="editarEstado==false && template.v_editable==null" class="btn btn-info container-button" (click)="OnEditar(i)"><i
+                                            class="fa fa-edit"></i></button>
+                                            <button *ngIf="editarEstado==false && template.v_editable==null" class="btn btn-danger container-button" (click)="OnEliminar(i)"><i
+                                                class="fa fa-trash"></i></button>
+                                            <button *ngIf="editarEstado==true && template.v_editable==1" class="btn btn-success container-button" (click)="OnUpdate(i)"><i
+                                                    class="fa fa-save"></i></button>
+                                            <button *ngIf="editarEstado==true && template.v_editable==1" class="btn btn-danger container-button" (click)="OnCancel(i)"><i
+                                                    class="fa fa-times"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<swal #registrar  title="Registrar Template Alerta" customClass="insertar-valores-swal" [showConfirmButton]="false" [showCancelButton]="false"  
+    [allowOutsideClick]="false" confirmButtonText="Grabar" cancelButtontext="Cancelar" >
+    <div *swalPartial>
+      <app-registrar-alerta-template (emisor)="onCancelRegistrar()" (emisorItems)="listarItems($event)" ></app-registrar-alerta-template>
+    </div>
+</swal>

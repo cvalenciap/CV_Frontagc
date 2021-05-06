@@ -1,0 +1,142 @@
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+        <div class="row mt-2">
+            <div class="col-md-12 padding-2">
+                <div class="form-group">
+                    <label>Tipo Alerta:</label>
+                    <ng-select [items]="listAlerta" bindLabel="v_description" bindValue="v_id_alerta" name="v_description" placeholder="Seleccione Alertas"
+                    #selectContratista [(ngModel)]="tipoAlerta" [ngModelOptions]="{standalone: true}" (change)="obtenerAlertaQueries();" dropdownPosition="bottom">
+                   </ng-select>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <label class="radio-inline margin-radio">
+                        <input type="radio" name="radioeleccion" class="enter" value="1"
+                            (change)="chackAccion($event)"><b>
+                            Por Elección</b>
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <label class="radio-inline margin-radio">
+                        <input type="radio" name="radioeleccion" class="enter" value="2"
+                            (change)="chackAccion($event)"><b>
+                            Personalizado</b>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2" *ngIf="radioEleccion==='1'">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="">Hora:</label>
+                    <ng-select [items]="listaHoras"
+                     [(ngModel)]="horas">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="">Minuto:</label>
+                    <ng-select [items]="listaMinutos"
+                     [(ngModel)]="minutos">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="">Periodo:</label>
+                    <ng-select [items]="listaTiempo"
+                     [(ngModel)]="periodo">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2" *ngIf="radioEleccion==='2'">
+            <div class="col-md-12 padding-2">
+                <div class="form-group">
+                    <label>Personalizado:</label>
+                    <ng-select [items]="listaFrecAlerta" bindLabel="V_DESCCORT" bindValue="V_IDVALO" name="V_DESCCORT" placeholder="Seleccione Personalizado"
+                     [(ngModel)]="personalizado">
+                   </ng-select>
+                </div>
+            </div>
+        </div>
+      <div class="row mt-2" *ngIf="radioEleccion==='2'">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="">Hora Inicio:</label>
+            <ng-select [items]="listaHoras"
+                       [(ngModel)]="horasInicio">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="">Minuto Inicio:</label>
+            <ng-select [items]="listaMinutos"
+                       [(ngModel)]="minutosInicio">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="">Periodo Inicio:</label>
+            <ng-select [items]="listaTiempo"
+                       [(ngModel)]="periodoInicio">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2" *ngIf="radioEleccion==='2'">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="">Hora Fin:</label>
+            <ng-select [items]="listaHoras"
+                       [(ngModel)]="horasFin">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="">Minuto Fin:</label>
+            <ng-select [items]="listaMinutos"
+                       [(ngModel)]="minutosInicio"
+                       [disabled]="true">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="">Periodo Inicio:</label>
+            <ng-select [items]="listaTiempo"
+                       [(ngModel)]="periodoFin">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+        <div class="row mt-2" *ngIf="radioEleccion==='1' || radioEleccion==='2'">
+            <div class="col-md-12 padding-2">
+                <div class="form-group">
+                    <label>Repetición:</label>
+                    <ng-select [items]="listaDias" [multiple]="true" bindLabel="name" bindValue="id" name="name" placeholder="Seleccione Días"
+                    [(ngModel)]="dias">
+                  </ng-select>
+                </div>
+            </div>
+        </div>
+    <div class="row mt-1 text-center" style="margin-bottom: 40px;">
+      <div class="col-sm-12 padding-2" *ngIf="radioEleccion==='1' || radioEleccion==='2'">
+          <button class="btn btn-primary container-button" (click) = "onRegistrarCron()" >
+              <i class="fa fa-plus"></i>  Agregar</button>
+      </div>
+      <div class="col-sm-12 padding-2">
+          <button class="btn btn-default container-button" (click) = "onCancel()" >
+              <i class="fa fa-times"></i> Cancelar</button>
+      </div>
+    </div>
+</div>

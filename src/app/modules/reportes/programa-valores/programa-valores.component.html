@@ -1,0 +1,123 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4>
+      <a routerLink="/inicio">Inicio</a> / Contratista / Reportes / Programación Mensual
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+  <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <div class="row mt-2">
+      <div class="col-sm-12" style="display: inline-flex;">
+        <button class="btn btn-success container-button" [swal]="registrar"> <i class="fa fa-list"></i> Registrar Nuevos</button>        
+        <button *ngIf="items.length > 0" class="btn btn-danger container-button" 
+          [swal]="{ title: '¿Estás seguro que desea eliminar el archivo adjunto?', showCancelButton: true,
+          confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false, focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }" (confirm)="OnEliminar()"> <i class="fa fa-trash" ></i> Eliminar Registros</button>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="form-group">
+        <label class="col-md-1 padding-0 text-right control-label">Oficina:</label>
+        <div class="col-md-2">
+          <select class="form-control" [(ngModel)]="oficina" type="text" name="oficina" (ngModelChange)="OnChange(2, $event)"  (change)="obtenerSubactividad();">
+            <option *ngFor="let oficina of lista.oficinas;" [ngValue]="oficina">{{oficina.descripcion}}
+            </option>
+          </select>
+        </div>
+        <label class="col-md-1 padding-0 text-right control-label">Contratista:</label>
+        <div class="col-md-2">
+          <select class="form-control" [(ngModel)]="empresa" type="text" name="empresa" (ngModelChange)="OnChange(1, $event)">
+            <option *ngFor="let empresa of listaParametros.listaEmpresa" [ngValue]="empresa" >
+              {{empresa.descripcion}}</option>
+          </select>
+        </div>
+        <label class="col-md-1 padding-0 text-right control-label">Actividad:</label>
+        <div class="col-md-2">
+          <select class="form-control" [(ngModel)]="actividad" type="text" name="actividad" (ngModelChange)="OnChange(3, $event)" (change)="obtenerSubactividad();">
+            <option *ngFor="let actividad of listaParametros.listaActividad" [ngValue]="actividad">
+              {{actividad.descripcion}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-info container-button" (click)="OnListarProgramaMensual()"> <i class="fa fa-search" ></i> Buscar</button>
+        </div>
+      </div>    
+    </div>
+    <!-- Table report-->
+    <div class="row mt-2">
+      <div class="col-lg-12">
+        <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+          <sk-three-bounce></sk-three-bounce>
+          <div class="row mt-2">
+            <div class="table-responsive">
+              <table class="table table-stripped table-hover issue-tracker">
+                <thead>
+                  <tr>
+                    <th class="text-center" data-col="item">Item</th>
+                    <th class="text-center" data-col="oficina">Oficina</th>
+                    <th class="text-center" data-col="perfil">Contratista</th>
+                    <th class="text-center" data-col="usuario">Actividad Op.</th>
+                    <th class="text-center" data-col="subactividad1" *ngIf="editando==false">Subactividad 1</th>
+                    <th class="text-center" data-col="subactividad2" *ngIf="editando==false">Subactividad 2</th>
+                    <th class="text-center" data-col="subactividad2" *ngIf="editando==true">Subactividad</th>
+                    <th class="text-center" data-col="um">Prog. Mes</th>
+                    <th class="text-center" data-col="progmes">Periodo</th>
+                    <th class="text-center" data-col="programacion">Prog.Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of items; let i = index">
+                    <td class="text-center">
+                      {{i + 1 }}
+                    </td>
+                    <td class="text-center">
+                      {{item.n_id_ofic}}
+                    </td>
+                    <td class="text-center">
+                      {{item.v_n_id_contrati}}
+                    </td>
+                    <td class="text-center">
+                      {{item.v_idacti}}
+                    </td>
+                    <td data-col="subactividad1" *ngIf="item.v_editable==0 && editando==false" class="text-center">
+                      {{item.v_idsubacti_1}}
+                    </td>
+                    <td data-col="subactividad2" *ngIf="item.v_editable==0 && editando==false" class="text-center">
+                      {{item.v_idsubacti_2}}
+                    </td>
+                    <td data-col="subactividad2" *ngIf="item.v_editable==1 && editando==true" class="text-center">
+                      <ng-select [items]="this.subaticList" bindLabel="title" bindValue="key" name="subactividad" placeholder="Seleccione una Sub Actividad"
+                      #selectContratista [(ngModel)]="subactividad" [ngModelOptions]="{standalone: true}"
+                      dropdownPosition="bottom" >
+                     </ng-select>
+                    </td>  
+                    <td *ngIf="item.v_editable==0" class="text-center">
+                      {{item.n_val_prog_mensual}}
+                    </td>
+                    <td *ngIf="item.v_editable==1" class="text-center">
+                      <input type="text" name="progmes" id="progmes" [(ngModel)]="item.n_val_prog_mensual" class="form_control">
+                    </td>  
+                    <td class="text-center">
+                      {{item.v_periodo}}
+                    </td>
+                    <td class="text-center">
+                      {{item.n_val_prog_total}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #registrar  title="Registrar Valores" customClass="insertar-valores-swal" [showConfirmButton]="false" [showCancelButton]="false"  
+    [allowOutsideClick]="false" confirmButtonText="Grabar" cancelButtontext="Cancelar" >
+    <div *swalPartial>
+      <app-insertar-programa-valores parametros={{parametros}} (emisor)="onCancelRegistrar()" (emisorItems)="listarItems($event)" ></app-insertar-programa-valores>
+    </div>
+</swal>

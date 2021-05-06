@@ -1,0 +1,115 @@
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+
+                <label class="col-md-3" style="text-align: left">Oficina: *</label>
+                <div class="col-md-3">
+                    <ng-select [items]="this.lista.oficinas" bindLabel="descripcion" bindValue="codigo"
+                        placeholder="Seleccione Oficina" name="oficina" #selectItem [clearable]="false"
+                        [(ngModel)]="oficina.codigo" [ngModelOptions]="{standalone: true}"
+                        (change)="OnChange(1, $event);">
+                    </ng-select>
+                </div>
+
+                <label class="col-md-3" style="text-align: left">Actividad: *</label>
+                <div class="col-md-3">
+                    <ng-select [items]="listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo"
+                        placeholder="Seleccione Actividad" name="actividad" #selectActividad [clearable]="false"
+                        [(ngModel)]="actividad.codigo" [ngModelOptions]="{standalone: true}"
+                        (change)="OnChange(2, $event);">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+
+                <!--                 <label class="col-md-2 padding-0 text-right control-label">Actividad:</label>
+                  <div class="col-md-4">
+                    <ng-select [items]="this.listaActividad" bindLabel="descripcion" bindValue="codigo" placeholder="Seleccione Actividad"
+                      name="actividad" #selectItem [clearable]="false" [(ngModel)]="actividad.codigo" [ngModelOptions]="{standalone: true}"
+                      (change)="OnChange(2, $event);">
+                    </ng-select>
+                  </div> -->
+                <label class="col-md-3">Ítem: *</label>
+                <div class="col-md-3">
+                    <ng-select [items]="this.arrayItems" bindLabel="detalle" bindValue="codigo"
+                        placeholder="Seleccione Ítem" name="item" #selectItem [clearable]="false"
+                        [(ngModel)]="item.codigo" [ngModelOptions]="{standalone: true}" (change)="OnChange(4, $event);">
+                    </ng-select>
+                </div>
+                <label class="col-md-3">Sub Actividad: *</label>
+                <div class="col-md-3">
+                    <ng-select class="auto-grow" [items]="this.subaticList" bindLabel="title" bindValue="key"
+                        placeholder="Seleccione subactividad" name="subactividad" #selectItem [clearable]="false"
+                        [(ngModel)]="subactividad" [ngModelOptions]="{standalone: true}"
+                        (change)="OnChange(3, $event);">
+                    </ng-select>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <label class="col-md-3" style="padding-top: 2px;">Cuadrilla / Día: (+)</label>
+                <div  class="col-md-3" id="ncuadrilla">
+                    <input *ngIf="cuadrillaBlock==1" type="number" class="form-control" name="ncuadrilla" id="ncuadrilla" [(ngModel)]="ncuadrilla"
+                    [readonly]="true"   />
+
+                    <input *ngIf="cuadrillaBlock==0" type="number" class="form-control" name="ncuadrilla" id="ncuadrilla" [(ngModel)]="ncuadrilla"
+                    (keypress)="validacionNumero.validacionSoloNumeros($event)"  (blur)="onBlurCuadrilla(ncuadrilla)" />
+                </div>
+                <label class="col-md-3" style="padding-top: 8px;">Trabajador / Día: (+)</label>
+                <div class="col-md-3" id="vrendimiento">
+                    <input  *ngIf="trabajadorBlock==0" type="number" class="form-control" name="vtrabajador" id="vtrabajador"
+                        [(ngModel)]="vtrabajador" (keypress)="validacionNumero.validacionSoloNumeros($event)" (blur)="onBlurTrabajador(vtrabajador)"/>
+                    
+                        <input  *ngIf="trabajadorBlock==1" type="number" class="form-control" name="vtrabajador" id="vtrabajador"
+                        [(ngModel)]="vtrabajador" [readonly]="true" />
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+                <label class="col-md-3" style="padding-top: 8px;">Suministro / Día: (+)</label>
+                <div class="col-md-3" id="fechaControl">
+                    <!-- <form [formGroup]="myForm" novalidate>
+                        <month-date-picker name="fecha" formControlName="fecha" (calculate)="onCalcular($event)"></month-date-picker>
+                    </form> -->
+                    <input *ngIf="suministroBlock==0" type="number" class="form-control" name="vsuministro" id="vsuministro"
+                    [(ngModel)]="vsuministro" (keypress)="validacionNumero.validacionSoloNumeros($event)" 
+                    (blur)="onBlurSuministro(vsuministro)" />
+
+                    <input *ngIf="suministroBlock==1" type="number" class="form-control" name="vsuministro" id="vsuministro"
+                        [(ngModel)]="vsuministro" [readonly]="true" />
+                </div>
+
+                <label class="col-md-3" style="padding-top: 2px;">Unidad Medida: *</label>
+                <div class="col-md-3" id="progTotal">
+                    <input type="text" class="form-control" name="uniMedida" id="uniMedida" [(ngModel)]="uniMedida"/>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-sm-12" style="display: inline-flex;">
+
+                <label class="col-md-3" style="padding-top: 2px;">V. Opcional 1:</label>
+                <div class="col-md-3" id="progTotal">
+                    <input type="text" class="form-control" name="opcional1" id="opcional1" [(ngModel)]="opcional1" />
+                </div>
+                <label class="col-md-3" style="padding-top: 2px;">V. Opcional 2:</label>
+                <div class="col-md-3" id="progTotal">
+                    <input type="text" class="form-control" name="opcional2" id="opcional2" [(ngModel)]="opcional2" />
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1 text-center">
+            <div class="col-sm-12">
+                <button class="btn btn-success container-button" (click)="onCrear()"><i class="fa fa-save"></i>
+                    Grabar</button>
+                <button class="btn btn-default container-button" (click)="onCancel()"><i class="fa fa-times"></i>
+                    Cancelar</button>
+            </div>
+        </div>
+    </div>

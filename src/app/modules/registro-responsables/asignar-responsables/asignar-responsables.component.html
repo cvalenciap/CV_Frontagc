@@ -1,0 +1,134 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Registro de Responsables</strong></h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row m-b-md">
+  <div class="ibox-content">
+    <div class="row" style="padding-bottom: 0px; padding-left: 10px">
+
+      <div class="row m-b-md" style="margin-bottom:15px;">
+        <div class="col-md-4">
+          <button type="button" [swal]="guardarRegistro" [disabled]="trabajadoreSeleccionados==null || trabajadores==null || (trabajadoreSeleccionados.length==0 && trabajadores.length==0) " class="btn btn-primary container-button" title="Guardar Cambios"><i class="fa fa-check margin-right-10"></i><span>Guardar</span></button>
+        </div>
+      </div>
+      <form class="form-horizontal" style="margin-bottom:0;">
+        <div class="form-group">
+          <label class="col-sm-1 control-label">Empresa:</label>
+          <div class="col-sm-3">
+            <ng-select [items]="empresas" bindLabel="descripcion" [clearable]="true" placeholder="Seleccione Empresa"
+              [(ngModel)]="selectedEmpresa" [ngModelOptions]="{standalone: true}" (change)="OnCambioEmpresa()"></ng-select>
+          </div>
+          <label class="col-sm-1 control-label">Oficina:</label>
+          <div  class="col-sm-3">
+            <ng-select [items]="oficinas" bindLabel="descripcion" [clearable]="true"
+            [(ngModel)]="selectedOficina" [ngModelOptions]="{standalone: true}" (change)="OnCambioOficina()"></ng-select>
+          </div>
+          <label class="col-sm-1 control-label">Actividad:</label>
+          <div class="col-sm-3">
+            <ng-select [items]="actividades" bindLabel="descripcion" [clearable]="true"
+            [(ngModel)]="selectedActividad" [ngModelOptions]="{standalone: true}" (change)="OnCambioActividad()"></ng-select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row m-b-md">
+      <div class="ibox-content" style="padding-top: 0px" [ngClass]="{'sk-loading': loading}">
+          <sk-three-bounce></sk-three-bounce>
+        <div class="row m-b-md">
+          <div class="col-md-5">
+            <div class="row">
+              <div class="container-fluid margin-bottom-10 margin-top-20">
+                <div class="form-group">
+                  <div class="col-md-11 padding-0">
+                    <input type="text" #buscar_IZQ class="form-control" name="textoSSeleccion" placeholder="Ingresar Texto Búsqueda" [(ngModel)]="textoSSeleccion" (click)="OnConfigurarBusqueda_IZQ()"/>
+                  </div>
+                  <div class="col-md-1 padding-0">
+                    <button class="btn btn-primary" title="Buscar" (click)="OnBuscarOrigen()"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ibox-content padding-0">
+              <div class="container-fluid bg-default">
+                <h4 class="text-center">LISTA DEL PERSONAL</h4>
+              </div>
+              <div class="table-responsive container-lista-responsable">
+                <table class="table table-stripped table-hover">
+                  <thead>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let trabajador of trabajadores; let indice = index">
+                      <td id="{{trabajador.codigo}}" (click)="seleccionarTrabajadorAgregar(trabajador, indice)"
+                        class="text-left" data-col="nombre" [ngClass]="{highlight: trabajador.origen=='C' && trabajador.estadoTrabajador=='INACTIVO' && trabajador.estadoTabla,
+                                                                        highlight_origen: trabajador.origen=='C'  && trabajador.estadoTrabajador!='INACTIVO' && trabajador.estadoTabla,
+                                                                        highlight_seleccion: trabajador.estadoTabla==false}">
+                        {{(indice + 1) + '. ' + trabajador.codigo+ ' - ' +trabajador.nombreCompleto}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-2" style="padding-top: 120px">
+            <div class="row text-center" >
+                <button class="btn btn-success width-100 margin-bottom-10" [disabled]="permisos('CREAR') && (trabajadores==null ||  trabajadores.length==0)" (click)="agregarTrabajadores()"><i
+                  class="fa fa-arrow-right margin-right-10"></i> Agregar</button>
+            </div>
+            <div class="row text-center">
+                <button class="btn btn-danger width-100" [disabled]="permisos('ELIMINAR') && (trabajadoreSeleccionados==null || trabajadoreSeleccionados.length==0)" (click)="quitarTrabajadores()"><i
+                  class="fa fa-arrow-left margin-right-10"></i> Quitar</button>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="row">
+              <div class="container-fluid margin-bottom-10 margin-top-20">
+                <div class="form-group">
+                  <div class="col-md-11 padding-0">
+                    <input #buscar_DER type="text"  name="textoCSeleccion" class="form-control" placeholder="Ingresar Texto Búsqueda" [(ngModel)]="textoCSelecccin" (click)="OnConfigurarBusqueda_DER()"/>
+                  </div>
+                  <div class="col-md-1 padding-0">
+                    <button class="btn btn-primary" title="Buscar" (click)="OnBuscarSeleccion()"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ibox-content padding-0">
+              <div class="container-fluid bg-default">
+                <h4 class="text-center">LISTA DEL PERSONAL SELECCIONADO</h4>
+              </div>
+              <div class="table-responsive container-lista-responsable">
+                <table class="table table-stripped table-hover">
+                  <thead>
+                    <tr>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let trabajadore of trabajadoreSeleccionados; let indice = index">
+                      <td id="{{trabajadore.codigo}}" (click)="seleccionarTrabajadorQuitar(trabajadore, indice)"
+                        class="text-left" data-col="nombre" [ngClass]="{highlight: trabajadore.estadoTrabajador=='INACTIVO',
+                                                                        highlight_origen: trabajadore.origen=='S' && trabajadore.estadoTabla,
+                                                                        highlight_seleccion: trabajadore.estadoTabla == false}">
+                        {{(indice + 1) + '. ' + trabajadore.codigo+ ' - ' +trabajadore.nombreCompleto}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div>
+  </div>
+</div>
+</div>
+
+<swal #guardarRegistro type="question" title="¿Esta seguro de guardar los cambios?"
+confirmButtonText="Aceptar" cancelButtonText="Cancelar" [showCancelButton]="true "
+(confirm)="OnGuardar()"></swal>

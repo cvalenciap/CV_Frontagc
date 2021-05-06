@@ -1,0 +1,59 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+        <div class="col-lg-10">
+          <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Registro de Parámetro</strong></h4>    
+        </div>
+
+        <div class="col-lg-2">
+      
+        </div>
+      </div>
+      <div class="wrapper wrapper-content animated fadeInRight">        
+        <div class="row m-b-md">
+              
+            <div class="ibox-content">
+                <div class="row m-b-md">
+                    <div class="col-md-4">
+                        <a class="btn btn-primary m-r" (click)="OnGuardar()"><i class="fa fa-check"></i> Guardar</a>
+                        <a [routerLink]="'..'" class="btn btn-gray-dark m-r"><i class="fa fa-arrow-left"></i> Regresar</a>
+                    </div>
+                 </div>
+
+              <form class="form-horizontal">
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Tipo Parametro :</label>
+                  <div class="col-sm-6"><input type="text" class="form-control" name="TipoParametro" [ngModel]="itemTipo.detalle" disabled="disabled"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label pull-left">Valor Parametro :</label>
+                  <div class="col-sm-4 pull-left">
+                    <input type="text" name="valor" #valor="ngModel" [ngClass]="{'ng-dirty ng-invalid':errors?.valor}"  [tooltip]="errors?.valor" [(ngModel)]="itemParam.valor" maxlength="2500" class="form-control">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Descripcion corta :</label>
+                  <div class="col-sm-6">
+                    <input type="text" name="descripcion-corta" #descripcionCorta="ngModel" [ngClass]="{'ng-dirty ng-invalid':errors?.descripcionCorta}" maxlength="250" [tooltip]="errors?.descripcionCorta" [(ngModel)]="itemParam.descripcionCorta" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Descripcion :</label>
+                    <div class="col-sm-6">
+                      <input type="text" name="detalle-param" #detalle="ngModel" [ngClass]="{'ng-dirty ng-invalid':errors?.detalle}" [tooltip]="errors?.detalle" maxlength="250" [(ngModel)]="itemParam.detalle" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Estado :</label>
+                  <div class="col-sm-6">
+                        <ui-switch name="switch" size="medium" [(ngModel)]="enable"></ui-switch>
+                  </div>
+                </div>
+                 
+              </form>
+              
+            </div>
+        </div>
+        
+      </div>

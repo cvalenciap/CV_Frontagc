@@ -1,0 +1,189 @@
+ <!-- {{ angForm.value | json }} -->
+<!--{{ f.motivo.status }}
+{{ f.motivo.valid }} -->
+<div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0px;padding-top: 2px">
+    <div class="row">
+        <h3 class="text-center text-muted font-bold ">
+            Nueva Solicitud de Movimiento del Personal
+        </h3>
+    </div>
+    <form [formGroup]="angForm" (ngSubmit)="guardar()">
+        <div class="row">
+            <div class="ibox-content no-borders">
+                <!-- Fecha de Solicitud -->
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;">
+                        <label class="control-label text-left">Fecha de Solicitud:</label>
+                    </div>
+                    <div class="col-lg-4" style="padding-left: 0px;">
+                        <input type="text" class="form-control" formControlName="fechaSolicitud" readonly>
+                    </div>
+                </div>
+                <p></p>
+                <!-- Motivo -->
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;">
+                        <label class="control-label text-left">Motivo:</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0px;">
+                        <select class="form-control" formControlName="motivo" [attr.disabled]="guardarRegistro ? '' : null"
+                            (change)="habilitarControles($event.target.value)"
+                            [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.motivo.errors) || (f.motivo.invalid && f.motivo.errors && (f.motivo.dirty || f.motivo.touched)) }">
+                            <option value="" hidden>Seleccione Motivo</option>
+                            <option *ngFor="let item of listaMotivoMovimiento" value="{{item.codigo}}">
+                                {{item.descripcionCorta}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;"></div>
+                    <div class="col-lg-9" style="padding-left: 0px;">
+                        <p *ngIf="(f.motivo.invalid && f.motivo.errors.required && (f.motivo.dirty || f.motivo.touched)) ||
+                              (isSubmitted && f.motivo.invalid && f.motivo.errors.required)" class="text-danger">
+                            Debe seleccionar el motivo del movimiento
+                        </p>
+                    </div>
+                </div>
+                <p></p>
+                <!-- Nuevo Cargo -->
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;">
+                        <label class="control-label text-left">Nuevo Cargo:</label>
+                    </div>
+                    <div *ngIf="!f.cargo" class="col-lg-7" style="padding-left: 0px;">
+                        <select class="form-control" [attr.disabled]="true">
+                            <option value="" hidden>Seleccione Cargo</option>
+                        </select>
+                    </div>
+                    <div *ngIf="f.cargo" class="col-lg-7" style="padding-left: 0px;">
+                        <select class="form-control" formControlName="cargo" [attr.disabled]="guardarRegistro ? '' : null"
+                            [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.cargo.errors) || (f.cargo.invalid && f.cargo.errors && (f.cargo.dirty || f.cargo.touched)) }">
+                            <option value="" hidden>Seleccione Cargo</option>
+                            <option *ngFor="let item of listaCargos" value="{{item.id}}">{{item.descripcion}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngIf="f.cargo" class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;"></div>
+                    <div class="col-lg-9" style="padding-left: 0px;">
+                        <p *ngIf="(f.cargo.invalid && f.cargo.errors.required && (f.cargo.dirty || f.cargo.touched)) ||
+                                  (isSubmitted && f.cargo.invalid && f.cargo.errors.required)" class="text-danger">
+                            Debe seleccionar el nuevo Cargo
+                        </p>
+                    </div>
+                </div>
+                <p></p>
+                <!-- Nuevo Item -->
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;">
+                        <label class="control-label text-left">Nuevo Item:</label>
+                    </div>
+                    <div *ngIf="!f.item" class="col-lg-7" style="padding-left: 0px;">
+                        <select class="form-control" [attr.disabled]="true">
+                            <option value="" hidden>Seleccione Item</option>
+                        </select>
+                    </div>
+                    <div *ngIf="f.item" class="col-lg-7" style="padding-left: 0px;">
+                        <select class="form-control" formControlName="item" (change)="listarOficinas($event.target.value)" [attr.disabled]="guardarRegistro ? '' : null"
+                            [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.item.errors) || (f.item.invalid && f.item.errors && (f.item.dirty || f.item.touched)) }">
+                            <option value="" hidden>Seleccione Item</option>
+                            <option *ngFor="let item of listaItems" value="{{item.id}}">{{item.descripcion}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngIf="f.item" class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;"></div>
+                    <div class="col-lg-9" style="padding-left: 0px;">
+                        <p *ngIf="(f.item.invalid && f.item.errors.required && (f.item.dirty || f.item.touched)) ||
+                                      (isSubmitted && f.item.invalid && f.item.errors.required)" class="text-danger">
+                            Debe seleccionar el nuevo Item
+                        </p>
+                    </div>
+                </div>
+                <p></p>
+                <!-- Nueva Oficina -->
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;">
+                        <label class="control-label text-left">Nueva Oficina:</label>
+                    </div>
+                    <div *ngIf="!f.oficina" class="col-lg-7" style="padding-left: 0px;">
+                        <select class="form-control" [attr.disabled]="true">
+                            <option value="" hidden>Seleccione Oficina</option>
+                        </select>
+                    </div>
+                    <!-- {{f.oficina.invalid | json}}                     -->
+                    <!-- {{f.oficina.status | json}}
+                    {{f.oficina.errors | json}} -->
+                    <div *ngIf="f.oficina" class="col-lg-7" style="padding-left: 0px;">
+                        <select class="form-control" formControlName="oficina" [attr.disabled]="guardarRegistro ? '' : null"
+                            [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.oficina.errors) || (f.oficina.invalid && f.oficina.errors && (f.oficina.dirty || f.oficina.touched)) }">
+                            <option value="" hidden>Seleccione Oficina</option>
+                            <option *ngFor="let item of listaOficinas" value="{{item.codigo}}">{{item.descripcion}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngIf="f.oficina" class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;"></div>
+                    <div class="col-lg-9" style="padding-left: 0px;">
+                        <p *ngIf="(f.oficina.invalid && f.oficina.errors.required && (f.oficina.dirty || f.oficina.touched)) ||
+                                          (isSubmitted && f.oficina.invalid && f.oficina.errors.required)"
+                            class="text-danger">
+                            Debe seleccionar la nueva Oficina
+                        </p>
+                    </div>
+                </div>
+                <p></p>
+                <!-- Descripcion -->
+                <div class="row">
+                    <div class="col-lg-3" style="padding-right: 0px;">
+                        <label class="control-label text-left">Descripción:</label>
+                    </div>
+                    <div class="col-lg-9" style="padding-left: 0px;">
+                        <textarea class="form-control" formControlName="descripcion" rows="3" [attr.disabled]="guardarRegistro ? '' : null">
+                      </textarea>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-9 no-padding no-margins"
+                        *ngIf="angForm.controls['descripcion'].invalid && (angForm.controls['descripcion'].dirty || angForm.controls['descripcion'].touched)">
+                        <span *ngIf="angForm.controls['descripcion'].errors.required" class="text-danger">Debe ingresar
+                            la descripción</span>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0px;margin-bottom: 10px" *ngIf="!guardarRegistro">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-success btn-sm" style="margin-right: 1rem;">Guardar <i
+                        class="fas fa fa-save"></i></button>
+                <button class="btn btn-basic btn-sm" (click)="cancelar()">Cancelar <i
+                        class="fas fa fa-times"></i></button>
+            </div>
+        </div>
+        <div *ngIf="guardarRegistro">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <label class="text-danger">¿Está seguro de registrar la solicitud de movimiento de personal?</label>
+                </div>
+            </div>
+            <p></p>
+            <div class="row" style="margin-top: 0px;margin-bottom: 10px">
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary btn-sm" style="margin-right: 1rem;" (click)="aceptar()">Aceptar <i
+                            class="fas fa fa-check"></i></button>
+                    <button class="btn btn-basic btn-sm" (click)="cancelarRegistro()">Cancelar <i
+                            class="fas fa fa-times"></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- <br />
+<p>Form value: {{ angForm.value | json }}</p>
+<p>Form status: {{ angForm.status | json }}</p> -->

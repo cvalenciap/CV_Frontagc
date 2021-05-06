@@ -1,0 +1,68 @@
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox-content" style="padding: 7px">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-stripped table-hover issue-tracker">
+                        <thead>
+                            <tr>
+                                <th class="text-center">CÓDIGO</th>
+                                <th class="text-center">NUM_OS</th>
+                                <th class="text-center">SUMINISTRO</th>
+                                <th class="text-center">TIPOLOGIA</th>
+                                <th class="text-center">DIRECCIÓN</th>
+                                <th class="text-center">LOCALIDAD</th>
+                                <th class="text-center">DISTRITO</th>
+                                <th class="text-center" *ngIf="itemCargaTrabajo.uidEstado != 'PE' && itemCargaTrabajo.uidEstado != 'AN' ">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let registro of listaItems; let indice = index">
+                                <td class="text-center" data-col="codigoRegistro">{{registro.codigoRegistro}}</td>
+                                <td class="text-center" data-col="numOS">{{registro.numOS}}</td>
+                                <td class="text-center" data-col="nisRad">{{registro.nisRad}}</td>
+                                <td class="text-center" data-col="tipOS">{{registro.tipOS}}</td>
+                                <td data-col="direccion">{{registro.calle}} {{registro.numero}}</td>
+                                <td data-col="urbaniza">{{registro.urbaniza}}</td>
+                                <td class="text-center" data-col="distrito">{{registro.distrito}}</td>
+                                <td class="text-center" *ngIf="itemCargaTrabajo.uidEstado != 'PE' && itemCargaTrabajo.uidEstado != 'AN'">
+                                    <button dropdownToggle type="button" class="btn btn-sm btn-success" [swal]="cargaArchivos" (click)="uidRegistro = registro.codigoRegistro">
+                                        <i class="fa fa-paperclip icon"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row container-pagination">
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)" [totalItems]="paginacion.totalRegistros"
+                            [itemsPerPage]="paginacion.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                            firstText="&laquo;" lastText="&raquo;"></pagination>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="text-center m-a-sm">
+                            <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="text-right m-a-sm">
+                            <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <swal #cargaArchivos title="Carga de Archivos"
+        customClass="carga-archivo-detalle-swal"
+        [showCancelButton]="true"
+        [showConfirmButton]="false"
+        [focusCancel]="true"
+        [allowOutsideClick]="false"
+        confirmButtonText="Aceptar"
+        cancelButtonText="Cerrar">
+        <div *swalPartial>
+            <app-carga-archivos-detalle [uidRegistro]="uidRegistro"></app-carga-archivos-detalle>
+        </div>
+    </swal>

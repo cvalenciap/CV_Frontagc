@@ -1,0 +1,21 @@
+.table {
+    tr {
+      th[data-col='primero'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='segundo'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='tercero'] {text-align: center; background:#efefef;}
+      th[data-col='item'] {font-size: x-small;}
+      th[data-col='oficina'] {font-size: x-small;}
+      th[data-col='contratista'] {font-size: x-small;}
+      th[data-col='codigo'] {font-size: x-small;}
+      th[data-col='lector'] {font-size: x-small;}
+      th[data-col='periodo'] {font-size: x-small;}
+      th[data-col='carga'] {font-size: x-small;}
+      th[data-col='lectura'] {font-size: x-small;}
+      th[data-col='incidencia'] {font-size: x-small;}
+      th[data-col='supervisada'] {font-size: x-small;}
+      th[data-col='porc_lectura'] {font-size: x-small;}
+      th[data-col='porc_incidencia'] {font-size: x-small;}
+      th[data-col='porc_supervisada'] {font-size: x-small;}
+      
+    }
+  }

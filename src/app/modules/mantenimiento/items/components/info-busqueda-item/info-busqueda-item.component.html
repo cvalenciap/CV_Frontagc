@@ -1,0 +1,17 @@
+<alert type="info" *ngIf="mostrarFiltroAplicado">
+    <div class="row">
+        <div class="col-lg-3 text-left">
+            <strong>Búsqueda Por:</strong>
+        </div>
+        <div class="col-lg-9 text-right">
+            <a (click)="eliminarFiltro()" title="Eliminar filtro"><i class="fa fa-trash"></i></a>
+        </div>
+    </div>
+    <div
+        *ngIf="requestItem.descripcion !== null && requestItem.descripcion !== undefined && requestItem.descripcion !== ''">
+        <strong>Descripción: </strong> {{ requestItem.descripcion }}
+    </div>
+    <div *ngIf="requestItem.estado !== null && requestItem.estado !== undefined && requestItem.estado !== ''">
+        <strong>Estado: </strong> {{ requestItem.estado == 'A' ? 'Activo': 'Inactivo' }}
+    </div>
+</alert>

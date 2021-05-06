@@ -1,0 +1,35 @@
+<alert type="warning">
+  <h5>Se encontraron observaciones en los siguientes registros. No se podrá dar de alta</h5>
+</alert>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+      <tr *ngFor="let item of listaPaginada">
+        <td class="text-danger"><strong>{{item}}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-4 col-sm-12 col-xs-12">
+        <pagination [(ngModel)]="paginacion.pagina" [totalItems]="paginacion.totalRegistros"
+          [itemsPerPage]="paginacion.registros" (pageChanged)="onCambioPagina($event)" [boundaryLinks]="true"
+          [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+        </pagination>
+      </div>
+      <div class="col-md-4 col-sm-12 col-xs-12 text-center">
+        <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+          [page]="paginacion.pagina"></pagination-info>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-success btn-sm"
+        (click)="onRegresar()">
+  <i class="fa fa-arrow-left"></i>  Regresar
+</button>

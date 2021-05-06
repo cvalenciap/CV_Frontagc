@@ -1,0 +1,51 @@
+<form class="container-filtros">
+  <div class="row" style="margin-bottom: 15px;">
+      <div class="col-md-8 padding-0">
+      </div>
+      <div class="col-md-4 text-center">
+          <a type="button" class="btn-sm btn-default" style="background: #eee" (click)="onLimpiarFiltros()"><i
+            class="fa fa-eraser" title="Buscar"></i> Limpiar filtros</a>
+      </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label padding-0">Nro. Suministro:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input type="text" (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control" [(ngModel)]="filtros.suministro" [ngModelOptions]="{standalone: true}" maxlength="9"/>
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label padding-0">Tipo Archivo:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <ng-select [items]="tipo" bindLabel="descripcion" bindValue="valor" placeholder="Seleccione Tipo"
+        name="tipo" [clearable]="true" [(ngModel)]="filtros.tipoArchivo" [ngModelOptions]="{standalone: true}">
+      </ng-select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label padding-0">Usuario:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <input  (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="40"  type="text" class="form-control" [(ngModel)]="filtros.usuario" [ngModelOptions]="{standalone: true}"
+       style="text-transform: uppercase;"/>
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label padding-0">Tipo de Accion:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <ng-select [items]="acciones" bindLabel="descripcion" bindValue="valor" placeholder="Seleccione Acción"
+        name="acciones" [clearable]="true" [(ngModel)]="filtros.tipoAccion" [ngModelOptions]="{standalone: true}">
+      </ng-select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label padding-0">Fecha Inicio:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <div class="input-group date">
+        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"  [(bsValue)]="filtros.fechaInicio" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="detectarCambioFechas()" >
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+      </div>
+    </div>
+    <label class="col-xs-6 col-sm-2 col-md-2 control-label padding-0">Fecha Fin:</label>
+    <div class="col-xs-6 col-sm-4 col-md-4">
+      <div class="input-group date">
+        <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"  [(bsValue)]="filtros.fechaFin" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="detectarCambioFechas()" >
+        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,52 @@
+
+<div class="row">
+  <div class="col-md-8 text-center" style="padding-left: 0px">
+    <h4 class="font-bold" style="margin-left: 16rem !important;">Búsqueda Avanzada</h4>
+  </div>
+  <div class="col-md-4 text-right pull-right">
+    <button type="button" class="btn-sm btn-default" style="background: #eee" (click)="onLimpiarFiltros()"><i
+        class="fa fa-eraser" title="Buscar"></i> Limpiar filtros</button>
+  </div>
+</div>
+
+<div class="row mt-1">
+  <div class="col-md-12">
+    <h5>Datos de Consulta</h5>
+    <hr class="custom-hr">
+  </div>
+</div>
+
+<div class="row mt-1">
+  <div class="col-md-12 no-lateral-padding">
+    <label class="col-md-3 no-right-padding text-left control-label">Estado:</label>
+    <div class="col-md-5">
+      <ng-select placeholder="Seleccione"
+                 [items]="comboEstados"
+                 bindLabel="descripcion"
+                 [clearable]="true"
+                 [(ngModel)]="cargoRequest.estado"
+                 (ngModelChange)="onChangeFiltro('Estado', $event)"></ng-select>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-1">
+  <div class="col-md-12 no-lateral-padding">
+    <label class="col-md-3 no-right-padding text-left control-label">Descripción:</label>
+    <div class="col-md-9">
+      <input appWordsOnly type="text"
+             class="form-control texto-ingresado"
+             [(ngModel)]="cargoRequest.descripcion"
+             (change)="onChangeFiltro('Descripción', $event)">
+    </div>
+  </div>
+</div>
+
+<div class="row" style="margin-top: 2rem;">
+  <div class="col-md-12 text-center">
+    <button class="btn btn-success btn-sm" style="margin-right: 1rem;" (click)="busquedaAvanzada()">Buscar <i
+        class="fas fa fa-search"></i></button>
+    <button class="btn bg-custom-gray btn-sm" (click)="cerrarModal()">Cancelar <i
+        class="fas fa fa-times"></i></button>
+  </div>
+</div>

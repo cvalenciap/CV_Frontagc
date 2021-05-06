@@ -1,0 +1,8 @@
+export enum CargosPersonal {
+
+    CARGO_OPERATIVO = 'TG001',
+    CARGO_ADMINISTRATIVO = 'TG002',
+    CARGO_ATENC_PUBLICO = 'TG003',
+    CARGO_SOPORTE_ADMIN = 'TG004'
+
+}

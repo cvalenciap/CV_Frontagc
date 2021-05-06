@@ -1,0 +1,87 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="col-md-12 container-modal-attach-file">
+    <div *ngIf="esContratista==true && esSedapal==false && (cargaTrabajo.uidEstado=='AC' || cargaTrabajo.uidEstado=='OS' || cargaTrabajo.uidEstado=='EPC')" class="row">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 control-label">Adjuntar archivos: </label>
+                <div class="col-xs-12 col-sm-7 col-md-7">
+                    <div class="uploader">
+                        <div id="input-file" class="input-value"><span>{{nombreArchivo}}</span></div>
+                        <label for="attach-file"></label>
+                        <input #FileInput (click)="resetFile()" accept=".jpg,.pdf" type="file" class="upload" id="attach-file" (change)="seleccionarArchivo($event)">
+                    </div>
+                </div>
+                <div *ngIf="acciones.includes('CA')" class="col-xs-12 col-sm-2 col-md-2">
+                    <!-- <button class="btn btn-success" [disabled]="!archivosSeleccionados" (click)="saveAttchFile()">Cargar Archivo Adjunto</button> -->
+                    <button class="btn btn-success" [disabled]="!archivosSeleccionados" (click)="validarAdjunto()">Cargar Archivo Adjunto</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="existeArchivoMismoNombre" class="row" style="padding-left: 9px;">
+      <span>
+        <span style="font-size: 1.1em; color: #D63C1B" class="m-r">El detalle ya tiene un archivo con nombre
+          <strong>"{{nombreArchivo}}"</strong>, ¿Desea reemplazar el archivo?</span>
+        <a type="button" class="btn btn-sm btn-default m-r" style="background: #eee;" (click)="guardarAdjunto()">
+          Sí, reemplazar
+        </a>
+        <a type="button" class="btn btn-sm btn-default" (click)="resetVariables()">
+          Cancelar
+        </a>
+      </span>
+    </div>
+    <div class="container-attach-pagination">
+    <div class="row container-attach-files">
+      <div class="table-responsive">
+        <table class="table table-responsive table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="text-left">Nombre Archivo</th>
+              <th class="text-center">Usuario</th>
+              <th class="text-center">Fecha Carga</th>
+              <th class="text-center">Tipo</th>
+              <th class="text-center">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let adjunto of adjuntos; let indice=index">
+              <td class="padding8 text-left">{{adjunto.nombre}}</td>
+              <td class="padding8 text-center">{{adjunto.usuarioCreacion}}</td>
+              <td class="padding8 text-center">{{adjunto.fechaCarga}}</td>
+              <td class="padding8 text-center">{{adjunto.extension}}</td>
+              <td class="text-center" width="90px">
+                <!-- <a *ngIf="acciones.includes('DA')" dropdownToggle type="button" class="btn btn-sm btn-primary m-r" [href]="endpointFileServer + adjunto.ruta + '?download=1'">
+                  <i class="fa fa-download icon"></i>
+                </a> -->
+                <a *ngIf="acciones.includes('DA')" dropdownToggle type="button" class="btn btn-sm btn-primary m-r" (click)="getFile(adjunto.nombre, adjunto.extension, adjunto.ruta)">
+                  <i class="fa fa-download icon"></i>
+                </a>
+                <span *ngIf="acciones.includes('EA') && (esContratista==true && esSedapal==false && (cargaTrabajo.uidEstado=='AC' || cargaTrabajo.uidEstado=='OS' || cargaTrabajo.uidEstado=='EPC'))">
+                  <button dropdownToggle type="button" class="btn btn-sm btn-danger" (click)="deleteAttachFile(adjunto)"><i class="fa fa-trash icon"></i></button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row container-attach-pagination">
+      <div class="col-md-4 col-sm-12 col-xs-12">
+        <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)" [totalItems]="paginacion.totalRegistros"
+                    [itemsPerPage]="paginacion.registros" [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                    firstText="&laquo;" lastText="&raquo;"></pagination>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="text-center m-a-sm">
+          <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="text-right m-a-sm">
+          <pagination-set></pagination-set>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

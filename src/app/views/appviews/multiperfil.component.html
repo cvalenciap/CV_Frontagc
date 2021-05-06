@@ -1,0 +1,59 @@
+<div class="loginColumns loginscreen animated fadeInDown">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="text-center m-t-xl">
+              <img src="assets/images/sedapal-logo-2.png">
+            </div>
+            <h2 class="font-bold text-center titulo">Aplicativo de Gestión Comercial - AGC</h2>
+          </div>
+          <div class="col-md-6">
+            <div class="ibox-content" >
+              <form (ngSubmit)="OnIniciarSesion(form)" #form="ngForm">
+                
+                    <div class="form-group">
+                        <label class="col-1 col-form-label pull-left">Seleccione Perfil:</label>
+                    </div>
+                    <div class="form-group">
+                            <div class="col-8">
+                                    <ng-select [items]="perfiles"
+                                                bindValue= "codigo"
+                                                bindLabel= "descripcion"
+                                                placeholder="Seleccionar"
+                                                name ="perfiles"
+                                                [clearable]="false"
+                                                [(ngModel)]="item.perfil">
+                                    </ng-select>
+                                    </div>
+                    </div>
+                    <div class="form-group">
+                    <button [disabled]="form.invalid" type="submit" class="btn btn-primary dim block full-width m-b">                
+                      Iniciar Sesión
+                    </button>
+                    </div>
+                    <div *ngFor="let alert of alerts; let i = index" class="alert alert-danger">
+                        <button type="button" class="close" (click)="closeErrorAlert(i)">×</button>
+                        <span [innerHtml]=alert.msg></span>
+                    </div>
+                    <!-- <div class="form-group">
+                        <div class="text-center">
+                            <a [routerLink]="['../contrasena']"><small>Receuperar contraseña</small></a>
+                        </div>
+                    </div> -->
+    
+                </form>
+              <p class="m-t">
+                <small>Integrado con la plataforma AGC de SEDAPAL.</small>
+              </p>
+            </div>
+          </div>
+        </div>
+        <hr class="hr-white">
+        <div class="row">
+          <div class="col-md-6">
+            <span [innerHtml]="copyright"></span>
+          </div>
+          <div class="col-md-6 text-right">
+            <small>{{id}} ver. {{version}}</small>
+          </div>
+        </div>
+      </div>

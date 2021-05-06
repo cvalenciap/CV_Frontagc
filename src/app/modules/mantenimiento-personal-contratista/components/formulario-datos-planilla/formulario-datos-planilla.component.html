@@ -1,0 +1,71 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content no-borders">
+      <div [formGroup]="angForm" #formDir="ngForm">
+        <div class="row">
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Estado Laboral:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="estadoLaboral" [value]="f.estadoLaboral.value === 'A' ? 'ACTIVO': 'CESADO'"
+              [attr.disabled]="!config.inputEstadoLaboral ? '' : null" />
+          </div>
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Fecha de Ingreso:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <div class="input-group date">
+              <input autocomplete="off" bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+                name="fechaNacimiento" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" placeholder="dd/MM/yyyy" appDateOnly
+                [attr.disabled]="!config.inputFechaIngreso ? '' : null" formControlName="fechaIngreso"
+                [ngClass]="{ 'ng-dirty ng-invalid' : (isSubmitted && f.fechaIngreso.errors) || (f.fechaIngreso.invalid && f.fechaIngreso.errors && (f.fechaIngreso.dirty || f.fechaIngreso.touched)) }" />
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-7"></div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <small *ngIf="(f.fechaIngreso.invalid && f.fechaIngreso.errors.required && (f.fechaIngreso.dirty || f.fechaIngreso.touched)) || 
+              (isSubmitted && f.fechaIngreso.invalid && f.fechaIngreso.errors.required)" class="text-danger">
+              Debe registrar la fecha de ingreso
+            </small>
+            <small *ngIf="f.fechaIngreso.value == 'Invalid Date'" class="text-danger">
+              Debe registrar la fecha de ingreso
+            </small>
+          </div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Motivo de Cese:</label>
+          </div>
+          <div class="col-lg-7" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="motivoCese"
+              [attr.disabled]="!config.inputMotivoCese ? '' : null" />
+          </div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Fecha de Cese:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="fechaCese"
+              [attr.disabled]="!config.inputFechaCese ? '' : null" />
+          </div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Observación:</label>
+          </div>
+          <div class="col-lg-7" style="padding-left: 0px;">
+            <textarea class='form-control' rows='5' [attr.disabled]="!config.inputObservacionCese ? '' : null"
+              formControlName="observacion"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

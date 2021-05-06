@@ -1,0 +1,24 @@
+.control-label{
+    margin-top:8px;
+}
+
+.table {
+    tr {
+      th[data-col='item'] {width: 2%}
+      th[data-col='oficina'] {width: 5%}
+      th[data-col='perfil'] {width: 5%}
+      th[data-col='usuario'] {width: 5%}
+      th[data-col='subactividad1'] {width: 5%}
+      th[data-col='subactividad2'] {width: 5%}
+      th[data-col='espacio'] {width: 5%}
+      th[data-col='usuario'] {width: 5%}
+      th[data-col='um'] {width: 3%;}
+      th[data-col='progmes'] {width: 5%;}
+      th[data-col='programacion'] {width: 5%;}
+      th[data-col='acciones'] {width: 5%;}
+
+    }
+  }
+  #subacti2{
+    width: 350px !important;
+  }

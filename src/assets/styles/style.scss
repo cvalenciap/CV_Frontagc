@@ -1,0 +1,291 @@
+/*
+ *
+ *   INSPINIA - Responsive Admin Theme
+ *   version 2.7.1
+ *
+*/
+
+// Google Fonts
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+// Variables, Mixins
+@import "imports/variables";
+@import "imports/mixins";
+// INSPINIA Theme Elements
+@import "imports/typography";
+@import "imports/navigation";
+@import "imports/top_navigation";
+@import "imports/buttons";
+@import "imports/badges_labels";
+@import "imports/elements";
+@import "imports/sidebar";
+@import "imports/base";
+@import "imports/pages";
+@import "imports/chat";
+@import "imports/metismenu";
+@import "imports/spinners";
+// Landing page styles
+
+/*@import "imports/landing";*/
+
+// RTL Support
+@import "imports/rtl";
+// For demo only - config box style
+@import "imports/theme-config";
+// INSPINIA Skins
+@import "imports/skins";
+@import "imports/md-skin";
+// Media query style
+@import "imports/media";
+// Custom style
+// Your custom style to override base style
+@import "imports/custom";
+@import "imports/general";
+// Clear layout on print mode
+@media print {
+    nav.navbar-static-side {
+        display: none;
+    }
+    body {
+        overflow: visible !important;
+    }
+    #page-wrapper {
+        margin: 0;
+    }
+}
+
+.container-button {
+  margin-right: 10px;
+}
+
+.padding-0 {
+  padding: 0px;
+}
+
+.margin-0 {
+  margin: 0px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-right-10 {
+  margin-right: 10px;
+}
+
+.margin--left-right-6 {
+  margin-right: 6px;
+  margin-left: 6px;
+}
+
+.margin-left-right-10 {
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.padding-left {
+   padding-left: 57px;
+  padding-right: 0px;
+}
+
+.padding-left-15 {
+  padding-left: 15px;
+}
+
+.padding-left-40 {
+  padding-left: 40px;
+}
+
+.padding-left-50 {
+  padding-left: 50px;
+}
+
+.margin-left-80 {
+  margin-left: 80px;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0;
+}
+
+.padding-bottom-10 {
+  padding-bottom: 10px;
+}
+
+.padding-bottom-0 {
+  padding-bottom: 0;
+}
+
+.padding-left-10 {
+  padding-left: 10px;
+}
+
+.container-modal {
+  height: 600px;
+  padding-bottom: 0px;
+  overflow: auto;
+}
+
+.container-modal-cm {
+  height: 300px;
+  padding-bottom: 0px;
+  overflow: auto;
+}
+
+.container-modal-ee {
+  height: 250px;
+  padding-bottom: 0px;
+  overflow: auto;
+}
+
+.container-lista-responsable {
+  height: 250px;
+  padding: 0px;
+  overflow: auto;
+}
+
+.padding-5 {
+  padding: 5px;
+}
+
+.btn-gray-dark {
+  background: gray;
+  color: white;
+}
+
+.btn-gray-dark:hover {
+  color: white;
+  background: dimgray;
+}
+
+.btn-gray-blue {
+  background: #6fb7e6;
+  color: white;
+}
+
+.btn-gray-blue:hover {
+  color: white;
+  background: #39a7ef;
+}
+
+
+
+.alert {
+  padding: 2px 15px 5px 15px;
+}
+
+.hr-white {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eee;
+  box-sizing: content-box;
+  height: 0;
+  display: block;
+  unicode-bidi: isolate;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  overflow: hidden;
+}
+
+.text-11 {
+  font-size: 11px !important;
+}
+
+.bordeado {
+  border: 1px solid grey;
+}
+
+.mb-2 {
+  margin-bottom: 2rem !important;
+}
+
+.mt-1 {
+  margin-top: 1rem !important;
+}
+
+.mt-2 {
+  margin-top: 2rem !important;
+}
+
+.no-lateral-padding {
+  padding-left: 0rem !important;
+  padding-right: 0rem !important;
+}
+
+.no-right-padding {
+  padding-right: 0rem !important;
+}
+
+.no-left-padding {
+  padding-left: 0rem !important;
+}
+
+.vertical-middle {
+  vertical-align: middle !important;
+}
+
+.custom-pointer:hover {
+  cursor: pointer;
+}
+
+.highlight_retirado {
+  background-color:lighten(#ED5565, 4%);
+  color: white;
+}
+
+.highlight_agregado{
+  background-color:lighten(#1ab394, 4%);
+  color: white;
+}
+
+.highlight_seleccionado {
+  background-color:lighten(#1f659b, 4%);
+  color: white;
+}
+
+.row-hover {
+  &:hover {
+    cursor: pointer;
+    background-color: #e1ecf4;
+  }
+}
+
+.text-combo {
+  font-size: 0.995em !important;
+}
+
+.small-text {
+  font-size: 0.85em !important;
+}
+
+.middle-align {
+  vertical-align: middle !important;
+}
+
+bs-datepicker-container,
+bs-daterangepicker-container {
+  z-index: 3000;
+}
+
+@import "imports/upload";
+$pdf-swal-padding: 5px;
+$pdf-swal-close-height: 25px;
+$pdf-swal-width: 900px;
+$pdf-swal-height: 600px;
+.pdf-swal {
+  padding: $pdf-swal-close-height $pdf-swal-padding $pdf-swal-padding $pdf-swal-padding !important;
+  width:  $pdf-swal-width !important;
+  height: $pdf-swal-height !important;
+  .pdf-viewer-container {
+    width: $pdf-swal-width - ($pdf-swal-padding * 2);
+    height: $pdf-swal-height - ($pdf-swal-close-height + ($pdf-swal-padding * 2));
+  }
+  
+}

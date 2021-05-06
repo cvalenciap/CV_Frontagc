@@ -1,0 +1,36 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="profile-element text-center">
+                    <img src="assets/images/sedapal-logo-2.png">
+                </div>
+                <div class="logo-element">
+                    <img src="assets/images/sedapal-gota.png">
+                </div>
+            </li>
+            
+            <li [ngClass]="{active: activeRoute('inicio')}">
+                <a [routerLink]="['/inicio']"><i class="fa fa-th-large"></i> <span class="nav-label">Inicio</span></a>
+            </li>
+            <!--li [ngClass]="{active: activeRoute('bandeja')}">
+                <a href="#"><i class="fa fa-inbox"></i> <span class="nav-label">Bandejas</span> <span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute('carga-trabajo')}">
+                    <li [ngClass]="{active: activeRoute('carga-trabajo')}"><a [routerLink]="['/carga-trabajo']">Bandeja Carga de Trabajo</a></li>
+                </ul>
+            </li-->
+
+            <li *ngFor="let item of modulo; let i=index">
+                <a href="#"><i class="fa fa-inbox"></i> <span class="nav-label">{{proper(item.descripcion)}}</span> <span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse" [ngClass]="{in: activeRoute(item.activeRoute)}">
+                    <li *ngFor="let subitem of item.formularios">
+                        <a   (click)="session()"   routerLink="{{subitem.url}}"><span class="nav-label">{{proper(subitem.descripcion)}}</span> <span class="fa arrow"></span> </a>
+                    </li>
+                </ul>
+            </li>
+            <li [ngClass]="{active: activeRoute('login')}">
+                <a (click)="logout(item.token)"><i class="fa fa-reply-all"></i> <span class="nav-label">Cerrar Sesión</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,130 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Asignación de Personal AGC a Grupos</strong></h4>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content">
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Búsqueda de Grupos:</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-horizontal margin-bottom-0">
+          <!--  Combo Empresa  -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="col-md-1 control-label">Empresa:</label>
+              <div class="col-md-3">
+                <ng-select placeholder="Seleccionar Empresa"
+                           #selectEmpresa
+                           [items]="comboEmpresa"
+                           bindLabel="descripcion"
+                           bindValue="codigo"
+                           [ngModelOptions]="{ standalone : true }"
+                           [(ngModel)]="datosConsulta.idEmpresa"
+                           (change)="onCambioEmpresa()"></ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <!--  Combo Oficina -->
+              <label class="col-md-1 control-label">Oficina:</label>
+              <div class="col-md-3">
+                <ng-select placeholder="Seleccionar Oficina"
+                           #selectOficina
+                           [items]="comboOficina"
+                           bindLabel="descripcion"
+                           bindValue="codigo"
+                           [ngModelOptions]="{ standalone : true }"
+                           [(ngModel)]="datosConsulta.idOficina"
+                           (change)="onCambioOficina()"></ng-select>
+              </div>
+              <!-- Combo Grupo Funcional -->
+              <label class="col-md-2 control-label">Grupo Funcional:</label>
+              <div class="col-md-3">
+                <ng-select placeholder="Seleccionar Grupo"
+                           #selectGrupo
+                           [items]="comboGrupo"
+                           bindLabel="grupo.descGrupo"
+                           bindValue="grupo.idGrupo"
+                           [ngModelOptions]="{ standalone : true }"
+                           [(ngModel)]="datosConsulta.idGrupo"></ng-select>
+              </div>
+              <div class="col-md-1 text-right">
+                <button class="btn btn-sm btn-primary"
+                        [disabled]="datosConsulta.idEmpresa <= 0"
+                        (click)="buscarGruposOficina()">
+                  <i class="fa fa-search"></i> Buscar
+                </button>
+              </div>
+              <div class="col-md-1 text-right">
+                <button class="btn btn-sm btn-info"
+                        (click)="onLimpiarFiltros()">
+                  <i class="fa fa-trash"></i> Limpiar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--   Tabla de Personal   -->
+      <div class="row">
+        <div class="table-responsive">
+          <table class="table table-condensed table-bordered table-stripped table-hover issue-tracker">
+            <thead class="thead-dark">
+            <tr>
+              <th class="text-center">Nro</th>
+              <th class="text-center">Empresa</th>
+              <th class="text-center">Oficina</th>
+              <th class="text-center">Grupo</th>
+              <th class="text-center">Ver Personal</th>
+            </tr>
+            </thead>
+            <tbody *ngIf="$mostrarTabla">
+            <tr *ngFor="let grupo of listaGruposEncontrados |
+                        paginate: paginacionConfig;">
+              <td class="text-center text-11">{{grupo.indice}}</td>
+              <td class="text-center text-11">{{grupo.empresa.descripcion}}</td>
+              <td class="text-center text-11">{{grupo.oficina.descripcion}}</td>
+              <td class="text-center text-11">{{grupo.grupo.descGrupo}}</td>
+              <td class="text-center text-11">
+                <button class="btn btn-info"
+                        (click)="navegarToAsignarPersonal(grupo)">
+                  <i class="fa fa-users"></i></button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row" *ngIf="$mostrarTabla">
+        <div class="col-md-4">
+          <pagination [(ngModel)]="paginacion.pagina"
+                      [totalItems]="paginacion.totalRegistros"
+                      [itemsPerPage]="paginacion.registros"
+                      [maxSize]="5"
+                      [boundaryLinks]="true"
+                      (pageChanged)="onCambiarPagina($event)"
+                      previousText="&lsaquo;" nextText="&rsaquo;"
+                      firstText="&laquo;" lastText="&raquo;"></pagination>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center m-a-sm">
+            <pagination-info [totalItems]="paginacion.totalRegistros"
+                             [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center m-a-sm">
+            <pagination-set (optionChanged)="OnCambioRegistros($event)"></pagination-set>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

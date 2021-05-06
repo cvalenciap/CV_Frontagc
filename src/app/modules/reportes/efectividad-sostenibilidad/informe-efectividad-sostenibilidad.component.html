@@ -1,0 +1,294 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4>
+      <a routerLink="/inicio">Inicio</a> / Contratista / Reportes / Informe de Efectividad en la Sostenibilidad
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated main-content mt-1" style="padding: 0px;">
+  <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+    <div class="row">
+      <div class="col-sm-12" style="display: inline-flex;">
+        <button class="btn btn-info container-button" (click)="OnFiltrar()"> <i class="fa fa-search"></i>
+          Buscar</button>
+          <app-button-return></app-button-return>
+          <button class="btn btn-success container-button" (click)="OnLimpiar()"> <i class="fa fa-trash"></i>
+          Limpiar</button>
+        <span class="input-group-btn" dropdown *ngIf="itemsPagination.length>0">
+          <button type="button" class="btn btn-gray-blue">
+            <i class="fa fa-database" title="Buscar"></i> Exportar</button>
+          <button dropdownToggle type="button" class="btn btn-gray-blue dropdown-toggle dropdown-toggle-split">
+            <i class="fa fa-caret-down"></i></button>
+          <!-- Lista de Opciones -->
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+            <li role="menuitem">
+              <a (click)="OnPDF(); $event.stopPropagation();">PDF</a></li>
+            <li role="menuitem" *ngIf="codigoPerfil===6 || codigoPerfil===1">
+              <a (click)="OnExcel()">Excel</a></li>
+          </ul>
+        </span>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Contratista:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.listaParametros.listaEmpresa" bindLabel="descripcion" bindValue="codigo" name="empresa" placeholder="Seleccione Contratista"
+            #selectContratista [(ngModel)]="empresa" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom">
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Oficina:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.lista.oficinas" bindLabel="descripcion" bindValue="codigo" name="oficina" placeholder="Seleccione Oficina"
+                       #selectContratista [(ngModel)]="oficina" [ngModelOptions]="{standalone: true}"
+                       dropdownPosition="bottom"  (change)="obtenerItems();" >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Item:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.valorItmes" bindLabel="ITEM" bindValue="ITEM" name="ITEM"
+            #selectContratista [(ngModel)]="itemcp" [ngModelOptions]="{standalone: true}"
+            dropdownPosition="bottom" [disabled]="eitems"  (change)="obtenerSubactividad();">
+           </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Actividad:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.listaParametros.listaActividad" bindLabel="descripcion" bindValue="codigo" name="actividad"
+                       #selectContratista [(ngModel)]="actividad" [ngModelOptions]="{standalone: true}"
+                       dropdownPosition="bottom" [disabled]="eactividad" >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Periodo:</label>
+          <div class="col-md-9">
+            <form [formGroup]="myForm" novalidate>
+              <month-date-picker name="fechaI" formControlName="fechaI" (periodo)="onPeriodo($event)"></month-date-picker>
+            </form>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 padding-0">
+        <div class="form-group">
+          <label class="col-md-2 padding-0 text-right control-label">Ciclo:</label>
+          <div class="col-md-9">
+            <ng-select [items]="this.cicloList" bindLabel="CICLO" bindValue="CICLO" name="CICLO" placeholder="Seleccione el Ciclo"
+            #selectContratista [(ngModel)]="ciclo" [ngModelOptions]="{standalone: true}" [disabled]="eciclo"
+            dropdownPosition="bottom">
+           </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table report-->
+    <div class="row mt-2">
+      <div class="col-lg-12">
+        <div class="ibox-content" [ngClass]="{ 'sk-loading': isLoading}">
+          <sk-three-bounce></sk-three-bounce>
+          <div class="table-responsive">
+            <table class="table table-stripped table-hover issue-tracker">
+              <thead>
+                <tr>
+                  <th class="text-center" data-col="item">Item</th>
+                  <th class="text-center" data-col="oficina">Fecha</th>
+                  <th class="text-center" data-col="perfil">Carga</th>
+                  <th class="text-center" data-col="usuario">D1</th>
+                  <th class="text-center" data-col="actividad">D2</th>
+                  <th class="text-center" data-col="subactividad">D3</th>
+                  <th class="text-center" data-col="subactividad">D4</th>
+                  <th class="text-center" data-col="subactividad">D5</th>
+                  <th class="text-center" data-col="usuario">D6</th>
+                  <th class="text-center" data-col="actividad">D7</th>
+                  <th class="text-center" data-col="subactividad">D8</th>
+                  <th class="text-center" data-col="subactividad">D9</th>
+                  <th class="text-center" data-col="subactividad">D10</th>
+                  <th class="text-center" data-col="usuario">D11</th>
+                  <th class="text-center" data-col="actividad">D12</th>
+                  <th class="text-center" data-col="subactividad">D13</th>
+                  <th class="text-center" data-col="subactividad">D14</th>
+                  <th class="text-center" data-col="subactividad">D15</th>
+                  <th class="text-center" data-col="usuario">D16</th>
+                  <th class="text-center" data-col="actividad">D17</th>
+                  <th class="text-center" data-col="subactividad">D18</th>
+                  <th class="text-center" data-col="subactividad">D19</th>
+                  <th class="text-center" data-col="subactividad">D20</th>
+                  <th class="text-center" data-col="usuario">D21</th>
+                  <th class="text-center" data-col="actividad">D22</th>
+                  <th class="text-center" data-col="subactividad">D23</th>
+                  <th class="text-center" data-col="subactividad">D24</th>
+                  <th class="text-center" data-col="subactividad">D25</th>
+                  <th class="text-center" data-col="usuario">D26</th>
+                  <th class="text-center" data-col="actividad">D27</th>
+                  <th class="text-center" data-col="subactividad">D28</th>
+                  <th class="text-center" data-col="subactividad">D29</th>
+                  <th class="text-center" data-col="subactividad">D30</th>
+                  <th class="text-center" data-col="subactividad">D31</th>
+                  <th class="text-center" data-col="subactividad">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of itemsPagination; let i = index">
+                  <td class="text-center">
+                    {{item.ordenador}}
+                  </td>
+                  <td class="text-center">
+                    {{item.f_emision}}
+                  </td>
+                  <td class="text-center">
+                    {{item.carga_entregadas}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d1}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d2}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d3}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d4}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d5}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d6}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d7}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d8}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d9}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d10}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d11}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d12}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d13}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d14}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d15}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d16}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d17}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d18}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d19}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d20}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d21}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d22}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d23}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d24}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d25}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d26}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d27}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d28}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d29}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d30}}
+                  </td>
+                  <td class="text-center">
+                    {{item.d31}}
+                  </td>
+                  <td class="text-center">
+                    {{item.total}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-12 col-xs-12">
+              <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)"
+                [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+                [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+              </pagination>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="text-center m-a-sm">
+                <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                  [page]="paginacion.pagina"></pagination-info>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="text-right m-a-sm">
+                <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+<swal #reportePdfSwal [showCloseButton]="true" [allowOutsideClick]="false" [showConfirmButton]="false"
+  customClass="pdf-swal">
+  <form *swalPartial>
+    <visor-pdf url="{{urlReportePdf}}" download="true"></visor-pdf>
+  </form>
+</swal>

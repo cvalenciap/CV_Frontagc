@@ -1,0 +1,143 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-9 text-center" style="padding-left: 0px">
+      <h3 class="font-bold" style="margin-left: 16rem !important;" *ngIf="tipoHistorico === 'P'">Búsqueda Avanzada - Histórico de Personal</h3>
+      <h3 class="font-bold" style="margin-left: 16rem !important;" *ngIf="tipoHistorico === 'M'">Búsqueda Avanzada - Histórico de Movimientos de Cargo</h3>
+    </div>
+    <div class="col-md-3 text-right pull-right">
+      <button type="button" class="btn-sm btn-default" style="background: #eee" (click)="onLimpiarFiltros()"><i
+          class="fa fa-eraser" title="Buscar"></i> Limpiar filtros</button>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">D.N.I:</label>
+      <div class="col-md-6">
+        <input appNoWhiteSpace
+               type="text"
+               class="form-control texto-ingresado"
+               [(ngModel)]="historicoRequest.numeroDocumento"
+               (change)="onChangeFiltro('D.N.I', $event)">
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Nombres:</label>
+      <div class="col-md-8">
+        <input type="text"
+               class="form-control texto-ingresado"
+               [(ngModel)]="historicoRequest.nombres"
+               (change)="onChangeFiltro('Nombres', $event)">
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Apellido Paterno:</label>
+      <div class="col-md-8">
+        <input type="text"
+               class="form-control texto-ingresado"
+               [(ngModel)]="historicoRequest.apellidoPaterno"
+               (change)="onChangeFiltro('Apellido Paterno', $event)">
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Apellido Materno:</label>
+      <div class="col-md-8">
+        <input type="text"
+               class="form-control texto-ingresado"
+               [(ngModel)]="historicoRequest.apellidoMaterno"
+               (change)="onChangeFiltro('Apellido Materno', $event)">
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Estado Contratista:</label>
+      <div class="col-md-8">
+        <ng-select placeholder="Seleccione"
+                   [items]="comboEstadoContratista"
+                   bindLabel="descripcion"
+                   [clearable]="true"
+                   [(ngModel)]="historicoRequest.estadoEmpresa"
+                   (ngModelChange)="onChangeFiltro('Estado Contratista', $event)"></ng-select>
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Contratista:</label>
+      <div class="col-md-8">
+        <ng-select placeholder="Seleccione"
+                   [items]="comboContratista"
+                   bindLabel="descripcion"
+                   [clearable]="true"
+                   [(ngModel)]="historicoRequest.empresa"
+                   (ngModelChange)="onChangeFiltro('Contratista', $event)"></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding" *ngIf="tipoHistorico === 'P'">
+      <label class="col-md-4 no-right-padding  text-left control-label">Estado Laboral:</label>
+      <div class="col-md-8">
+        <ng-select placeholder="Seleccione"
+                   [items]="comboEstadoLaboral"
+                   bindLabel="descripcion"
+                   [clearable]="true"
+                   [(ngModel)]="historicoRequest.estadoLaboral"
+                   (change)="onChangeFiltro('Estado Laboral', $event)"></ng-select>
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding" *ngIf="tipoHistorico === 'M'">
+      <label class="col-md-4 no-right-padding  text-left control-label">Estado Cargo:</label>
+      <div class="col-md-8">
+        <ng-select placeholder="Seleccione"
+                   [items]="comboEstadoCargo"
+                   bindLabel="descripcion"
+                   [clearable]="true"
+                   [(ngModel)]="historicoRequest.estadoCargo"
+                   (change)="onChangeFiltro('Estado Cargo', $event)"></ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Fecha Desde:</label>
+      <div class="col-md-8">
+        <div class="input-group date">
+          <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                 placement="top"
+                 [disabled]="!flagFechaObligatoria"
+                 [(ngModel)]="historicoRequest.fechaDesde"
+                 (ngModelChange)="onChangeFiltro('Fecha Desde', $event)">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 no-lateral-padding">
+      <label class="col-md-4 no-right-padding  text-left control-label">Fecha Hasta:</label>
+      <div class="col-md-8">
+        <div class="input-group date">
+          <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control"
+            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+            placement="top"
+            [disabled]="!flagFechaObligatoria"
+            [(ngModel)]="historicoRequest.fechaHasta"
+            (ngModelChange)="onChangeFiltro('Fecha Hasta', $event)">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 2rem;">
+    <div class="col-md-12 text-center">
+      <button class="btn btn-success btn-sm" style="margin-right: 1rem;" (click)="busquedaAvanzada()">Buscar <i
+          class="fas fa fa-search"></i></button>
+      <button class="btn bg-custom-gray btn-sm" (click)="cerrarModal()">Cancelar <i
+          class="fas fa fa-times"></i></button>
+    </div>
+  </div>
+</div>

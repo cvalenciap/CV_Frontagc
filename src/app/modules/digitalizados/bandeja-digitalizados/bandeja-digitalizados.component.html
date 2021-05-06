@@ -1,0 +1,537 @@
+
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4 class="padding-5">
+      <a routerLink="/inicio">Inicio</a> / Digitalizados / <strong>Consulta de Digitalizados</strong>
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+
+
+      <div class="ibox-content">
+          <div class="row m-b-md">
+                    <label class="col-lg-1" style="text-align: left">Nro. Suministro:</label>
+                    <div class="col-lg-2">
+                      <input #buscar type="text"   (keypress)="validacionNumero.validacionSoloNumeros($event)" class="form-control" [(ngModel)]="numeroSuministro" maxlength="9">
+                    </div>
+                        <label class="col-lg-1 control-label">Nro. Carga:</label>
+                        <div class="col-lg-2">
+                          <input (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="20"
+                            [disabled]="!estadoComponentes.inputNumeroCarga" type="text" class="form-control"
+                            [(ngModel)]="filtros.numeroCarga" [ngModelOptions]="{standalone: true}" />
+                        </div>
+                        <label class="col-lg-1 control-label">Actividad:</label>
+                        <div class="col-lg-3">
+                          <ng-select [items]="this.listaParametros.listaActividad"
+                                     bindLabel="descripcion"
+                                     bindValue="codigo"
+                                     placeholder="Seleccione Actividad"
+                                     name="actividades"
+                                     #selectActividad
+                                     [clearable]="true"
+                                     [(ngModel)]="filtros.actividad.codigo"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="onSeleccionarActividad($event)">
+                                  </ng-select>
+                        </div>
+          </div>
+          <div class="row m-b-mb">
+              <label class="col-lg-1 control-label">Orden Servicio:</label>
+              <div class="col-lg-2">
+                <input (keypress)="validacionNumero.validacionSoloNumeros($event)" maxlength="9"
+                  [disabled]="!estadoComponentes.inputOrdenServicio" type="text" class="form-control"
+                  [(ngModel)]="filtros.ordenServicio" [ngModelOptions]="{standalone: true}" />
+              </div>
+              <label class="col-lg-1 control-label">Orden Trabajo:</label>
+              <div class="col-lg-2">
+                <input (keypress)="validacionNumero.validacionSoloNumeros($event)" maxlength="10"
+                  [disabled]="!estadoComponentes.inputOrdenTrabajo" type="text" class="form-control"
+                  [(ngModel)]="filtros.ordenTrabajo" [ngModelOptions]="{standalone: true}" />
+              </div>
+              <label class="col-lg-1 control-label">Oficina:</label>
+              <div class="col-lg-3">
+                <ng-select [items]="this.listaParametros.listaOficina"
+                          bindLabel="descripcion"
+                          bindValue="codigo"
+                          placeholder="Seleccione Oficina"
+                          name="oficina"
+                          #selectOficina
+                          [clearable]="clrOficina"
+                          [(ngModel)]="filtros.oficina.codigo"
+                          [ngModelOptions]="{standalone: true}"
+                          dropdownPosition="bottom"
+                          (change)="onSeleccionarOficina($event)">
+                </ng-select>
+            </div>
+
+          </div>
+
+          <div  class="row m-b-md">
+
+              <label class="col-lg-1 control-label">Número Cédula:</label>
+              <div class="col-lg-2">
+                <input (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="50"
+                  [disabled]="!estadoComponentes.inputNumeroCedula" type="text" class="form-control"
+                  [(ngModel)]="filtros.numeroCedula" [ngModelOptions]="{standalone: true}" />
+              </div>
+              <label class="col-lg-1 control-label">Número Reclamo:</label>
+              <div class="col-lg-2">
+                <input (keypress)="validacionNumero.validacionSoloLetras($event)" maxlength="15"
+                  [disabled]="!estadoComponentes.inputNumeroReclamo" type="text" class="form-control"
+                  [(ngModel)]="filtros.numeroReclamo" [ngModelOptions]="{standalone: true}" />
+              </div>
+
+              <label class="col-lg-1" style="text-align: center">Seleccionar:</label>
+              <div class="col-lg-3">
+                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="seleccionarViewAdjuntos()">
+                        <option value="0">TODOS</option>
+                        <option value="1">CON DIGITALIZADOS</option>
+                        <option value="2">SIN DIGITALIZADOS</option>
+                    </select>
+              </div>
+          </div> <!-- row -->
+
+          <div class="row m-b-mb">
+              <label class="col-lg-1 control-label">Fecha Inicio:</label>
+              <div class="col-lg-2">
+                <div class="input-group date">
+                  <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+                    [(bsValue)]="filtros.fechaInicio" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [maxDate]="today"
+                    (bsValueChange)="detectarCambioFechas()">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+              <label class="col-lg-1 control-label">Fecha Fin:</label>
+              <div class="col-lg-2">
+                <div class="input-group date">
+                  <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"
+                    [(bsValue)]="filtros.fechaFin" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [maxDate]="today"
+                    (bsValueChange)="detectarCambioFechas()">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+                <div class="row">
+                    <div class="col-lg-1">
+                        <button type="button" class="btn btn-success" title="Buscar" (click)="onObtenerDigitalizados('BANDEJA')"><i class="fa fa-search margin-right-10"></i><span>Buscar</span> </button>
+
+                      </div>
+                     <div class="col-lg-1">
+                        <button type="button" class="btn btn-success boton-exportar" title="Exportar Registros" [disabled]="!verExportarExcel"
+                        (click)="generarArchivoExcel()">
+                          <i class="fa fa-database margin-right-10"></i><span>Exportar</span>
+                        </button>
+                      </div>
+
+                      <div class="col-lg-2">
+                          <a type="button" class="btn btn-default  boton-limpiar" style="background: #eee" (click)="onLimpiarFiltros()"><i
+                              class="fa fa-eraser" title="Buscar"></i> Limpiar</a>
+                        </div>
+                </div>
+
+
+          </div>
+
+      </div>
+<br/>
+
+
+
+
+    <div class="ibox-content" [@.disabled]="true">
+
+      <div class="row margin--left-right-6" *ngIf="mostrarFiltros">
+        <alert type="info" class="padding-0">
+          <div class="row">
+            <div class="col-md-10">
+              <span class="padding-0" [innerHtml]="filtrosTexto"></span>
+            </div>
+            <div class="col-md-offset-10">
+              <a (click)="eliminarFiltros()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+            </div>
+          </div>
+        </alert>
+      </div>
+      <sk-three-bounce></sk-three-bounce>
+
+
+
+      <mat-tab-group [(selectedIndex)]=selectedIndex >
+          <mat-tab label="Dist. y comunicaciones" >
+            <!-- inicio primera tabulación -->
+              <div class="table-responsive">
+                  <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                    <tr>
+                      <th class="text-center padding8">Item</th>
+                      <th class="text-center">Nro. Suministro</th>
+                      <th class="text-center padding-left-15">Actividad</th>
+                      <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                      <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                      <th class="text-center">Nro. Carga</th>
+                      <th class="text-center">Fecha Ejecución</th>
+                      <th class="text-center">Ver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let digitalizado of onListarDigitalizados(); let indice = index">
+                      <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                      <td class="text-center" data-col="numero-suministro">{{digitalizado.suministro}}</td>
+                      <td class="text-center" data-col="actividad">{{digitalizado.actividad.descripcion}}</td>
+                      <td class="text-center" data-col="servicio-trabajo-cedula">{{digitalizado.ordTrabOrdServCedu}}</td>
+                      <td class="text-center" data-col="tipologia">{{digitalizado.tipologia}}</td>
+                      <td class="text-center" data-col="numero-carga">{{digitalizado.numeroCarga}}</td>
+                      <td class="text-center" data-col="fecha-carga">{{digitalizado.fechaEjecucion}}</td>
+                      <td class="text-center" data-col="accion">
+                        <!-- <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar" (click)="visualizarDigitalizados(digitalizado, 'V'); visorPdfSwal.show(); $event.stopPropagation()"> -->
+                        <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar PDF" (click)="visualizarDigitalizados(digitalizado, 'V','pdf');">
+                            <i class="fa fa-file-pdf-o"></i>
+                        </button>
+                        <button *ngIf="digitalizado.cantImg > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarDigitalizados(digitalizado, 'V','jpg');">
+                          <i class="fa fa-file-image-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row margin-top-20">
+                  <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="onPageChanged($event)" [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged($event)"></pagination-set>
+                    </div>
+                  </div>
+                </div>
+          </mat-tab> <!-- PRIMERA PESTAÑA -->
+
+          <mat-tab label="Dist. aviso cobranza" >
+
+              <div class="table-responsive">
+                  <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                    <tr>
+                      <th class="text-center padding8">Item</th>
+                      <th class="text-center">Nro. Suministro</th>
+                      <th class="text-center padding-left-15">Actividad</th>
+                      <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                      <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                      <th class="text-center">Nro. Carga</th>
+                      <th class="text-center">Fecha Ejecución</th>
+                      <th class="text-center">Ver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let digitalizado of onListarDistavisos(); let indice = index">
+                      <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                      <td class="text-center" data-col="numero-suministro">{{digitalizado.suministro}}</td>
+                      <td class="text-center" data-col="actividad">{{digitalizado.actividad.descripcion}}</td>
+                      <td class="text-center" data-col="servicio-trabajo-cedula">{{digitalizado.ordTrabOrdServCedu}}</td>
+                      <td class="text-center" data-col="tipologia">{{digitalizado.tipologia}}</td>
+                      <td class="text-center" data-col="numero-carga">{{digitalizado.numeroCarga}}</td>
+                      <td class="text-center" data-col="fecha-carga">{{digitalizado.fechaEjecucion}}</td>
+                      <td class="text-center" data-col="accion">
+                        <!-- <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar" (click)="visualizarDigitalizados(digitalizado, 'V'); visorPdfSwal.show(); $event.stopPropagation()"> -->
+                        <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar PDF" (click)="visualizarDigitalizados(digitalizado, 'V','pdf');">
+                          <i class="fa fa-file-o"></i>
+                        </button>
+                        <button *ngIf="digitalizado.cantImg > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarDigitalizados(digitalizado, 'V','jpg');">
+                          <i class="fa fa-file-image-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row margin-top-20">
+                  <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacion2.pagina" (pageChanged)="onPageChanged2($event)" [totalItems]="paginacion2.totalRegistros" [itemsPerPage]="paginacion2.registros"
+                                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion2.totalRegistros" [itemsPerPage]="paginacion2.registros" [page]="paginacion2.pagina"></pagination-info>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged2($event)"></pagination-set>
+                    </div>
+                  </div>
+                </div>
+
+
+
+          </mat-tab>
+          <mat-tab label="Insp. comerciales" >
+              <div class="table-responsive">
+                  <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                    <tr>
+                      <th class="text-center padding8">Item</th>
+                      <th class="text-center">Nro. Suministro</th>
+                      <th class="text-center padding-left-15">Actividad</th>
+                      <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                      <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                      <th class="text-center">Nro. Carga</th>
+                      <th class="text-center">Fecha Ejecución</th>
+                      <th class="text-center">Ver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let digitalizado of onListarInspcomercial(); let indice = index">
+                      <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                      <td class="text-center" data-col="numero-suministro">{{digitalizado.suministro}}</td>
+                      <td class="text-center" data-col="actividad">{{digitalizado.actividad.descripcion}}</td>
+                      <td class="text-center" data-col="servicio-trabajo-cedula">{{digitalizado.ordTrabOrdServCedu}}</td>
+                      <td class="text-center" data-col="tipologia">{{digitalizado.tipologia}}</td>
+                      <td class="text-center" data-col="numero-carga">{{digitalizado.numeroCarga}}</td>
+                      <td class="text-center" data-col="fecha-carga">{{digitalizado.fechaEjecucion}}</td>
+                      <td class="text-center" data-col="accion">
+                        <!-- <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar" (click)="visualizarDigitalizados(digitalizado, 'V'); visorPdfSwal.show(); $event.stopPropagation()"> -->
+                        <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar PDF" (click)="visualizarDigitalizados(digitalizado, 'V','pdf');">
+                          <i class="fa fa-file-o"></i>
+                        </button>
+                        <button *ngIf="digitalizado.cantImg > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarDigitalizados(digitalizado, 'V','jpg');">
+                          <i class="fa fa-file-image-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row margin-top-20">
+                  <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacion3.pagina" (pageChanged)="onPageChanged3($event)" [totalItems]="paginacion3.totalRegistros" [itemsPerPage]="paginacion3.registros"
+                                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion3.totalRegistros" [itemsPerPage]="paginacion3.registros" [page]="paginacion3.pagina"></pagination-info>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged3($event)"></pagination-set>
+                    </div>
+                  </div>
+                </div>
+
+
+          </mat-tab>
+          <mat-tab label="Medidores" >
+
+              <div class="table-responsive">
+                  <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                    <tr>
+                      <th class="text-center padding8">Item</th>
+                      <th class="text-center">Nro. Suministro</th>
+                      <th class="text-center padding-left-15">Actividad</th>
+                      <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                      <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                      <th class="text-center">Nro. Carga</th>
+                      <th class="text-center">Fecha Ejecución</th>
+                      <th class="text-center">Ver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let digitalizado of onListarMedidores(); let indice = index">
+                      <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                      <td class="text-center" data-col="numero-suministro">{{digitalizado.suministro}}</td>
+                      <td class="text-center" data-col="actividad">{{digitalizado.actividad.descripcion}}</td>
+                      <td class="text-center" data-col="servicio-trabajo-cedula">{{digitalizado.ordTrabOrdServCedu}}</td>
+                      <td class="text-center" data-col="tipologia">{{digitalizado.tipologia}}</td>
+                      <td class="text-center" data-col="numero-carga">{{digitalizado.numeroCarga}}</td>
+                      <td class="text-center" data-col="fecha-carga">{{digitalizado.fechaEjecucion}}</td>
+                      <td class="text-center" data-col="accion">
+                        <!-- <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar" (click)="visualizarDigitalizados(digitalizado, 'V'); visorPdfSwal.show(); $event.stopPropagation()"> -->
+                        <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar PDF" (click)="visualizarDigitalizados(digitalizado, 'V', 'pdf');">
+                          <i class="fa fa-file-o"></i>
+                        </button>
+                        <button *ngIf="digitalizado.cantImg > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarDigitalizados(digitalizado, 'V','jpg');">
+                          <i class="fa fa-file-image-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row margin-top-20">
+                  <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacion4.pagina" (pageChanged)="onPageChanged4($event)" [totalItems]="paginacion4.totalRegistros" [itemsPerPage]="paginacion4.registros"
+                                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion4.totalRegistros" [itemsPerPage]="paginacion4.registros" [page]="paginacion4.pagina"></pagination-info>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged4($event)"></pagination-set>
+                    </div>
+                  </div>
+                </div>
+
+          </mat-tab>
+          <mat-tab label="SGIO" >
+
+              <div class="table-responsive">
+                  <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                    <tr>
+                      <th class="text-center padding8">Item</th>
+                      <th class="text-center">Nro. Suministro</th>
+                      <th class="text-center padding-left-15">Actividad</th>
+                      <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                      <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                      <th class="text-center">Nro. Carga</th>
+                      <th class="text-center">Fecha Ejecución</th>
+                      <th class="text-center">Ver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let digitalizado of onListarSGIO(); let indice = index">
+                      <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                      <td class="text-center" data-col="numero-suministro">{{digitalizado.suministro}}</td>
+                      <td class="text-center" data-col="actividad">{{digitalizado.actividad.descripcion}}</td>
+                      <td class="text-center" data-col="servicio-trabajo-cedula">{{digitalizado.ordTrabOrdServCedu}}</td>
+                      <td class="text-center" data-col="tipologia">{{digitalizado.tipologia}}</td>
+                      <td class="text-center" data-col="numero-carga">{{digitalizado.numeroCarga}}</td>
+                      <td class="text-center" data-col="fecha-carga">{{digitalizado.fechaEjecucion}}</td>
+                      <td class="text-center" data-col="accion">
+                        <!-- <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar" (click)="visualizarDigitalizados(digitalizado, 'V'); visorPdfSwal.show(); $event.stopPropagation()"> -->
+                        <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar PDF" (click)="visualizarDigitalizados(digitalizado, 'V', 'pdf');">
+                          <i class="fa fa-file-o"></i>
+                        </button>
+                        <button *ngIf="digitalizado.cantImg > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarDigitalizados(digitalizado, 'V','jpg');">
+                          <i class="fa fa-file-image-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row margin-top-20">
+                  <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacion5.pagina" (pageChanged)="onPageChanged5($event)" [totalItems]="paginacion5.totalRegistros" [itemsPerPage]="paginacion5.registros"
+                                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion5.totalRegistros" [itemsPerPage]="paginacion5.registros" [page]="paginacion5.pagina"></pagination-info>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged5($event)"></pagination-set>
+                    </div>
+                  </div>
+                </div>
+
+
+          </mat-tab>
+          <mat-tab label="Toma de estado" >
+
+              <div class="table-responsive">
+                  <table class="table table-bordered table-stripped table-hover issue-tracker">
+                    <thead>
+                    <tr>
+                      <th class="text-center padding8">Item</th>
+                      <th class="text-center">Nro. Suministro</th>
+                      <th class="text-center padding-left-15">Actividad</th>
+                      <th class="text-center">Ord.Serv/Ord.Trab/Num.Cédula</th>
+                      <th class="text-center">Tipología Ord.Trab/<br>Ord.Serv</th>
+                      <th class="text-center">Nro. Carga</th>
+                      <th class="text-center">Fecha Ejecución</th>
+                      <th class="text-center">Ver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let digitalizado of onListarTomaEstado(); let indice = index">
+                      <td class="text-center" data-col="codigo">{{(indice + 1)+((paginacion.pagina - 1) * paginacion.registros)}}</td>
+                      <td class="text-center" data-col="numero-suministro">{{digitalizado.suministro}}</td>
+                      <td class="text-center" data-col="actividad">{{digitalizado.actividad.descripcion}}</td>
+                      <td class="text-center" data-col="servicio-trabajo-cedula">{{digitalizado.ordTrabOrdServCedu}}</td>
+                      <td class="text-center" data-col="tipologia">{{digitalizado.tipologia}}</td>
+                      <td class="text-center" data-col="numero-carga">{{digitalizado.numeroCarga}}</td>
+                      <td class="text-center" data-col="fecha-carga">{{digitalizado.fechaEjecucion}}</td>
+                      <td class="text-center" data-col="accion">
+                        <!-- <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar" (click)="visualizarDigitalizados(digitalizado, 'V'); visorPdfSwal.show(); $event.stopPropagation()"> -->
+                        <button *ngIf="digitalizado.cantAdj > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar PDF" (click)="visualizarDigitalizados(digitalizado, 'V', 'pdf');">
+                          <i class="fa fa-file-o"></i>
+                        </button>
+                        <button *ngIf="digitalizado.cantImg > 0" class="btn btn-sm btn-success margin-right-10" title="Visualizar IMAGEN" (click)="visualizarDigitalizados(digitalizado, 'V','jpg');">
+                          <i class="fa fa-file-image-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row margin-top-20">
+                  <div class="col-md-4 col-sm-12 col-xs-12">
+                    <pagination [(ngModel)]="paginacion6.pagina" (pageChanged)="onPageChanged6($event)" [totalItems]="paginacion6.totalRegistros" [itemsPerPage]="paginacion6.registros"
+                                [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-center m-a-sm">
+                      <pagination-info [totalItems]="paginacion6.totalRegistros" [itemsPerPage]="paginacion6.registros" [page]="paginacion6.pagina"></pagination-info>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="text-right m-a-sm">
+                      <pagination-set (optionChanged)="onPageOptionChanged6($event)"></pagination-set>
+                    </div>
+                  </div>
+                </div>
+
+
+
+          </mat-tab>
+      </mat-tab-group>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+<swal #modalFiltrosBandejaLogDigitalizados [options]="alertOption" (confirm)="obtenerFiltrosModal()">
+    <div *swalPartial>
+        <app-filtros-bandeja-log></app-filtros-bandeja-log>
+    </div>
+  </swal>
+
+<swal #visorPdfSwal [showConfirmButton]="false" customClass="pdf-swal" (cancel)="eliminarArchivoFileServer();">
+  <form *swalPartial class="ajuste">
+    <app-visor-pdf [url]="urlPDF"></app-visor-pdf>
+  </form>
+</swal>
+<script src="node_modules/image-to-base64/image-to-base64.min.js"></script>
+
+<swal #visorImgSwal [showConfirmButton]="false" customClass="img-swal" (cancel)="eliminarArchivoFileServer();">
+  <form *swalPartial class="ajuste">
+      <app-image-viewer [images]=arrayImagenes
+      [idContainer]=sumVisor
+      [loadOnInit]="true"
+      [download]="true"
+      [showPDFOnlyOption]="false"
+      [showOptions]="true"
+      ></app-image-viewer>
+  </form>
+</swal>

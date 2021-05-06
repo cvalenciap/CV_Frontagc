@@ -1,0 +1,146 @@
+<div class="modal-dialog" style="margin-top: 0; margin-bottom: 0;">
+  <div class="ibox-content no-borders" [class.sk-loading]="loading">
+    <sk-three-bounce></sk-three-bounce>
+    <div class="modal-body" style="padding-top: 0; padding-bottom: 0;">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h4 class="text-muted font-bold">Cesar Personal</h4>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-4 no-lateral-padding">
+            <div class="form-group">
+              <div class="col-md-2 no-lateral-padding">
+                <label class="control-label">DNI:</label>
+              </div>
+              <div class="col-md-10">
+                <input type="text"
+                       class="form-control input-sm"
+                       [ngModel]="data.numeroDocumento"
+                       readonly>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 no-lateral-padding">
+            <div class="form-group">
+              <div class="col-md-2 text-right no-lateral-padding">
+                <label class="control-label">Cargo:</label>
+              </div>
+              <div class="col-md-10">
+                <input type="text"
+                       class="form-control input-sm"
+                       [ngModel]="data.cargo.descripcion"
+                       readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="col-md-3 no-lateral-padding">
+              <label class="control-label">Apellidos y Nombres:</label>
+            </div>
+            <div class="col-md-9">
+              <input type="text" class="form-control input-sm"
+                    [ngModel]="data.nombresCompletos" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div [formGroup]="formularioCese">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="col-md-3 no-lateral-padding">
+                <label class="control-label">*Motivo de Cese:</label>
+              </div>
+              <div class="col-md-9" [ngClass]="{'has-error has-feedback': validMotivoCese}">
+                <select class="form-control"
+                        formControlName="motivoCese">
+                  <option [value]="''">Seleccione</option>
+                  <option *ngFor="let item of comboMotivoCese" [value]="item.id">{{item.descripcion}}</option>
+                </select>
+                <mat-error *ngIf="(getControl('motivoCese').touched && getControl('motivoCese').hasError('required')) || validMotivoCese">Debe seleccionar el motivo de cese</mat-error>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="col-md-3 no-lateral-padding">
+                <label class="control-label">*Fecha de Cese:</label>
+              </div>
+              <div class="col-md-5" [ngClass]="{'has-error has-feedback': validFecCese}">
+                <div class="input-group date">
+                  <input bsDatepicker
+                         #dp="bsDatepicker"
+                         type="text"
+                         formControlName="fecCese"
+                         class="form-control"
+                         [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                <mat-error *ngIf="(getControl('fecCese').touched && getControl('fecCese').hasError('required'))">Debe ingresar la fecha de cese</mat-error>
+                <mat-error *ngIf="getControl('fecCese').touched && getControl('fecCese').hasError('fechaMax')">La fecha de cese debe ser igual o anterior a la fecha actual</mat-error>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="col-md-3 no-lateral-padding">
+                <label class="control-label">Observación Cese:</label>
+              </div>
+              <div class="col-md-9">
+                <textarea class="form-control no-resize"
+                          formControlName="observacion"
+                          draggable="false"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-2" *ngIf="!mostrarConfirmar">
+        <div class="col-md-12 text-center">
+          <button class="btn btn-success btn-sm"
+                  style="margin-right: 1rem;"
+                  (click)="onMostrarConfirmar()">
+                  Guardar <i class="fas fa fa-save"></i></button>
+          <button class="btn bg-custom-gray btn-sm"
+                  (click)="onCerrarModalCesarPersonal()">
+                  Cancelar <i class="fas fa fa-times"></i></button>
+        </div>
+      </div>
+
+      <div class="row mt-2" *ngIf="mostrarConfirmar">
+        <div class="col-md-12 text-center">
+          <h5 class="text-muted font-bold">¿Está seguro de cesar al personal seleccionado?</h5>
+        </div>
+        <div class="col-md-12 text-center">
+          <button class="btn btn-primary btn-sm"
+                  style="margin-right: 1rem;"
+                  (click)="onCesarPersonal()">
+                  Aceptar <i class="fas fa fa-check"></i></button>
+          <button class="btn bg-custom-gray btn-sm"
+                  (click)="onOcultarConfirmar()">
+                  Cancelar <i class="fas fa fa-times"></i></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

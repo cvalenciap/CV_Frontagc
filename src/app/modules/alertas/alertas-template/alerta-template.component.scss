@@ -1,0 +1,12 @@
+.table {
+    tr {
+      th[data-col='item'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='codigo'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='actividad'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='nombre'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='contenido'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+      th[data-col='acciones'] {text-align: center; background:#efefef; border-right: 1px solid #77777745;}
+
+      
+    }
+  }

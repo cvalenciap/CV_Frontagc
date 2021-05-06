@@ -1,0 +1,89 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4><a routerLink="/inicio">Inicio</a> / Mantenimiento / Empresas <strong>Registro de Empresas</strong></h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content">
+      <div class="row m-b-md">
+        <div class="col-md-4">
+          <button type="button" [disabled]="permisos('MODIFICAR')" class="btn btn-primary container-button" (click)="save()"><i class="fa fa-check margin-right-10"></i><span>Guardar</span></button>
+          <button type="button" class="btn btn-gray-dark" (click)="regresar()"><i class="fa fa-arrow-left margin-right-10"></i><span>Regresar</span></button>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <form class="form-horizontal" [class.invalid]="true">
+          <div class="form-group" >
+            <label class="col-sm-2 control-label">Tipo Empresa:</label>
+            <div class="col-sm-4">
+                <select name="tipoEmpresa" [tooltip]="errors?.tipoEmpresa" placement="top"
+                id="tipoEmpresa" class="form-control" [(ngModel)]="empresa.tipoEmpresa" [ngClass]="{'ng-dirty ng-invalid':errors?.tipoEmpresa}">
+                  <option value="0" disabled selected hidden>Seleccione Empresa</option>
+                  <option *ngFor="let tipo of tipos" value="{{tipo.codigo}}"> {{tipo.descripcion}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Razón Social:</label>
+            <div class="col-sm-4">
+              <input type="text" [tooltip]="errors?.descripcion" placement="top" name="descripcion" [disabled]="permisos('MODIFICAR')" class="form-control" [(ngModel)]="empresa.descripcion" [ngClass]="{'ng-dirty ng-invalid':errors?.descripcion}" placeholder="Ej: Lamburgo Service S.A.C"/>
+            </div>
+            <label class="col-sm-2 control-label">RUC Empresa:</label>
+            <div class="col-sm-4">
+              <input type="text" [tooltip]="errors?.nroRUC" placement="top" name="nroRUC" [disabled]="permisos('MODIFICAR')" class="form-control" [(ngModel)]="empresa.nroRUC" [ngClass]="{'ng-dirty ng-invalid':errors?.nroRUC}" maxlength="11" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="Ej: 20195896857"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Dirección Empresa:</label>
+            <div class="col-sm-4">
+              <input type="text" [tooltip]="errors?.direccion" placement="top" name="direccion" [disabled]="permisos('MODIFICAR')" class="form-control" [(ngModel)]="empresa.direccion" [ngClass]="{'ng-dirty ng-invalid':errors?.direccion}" placeholder="Ej: Avenida Tulipanes 7762 - Lima"/>
+            </div>
+            <label class="col-sm-2 control-label">Teléfono Empresa:</label>
+            <div class="col-sm-4">
+              <input type="text" [tooltip]="errors?.nroTelefono"[disabled]="permisos('MODIFICAR')" class="form-control" [(ngModel)]="empresa.telefono" [ngClass]="{'ng-dirty ng-invalid':errors?.nroTelefono}" maxlength="10" [ngModelOptions]="{standalone: true}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="Ej: 995584569"/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Fecha inicio de Vigencia:</label>
+            <div class="col-sm-4">
+              <div class="input-group date">
+                <input bsDatepicker #dp1="bsDatepicker" type="text" name="fechaInicio" (focusout)="validaFechaDesde($event);" [(ngModel)]="empresa.fechaInicioVigencia" class="form-control" [(bsValue)]="empresa.fechaInicioVigencia"  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" value="{{ empresa.fechaInicioVigencia | date:'dd/MM/yyyy' }}" [ngClass]="{'ng-dirty ng-invalid':errors?.fechaInicioVigencia}" [tooltip]="errors?.fechaInicioVigencia" placement="top" placeholder="Ej: 27/03/2019">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+            <label class="col-sm-2 control-label">Fecha fin de Vigencia:</label>
+            <div class="col-sm-4">
+              <div class="input-group date">
+                <input bsDatepicker #dp2="bsDatepicker" type="text" name="fechaFin" (focusout)="validaFechaHasta($event);" [(ngModel)]="empresa.fechaFinVigencia" class="form-control" [(bsValue)]="empresa.fechaFinVigencia"  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [ngClass]="{'ng-dirty ng-invalid':errors?.fechaFinVigencia}" [tooltip]="errors?.fechaFinVigencia" placement="top" placeholder="Ej: 15/04/2019">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Nro. Contrato</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" [disabled]="permisos('MODIFICAR')" [(ngModel)]="empresa.numeroContrato" [ngModelOptions]="{standalone: true}" placeholder="Ej: CO0001-01"/>
+            </div>
+            <span *ngIf="obtenerCodigoEmpresa()!=0">
+              <label class="col-sm-2 control-label">Estado:</label>
+              <div class="col-sm-4">
+                <ui-switch name="switch" size="medium"  (change) = "onCambiaEstado()" [checked] = "estado" [disabled]="permisos('MODIFICAR')"></ui-switch>
+              </div>
+            </span>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Comentario:</label>
+            <div class="col-md-4">
+              <textarea class="form-control" rows="5" [disabled]="permisos('MODIFICAR')" placeholder="Ingrese comentario respecto a la empresa"
+                        [(ngModel)]="empresa.comentario" [ngModelOptions]="{standalone: true}">
+
+              </textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

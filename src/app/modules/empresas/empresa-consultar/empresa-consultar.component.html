@@ -1,0 +1,184 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+  <div class="col-lg-12">
+    <h4 class="padding-5"><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Consulta de Empresas</strong>
+    </h4>
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content" [ngClass]="{'sk-loading': loading}">
+      <div class="row m-b-md">
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-success" [disabled]="permisos('CREAR')"
+            (click)="registrarEditarEmpresa(null)" title="Agregar Registro"><i
+              class="fa fa-plus margin-right-10"></i><span>Agregar</span></button>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <input #buscar type="text" placeholder="Ingrese Razón Social" class="form-control"
+              [(ngModel)]="textoBusqueda">
+            <span class="input-group-btn" dropdown>
+              <button type="button" class="btn btn-info" [disabled]="permisos('BUSCAR')" (click)="getListOfCompanies()"
+                title="Buscar"><i class="fa fa-search"></i></button>
+              <button dropdownToggle type="button" [disabled]="permisos('BUSCAR')"
+                class="btn btn-info dropdown-toggle dropdown-toggle-split"><i class="fa fa-caret-down"></i></button>
+              <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+                <li role="menuitem" [class.active]="flagBusqueda == 'RS'"><a
+                    (click)="buscar.placeholder = 'Ingrese Razón Social'; flagBusqueda = 'RS'">Razón Social</a></li>
+                <li role="menuitem" [class.active]="flagBusqueda == 'RU'"><a
+                    (click)="buscar.placeholder = 'Ingrese número de RUC'; flagBusqueda = 'RU'">RUC</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem"><a [swal]="busquedaAvanzadaSwal">Búsqueda avanzada</a></li>
+              </ul>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row margin--left-right-6" *ngIf="showMessage">
+        <alert type="info" class="padding-0">
+          <div class="row">
+           <div class="col-md-10">
+             <span class="padding-0" [innerHtml]="message"></span>
+           </div>
+            <div class="col-md-offset-10">
+              <a (click)="leaveFilters()" class="col-md-offset-11"><i class="fa fa-trash"></i></a>
+            </div>
+          </div>
+        </alert>
+      </div>
+      <sk-three-bounce></sk-three-bounce>
+      <div class="table-responsive">
+        <table class="table table-bordered table-stripped table-hover issue-tracker">
+          <thead>
+            <tr>
+              <th class="text-center col-md-1">Código</th>
+              <th class="text-center col-md-2">Razón Social</th>
+              <th class="text-center col-md-1">Tipo Empresa</th>
+              <th class="text-center col-md-3">Dirección</th>
+              <th class="text-center col-md-1">Fecha Fin Vigencia</th>
+              <th class="text-center col-md-1">RUC</th>
+              <th class="text-center col-md-1">Estado</th>
+              <th class="text-center col-md-2">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let empresa of empresas; let indice = index" [class.info]="indice == filaSeleccionada">
+              <td class="text-center" data-col="codigo">{{empresa.codigo}}</td>
+              <td class="text-left" data-col="razon-social">{{empresa.descripcion}}</td>
+              <td class="text-center" data-col="tipo-empresa" [ngSwitch]="empresa.tipoEmpresa">
+                <ng-container *ngSwitchCase="'C'">Contratista</ng-container>
+                <ng-container *ngSwitchCase="'S'">Sedapal</ng-container>
+              </td>
+              <td class="text-left" data-col="tipo-empresa">{{empresa.direccion}}</td>
+              <td class="text-center" data-col="tipo-empresa">{{empresa.fechaFinVigencia | date: 'dd/MM/yyyy'}}</td>
+              <td class="text-center" data-col="ruc">{{empresa.nroRUC}}</td>
+              <td class="text-center" data-col="estado" [ngSwitch]="empresa.estado">
+                <span *ngSwitchCase="'A'" class="label label-primary">Activo</span>
+                <span *ngSwitchCase="'I'" class="label label-default">Inactivo</span>
+              </td>
+              <td class="text-center" style="padding-left: 1.3rem;" data-col="accion">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <button class="btn btn-sm btn-success text-left mr-1"
+                                (click)="registrarEditarEmpresa(empresa)"
+                                title="Editar">
+                          <i class="fa fa-edit"></i></button>
+                      </td>
+
+                      <td>
+                        <button *ngIf="empresa.estado=='A'" class="btn btn-sm btn-danger text-center mr-1"
+                                [disabled]="permisos('ELIMINAR')" (confirm)="eliminarEmpresa(empresa, indice)"
+                                title="Eliminar"
+                          [swal]="{ title: '¿Está seguro que desea eliminar el registro?', showCancelButton: true,
+                                confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false,
+                                focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                      </td>
+
+                      <td>
+                        <button *ngIf="empresa.tipoEmpresa == 'C'"
+                                class="btn btn-sm btn-warning text-right mr-1"
+                                (click)="asignarItem(empresa)"
+                                title="Asignar Items">
+                          <i class="fa fa-arrow-right"></i>
+                        </button>
+                      </td>
+
+                      <td>
+                        <button *ngIf="empresa.tipoEmpresa == 'C' && validarBajaPersonal(empresa.fechaFinVigencia)" class="btn btn-sm btn-info text-right mr-1"
+                          title="Dar de baja a todo el personal"
+                          [swal]="{title: '¿Está seguro de dar de baja a todo el personal de la empresa Contratista?',
+                                   showCancelButton: true,
+                                   confirmButtonText: 'Sí, seguro',
+                                   cancelButtonText: 'No gracias',
+                                   focusConfirm: false,
+                                   focusCancel: true, imageUrl: 'assets/images/advertencia.png',
+                                   imageWidth: 50 }"
+                          (confirm)="darBajaContratista(empresa)">
+                          <i class="fa fa-user-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row margin-top-20">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+          <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)"
+            [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+            [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+          </pagination>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="text-center m-a-sm">
+            <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+              [page]="paginacion.pagina"></pagination-info>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="text-right m-a-sm">
+            <pagination-set (optionChanged)="OnPageOptionChanged($event)"></pagination-set>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #busquedaAvanzadaSwal title="Búsqueda Avanzada" customClass="buscar-empresa-swal" [showCancelButton]="true"
+  [focusCancel]="true" [allowOutsideClick]="true" confirmButtonText="Buscar" cancelButtonText="Cancelar"
+  (confirm)="getRequestCompanyOfModal()">
+  <div *swalPartial>
+    <buscar-empresa></buscar-empresa>
+  </div>
+</swal>
+
+<swal #detalleCeseMasivo
+      title="Detalle Cese"
+      [showCancelButton]="true"
+      [showConfirmButton]="false"
+      [focusCancel]="true"
+      [allowOutsideClick]="false"
+      cancelButtonText="Cerrar">
+  <div *swalPartial>
+    <div class="row">
+      <div class="col-md-12">
+        <alert type="danger">
+          El siguiente personal del Contratista tiene cargas pendientes de trabajo, no podrá realizar la baja al personal.
+        </alert>
+        <table>
+          <tbody>
+            <tr *ngFor="let det of detalleCese">{{det}}</tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</swal>

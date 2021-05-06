@@ -1,0 +1,43 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row m-b-md">
+    <div class="ibox-content no-borders">
+      <div [formGroup]="angForm" #formDir="ngForm">
+        <div class="row">
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Codigo SEDAPAL:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="codigoSedapal"
+              [attr.disabled]="!config.inputCodigoSedapal ? '' : null" />
+          </div>
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Estado Código:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="estadoCodigo" 
+              [value]="f.estadoCodigo.value === 'EE003' ? 'PENDIENTE DE ALTA': 
+              f.estadoCodigo.value === 'EE001' ? 'ALTA': 'BAJA'"
+              [attr.disabled]="!config.inputEstadoCodigo ? '' : null" />
+          </div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Fecha de Alta:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="fechaAlta"
+              [attr.disabled]="!config.inputFechaAlta ? '' : null" />
+          </div>
+          <div class="col-lg-2" style="padding-right: 0px;">
+            <label class="control-label text-left">Fecha de Baja:</label>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0px;">
+            <input type="text" class="form-control" formControlName="fechaBaja"
+              [attr.disabled]="!config.inputFechaBaja ? '' : null" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

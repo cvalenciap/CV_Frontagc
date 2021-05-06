@@ -1,0 +1,59 @@
+<div class="table-responsive">
+    <div [ngClass]="{'sk-loading': loading}">
+        <sk-three-bounce></sk-three-bounce>
+        <table class="table table-bordered table-stripped table-hover issue-tracker">
+            <thead>
+                <tr>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Descripción</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listaItemsGrilla; let indice = index">
+                    <td class="col-lg-1 text-center">{{item.id}}</td>
+                    <td class="col-lg-7 text-left">{{item.descripcion}}</td>
+                    <td class="col-lg-2 text-center" [ngSwitch]="item.estado">
+                        <span *ngSwitchCase="'A'" class="label label-primary">Activo</span>
+                        <span *ngSwitchCase="'I'" class="label label-default">Inactivo</span>
+                    </td>
+                    <td class="text-center" width="90px">
+                        <button class="btn btn-sm btn-success margin-right-10" (click)="editarItem(item)"
+                            title="Editar"><i class="fa fa-edit"></i></button>
+                        <span *ngIf="item.estado=='A'">
+                            <button class="btn btn-sm btn-danger" (confirm)="eliminarItem(item, indice)"
+                                title="Eliminar" [swal]="{ title: '¿Está seguro de eliminar el item seleccionado?', showCancelButton: true,
+                                confirmButtonText: 'Sí, seguro', cancelButtonText: 'No gracias', focusConfirm: false,
+                                focusCancel: true, imageUrl: 'assets/images/advertencia.png', imageWidth: 50 }">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" style="margin-left: 1em;"
+                                (click)="registrarOficina(item)" title="Registrar Oficina"><i
+                                    class="fa fa-building"></i></button>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row margin-top-20">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="cambiarPagina($event)"
+                [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros" [boundaryLinks]="true"
+                [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+            </pagination>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center m-a-sm">
+                <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                    [page]="paginacion.pagina"></pagination-info>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-right m-a-sm">
+                <pagination-set (optionChanged)="cambiarRegistrosPorPagina($event)"></pagination-set>
+            </div>
+        </div>
+    </div>
+</div>

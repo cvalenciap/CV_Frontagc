@@ -1,0 +1,209 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h4 class="text-muted">Carga Masiva de Personal Contratista</h4>
+    </div>
+  </div>
+
+  <div class="ibox-content no-borders" [ngClass]="{ 'sk-loading': loading}" *ngIf="mostrarCarga">
+    <sk-three-bounce></sk-three-bounce>
+    <div class="row mt-1">
+      <div class="col-md-12 text-left">
+        <div class="form-horizontal">
+          <div class="form-group">
+            <div class="col-md-4">
+              <label class="control-label">Adjuntar Archivo de Carga:</label>
+            </div>
+            <div class="col-md-5">
+              <div class="uploader">
+                <div id="input-sedapal" class="input-value"><span>{{placeholderInputText}}</span></div>
+                <label for="file-sedapal"></label>
+                <input #fileInputTxt accept=".txt" id="file-sedapal" class="upload" type="file"
+                  (click)="onClickFileInputTxt()" (change)="onCambioValorInput($event)">
+              </div>
+            </div>
+            <div class="col-md-3 text-right">
+              <button class="btn btn-info" (click)="onDescargarPlantilla()">Descargar Plantilla</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-1">
+      <div class="col-md-12 text-left">
+        <h5>Seleccionar Archivos de Fotos y Curriculum Vitae del Personal a Cargar</h5>
+      </div>
+    </div>
+    <!-- TODO: insertar loader -->
+    <div class="row mt-1">
+      <div class="col-md-12">
+        <div ng2FileDrop [ngClass]="!filesOverUploader ? 'drop-zone' : 'file-over'"
+          [class]="!filesOverUploader ? 'drop-zone' : 'file-over'" [uploader]="uploader" (fileOver)="onFileOver($event)"
+          (onFileDrop)="onFileDrop($event)">
+          <span class="text-center"><b>
+              <h4 class="text-muted font-bold">Arrastrar los archivos aquí Solo JPG y PDF</h4>
+            </b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row text-center mt-1">
+      <div class="col-md-12">
+        <button class="btn btn-success" (click)="onCargar()" [disabled]="!disabledUpload">Cargar</button>
+      </div>
+    </div>
+
+    <div class="row text-left">
+      <div class="col-md-12">
+        <p>Archivos seleccionados: {{uploader.queue.length}}</p>
+      </div>
+    </div>
+
+    <div class="row mt-1">
+      <div class="col-md-12 stuck">
+        <table class="table table-bordered table-stripped table-hover">
+          <thead class="thead-light ">
+            <tr>
+              <th class="col-md-4 text-center">Archivo</th>
+              <th class="col-md-1 text-center">Tamaño</th>
+              <th class="col-md-6 text-center">Observacion</th>
+              <th class="col-md-1 text-center">Quitar</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="uploader.queue.length > 0">
+            <tr *ngFor="let file of uploader.queue"
+              [class.danger]="!validarNombreAdjunto(file._file.name) || !validarTamanioArchivos(file._file)"
+              [class.success]="validarNombreAdjunto(file._file.name) && validarTamanioArchivos(file._file)">
+              <td>{{file._file.name}}</td>
+              <td>{{file._file.size / 1024 | number:'1.1-2'}} Kb</td>
+              <td>
+                <table>
+                  <tbody>
+                    <td *ngIf="validarNombreAdjunto(file._file.name) && validarTamanioArchivos(file._file)">OK</td>
+                    <td *ngIf="!validarTamanioArchivos(file._file)">Tamaño maximo superado</td>
+                    <td *ngIf="!validarNombreAdjunto(file._file.name)">
+                      El nombre de archivo no es válido
+                    </td>
+                  </tbody>
+                </table>
+              </td>
+              <td class="text-left">
+                <a class="padding-left-15" (click)="onEliminarItem(file)">
+                  <i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ibox-content no-borders animated fadeInRight" *ngIf="!mostrarCarga">
+    <div class="row mt-1">
+      <div class="col-md-12">
+        <div class="mb-2" *ngIf="mostrarCargaArchivo">
+          <h2 *ngIf="mostrarCargaArchivo">
+            <span>
+              <i class="fa fa-spinner fa-spin" style="font-size: x-large;"></i>
+            </span>{{' Procesando Archivo de Texto'}}
+          </h2>
+          <progressbar class="progress-striped active" type="success" [max]="100" [value]="100"></progressbar>
+        </div>
+        <div class="mb-2" *ngIf="mostrarCargaAdjuntos">
+          <h2 *ngIf="mostrarCargaAdjuntos">
+            <span>
+              <i class="fa fa-spinner fa-spin" style="font-size: x-large;"></i>
+            </span>{{' Enviando Fotos y Cv\'s: '+porcentaje+'%'}}
+          </h2>
+          <progressbar class="progress-striped active" type="success" [max]="totalArchivos"
+            [value]="contadorArchivoActual">
+            <span class="text-nowrap">{{contadorArchivoActual}} / {{totalArchivos}}</span>
+          </progressbar>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="ibox-content animated fadeInRight" *ngIf="mostrarResultados"> -->
+  <div class="row" *ngIf="mostrarResultados">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="text-muted font-bold">Resultado de Log de Errores de Carga</h4>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-bordered table-stripped table-hover">
+            <thead class="thead-light ">
+              <tr>
+                <th class="col-md-1 small-text text-center">N°</th>
+                <th class="col-md-1 small-text text-center">N° Fila de Archivo</th>
+                <th class="col-md-2 small-text text-center">Fecha de Carga</th>
+                <th class="col-md-1 small-text text-center">DNI</th>
+                <th class="col-md-4 small-text text-center">Detalle de Error</th>
+                <th class="col-md-3 small-text text-center">Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let resultado of listaPaginada">
+                <td class="text-center small-text vertical-middle">{{resultado.nro}}</td>
+                <td class="text-center small-text vertical-middle">{{resultado.nroRegistro}}</td>
+                <td class="text-center small-text vertical-middle">{{resultado.fechaDeCarga}}</td>
+                <td class="text-center small-text vertical-middle">{{resultado.numeroDocumento}}</td>
+                <td class="text-center small-text vertical-middle" *ngIf="resultado.detalle.length === 0">-</td>
+                <td class="text-left vertical-middle" *ngIf="resultado.detalle.length > 0">
+                  <ul *ngFor="let msg of resultado.detalle">
+                    <li class="small-text">{{msg}}</li>
+                  </ul>
+                </td>
+                <td class="text-center small-text vertical-middle">
+                  <span
+                    [class]="resultado.resultado === getResultadoCargaEnum().CORRECTO ? 'label label-primary' :
+                                 resultado.resultado === getResultadoCargaEnum().ADVERTENCIA ? 'label label-warning' : 'label label-danger'">
+                    {{resultado.resultado}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-4 col-sm-12 col-xs-12">
+              <pagination [(ngModel)]="paginacion.pagina"
+                          [totalItems]="paginacion.totalRegistros"
+                          [itemsPerPage]="paginacion.registros"
+                          (pageChanged)="onCambioPagina($event)"
+                          [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                          firstText="&laquo;" lastText="&raquo;"></pagination>
+            </div>
+            <div class="col-md-4 col-sm-12 col-xs-12 text-center">
+              <pagination-info [totalItems]="paginacion.totalRegistros"
+                                           [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+            </div>
+            <!-- <div class="col-md-4 col-sm-12 col-xs-12 text-right">
+              <pagination-set (optionChanged)="onCambioRegistros($event)"></pagination-set>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn btn-primary btn-sm" (click)="exportarResultado()" style="margin-right: 1rem;">Exportar <i
+              class="fas fa fa-download"></i></button>
+          <button class="btn btn-success btn-sm" (click)="limpiarCarga()">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

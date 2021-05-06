@@ -1,0 +1,7 @@
+export enum PerfilReporte{
+    TODOS = "TODOS",
+    ANALISTA_EXTERNO = 'ANALISTA EXTERNO',
+    ANALISTA_INTERNO = 'ANALISTA INTERNO',
+    ANALISTA_OTRO = "ANALISTA OTRO"
+  }
+  

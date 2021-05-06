@@ -1,0 +1,461 @@
+<div class="wrapper wrapper-content animated fadeInRight" style="padding-top: 0px;">
+    <div class="row">
+        <div class="col-lg-12">            
+            <ng-container [ngSwitch]="datosRegistro.uidEstado">                    
+                <form class="form-horizontal" *ngSwitchCase="'PE'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista" (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" [ngClass]="{'ng-dirty ng-invalid':errors?.
+                            atista}" 
+                                [tooltip]="errors?.uidContratista" placement="top" #uidContratista="ngModel" (ngModelChange)="onValidar()">
+                                <option value="0" disabled selected hidden>Seleccione Empresa</option>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                        <label class="col-sm-1 control-label">Fecha carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fecha" [ngModel]="datosRegistro.fechaCarga">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label for="" class="col-sm-1 control-label">Comentario:</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario">
+                        </div>
+                    </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'OS'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista"  (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" #uidContratista="ngModel"
+                                disabled>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Contratista:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaDevolucion" [ngModel]="datosRegistro.fechaContratista">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario" disabled>
+                            </div>
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>
+                        </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label for="" class="col-sm-1 control-label" style="padding-top:0px">Observación Sedapal:</label>
+                        <div class="col-lg-11">
+                            <input type="text" class="form-control" name="observacion" [(ngModel)]="datosRegistro.motivoAnula" disabled>
+                        </div>                   
+                    </div>                        
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'AC'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista"  (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" #uidContratista="ngModel"
+                                disabled>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario" disabled>
+                            </div>
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>
+                        </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'ES'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario" disabled>
+                            </div>
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>
+                        </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'OC'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista"  (change)="onChangeContratista()" id="uidContratista" class="form-control" [(ngModel)]="idConstratista" [ngClass]="{'ng-dirty ng-invalid':errors?.uidContratista}"
+                                [tooltip]="errors?.uidContratista" placement="top" #uidContratista="ngModel" (ngModelChange)="onValidar()">
+                                <option value="0" disabled selected hidden>Seleccione Empresa</option>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Fecha carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fecha" [ngModel]="datosRegistro.fechaCarga">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Contratista:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaDevolucion" [ngModel]="datosRegistro.fechaContratista">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario">
+                            </div>        
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>                    
+                        </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label for="" class="col-sm-1 control-label" style="padding-top:0px">Observación Contratista:</label>
+                        <div class="col-lg-11">
+                            <input type="text" class="form-control" name="observacion" [(ngModel)]="datosRegistro.motivoAnula" disabled>
+                        </div>                   
+                    </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'CE'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista"  (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" #uidContratista="ngModel"
+                                disabled>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Fecha carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fecha" [ngModel]="datosRegistro.fechaCarga">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Contratista:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaDevolucion" [ngModel]="datosRegistro.fechaContratista">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario" disabled>
+                            </div>
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>
+                        </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'EC'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista"  (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" #uidContratista="ngModel"
+                                disabled>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Fecha carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fecha" [ngModel]="datosRegistro.fechaCarga">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Contratista:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaDevolucion" [ngModel]="datosRegistro.fechaContratista">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario">
+                            </div>
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>
+                        </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'EPC'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista"  (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" #uidContratista="ngModel"
+                                disabled>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                        <label class="col-sm-1 control-label" style="padding-top:0px">Fecha envío Sedapal:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fechaSedapal">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario">
+                            </div>
+                            <label for="" class="col-sm-1 control-label">Ver:</label>
+                            <div class="col-lg-3">
+                                    <select name="viewAdjuntos" id="viewAdjuntos" class="form-control" [(ngModel)]="viewAdjuntos" (change)="changeViewAdjuntos()">
+                                        <option value="0" selected>TODOS</option>
+                                        <option value="1">CON ADJUNTOS</option>
+                                        <option value="2">SIN ADJUNTOS</option>
+                                    </select>
+                                </div>
+                        </div>
+                </form>
+                <form class="form-horizontal" *ngSwitchCase="'SGIO'">
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Nro Carga:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="numero" [ngModel]="datosRegistro.uidCargaTrabajo">
+                        </div>
+                        <label class="col-sm-1 control-label">Contratista:</label>
+                        <div class="col-sm-3">
+                            <select name="uidContratista" id="uidContratista"  (change)="onChangeContratista()" class="form-control" [(ngModel)]="idConstratista" #uidContratista="ngModel"
+                                disabled>
+                                <option *ngFor="let item of listaEmpresas" value="{{item.codigo}}"> {{item.descripcion}}</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">Oficina:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="oficina" [ngModel]="datosRegistro.descOficina">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Actividad:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="actividad" [ngModel]="datosRegistro.descActividad">
+                        </div>
+                        <label class="col-sm-1 control-label">Estado:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="estado" [ngModel]="datosRegistro.estado">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                        <label class="col-sm-1 control-label">Fecha envío:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control texto-ingresado" disabled="disabled" name="fechaEnvio" [ngModel]="datosRegistro.fecha">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 3px">
+                            <label for="" class="col-sm-1 control-label">Comentario:</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" name="comentario" [(ngModel)]="datosRegistro.comentario" disabled>
+                            </div>
+                        </div>
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</div>

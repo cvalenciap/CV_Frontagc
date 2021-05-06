@@ -1,0 +1,30 @@
+<div class="row main-content">
+  <div class="col-lg-8">
+    <div class="input-group">
+      <!-- Input buscar por nroCarga -->
+      <input type="text"
+               appNoWhiteSpace
+              class="form-control"
+              placeholder="{{inputPlaceholder}}"
+              [(ngModel)]="textoBusqueda">
+      <span class="input-group-btn" dropdown>
+        <button type="button"
+                class="btn btn-info"
+                (click)="onClickBuscar()">
+          <i class="fa fa-search" title="Buscar"></i></button>
+        <button dropdownToggle type="button"
+          class="btn btn-info dropdown-toggle dropdown-toggle-split">
+          <i class="fa fa-caret-down"></i></button>
+          <!-- Lista de Opciones -->
+          <ul *dropdownMenu class="dropdown-menu"
+              role="menu" aria-labelledby="button-split">
+              <li role="menuitem">
+                <a>Descripcion</a></li>
+              <li role="menuitem">
+                <a (click)="mostrarBusquedaAvanzada()">Búsqueda Avanzada</a></li>
+          </ul>
+      </span>
+    </div>
+  </div>
+</div>
+

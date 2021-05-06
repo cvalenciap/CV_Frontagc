@@ -1,0 +1,52 @@
+<div class="wrapper wrapper-content animated fadeInRight" style="padding-bottom: 0px;padding-top: 2px">
+  <div class="row">
+    <h3 class="text-center text-muted font-bold ">
+      Consulta de Solicitud de Cambio de Cargo
+    </h3>
+  </div>
+  <div class="row ">
+    <div class="ibox-content no-borders">
+      <div class="row">
+        <div class="col-lg-4" style="padding-right: 0px;">
+          <label class="control-label text-left">Nro. Solicitud:</label>
+        </div>
+        <div class="col-lg-6" style="padding-left: 0px;">
+          <input type="text" class="form-control" [(ngModel)]="solicitud.idSolicitud" disabled />
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-4" style="padding-right: 0px;">
+          <label class="control-label text-left">Fecha de Solicitud:</label>
+        </div>
+        <div class="col-lg-6" style="padding-left: 0px;">
+          <input type="text" class="form-control" [(ngModel)]="solicitud.fechaSolicitud" disabled />
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-4" style="padding-right: 0px;">
+          <label class="control-label text-left">Nuevo Cargo:</label>
+        </div>
+        <div class="col-lg-8" style="padding-left: 0px;">
+          <input type="text" class="form-control" [(ngModel)]="solicitud.cargoDestino.descripcion" disabled />
+        </div>
+      </div>
+      <p></p>
+      <div class="row">
+        <div class="col-lg-4" style="padding-right: 0px;">
+          <label class="control-label text-left">Descripción:</label>
+        </div>
+        <div class="col-lg-8" style="padding-left: 0px;">
+          <textarea class="form-control" rows="3" [(ngModel)]="solicitud.descripcionSolicitud" disabled>
+                    </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 0px;margin-bottom: 10px">
+    <div class="col-md-12 text-center">
+      <button class="btn btn-basic btn-sm" (click)="cerrar()">Cerrar <i class="fas fa fa-times"></i></button>
+    </div>
+  </div>
+</div>

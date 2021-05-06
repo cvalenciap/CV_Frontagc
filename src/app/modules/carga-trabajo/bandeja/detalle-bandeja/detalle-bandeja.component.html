@@ -1,0 +1,165 @@
+<div class="wrapper wrapper-content animated fadeInRight" style="padding: 0px;" >
+    <div class="ibox-content" style="padding-left: 10px;padding-right: 10px;padding-bottom: 0px">
+      <div class="row ">
+        <div class="col-lg-12">
+          <div class="row m-b-md">
+            <div class="col-lg-3">
+              <div class="input-group">
+                <div [hidden]="flag_busqueda">
+                  <input maxlength="20" (keypress)="validacionNroCarga($event)"   #buscar type="text" placeholder="Nro Carga" class="form-control"
+                         [(ngModel)]="textoBusqueda">
+                </div>
+                <div [hidden]="!flag_busqueda">
+                  <ng-select placeholder="Seleccione estado"  [items]="listaParametros.listaEstado" bindLabel="detalle" name="estado" [clearable]="true" [(ngModel)]="estadoParametro">
+                  </ng-select>
+                </div>
+                <span class="input-group-btn" dropdown>
+                                  <button type="button" class="btn btn-info" (click)="OnBuscar()"><i
+                                    class="fa fa-search" title="Buscar"></i></button>
+                                  <button dropdownToggle type="button"
+                                          class="btn btn-info dropdown-toggle dropdown-toggle-split"><i
+                                    class="fa fa-caret-down"></i></button>
+                                  <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
+                                      <li role="menuitem" [class.active]="parametroBusqueda == 'nrocarga'"><a
+                                        (click)=" parametroBusqueda = 'nrocarga'; textoBusqueda=null; OnConfigurarBusqueda()">Nro
+                                              de Carga</a></li>
+                                      <li role="menuitem" [class.active]="parametroBusqueda == 'descripcion'"><a
+                                        (click)=" parametroBusqueda = 'descripcion'; textoBusqueda=null; OnConfigurarBusqueda()">Descripción</a>
+                                      </li>
+                                      <li role="menuitem" [class.active]="parametroBusqueda == 'estado'"><a
+                                        (click)="parametroBusqueda = 'estado'; textoBusqueda=null; OnConfigurarBusqueda()">Estado</a>
+                                      </li>
+                                      <li class="divider dropdown-divider"></li>
+                                      <li role="menuitem"><a [swal]="busquedaAvanzadaSwal">Búsqueda avanzada</a></li>
+                                  </ul>
+                              </span>
+              </div>
+            </div>
+          </div>
+          <div class="row margin--left-right-6" *ngIf="showMessage">
+            <alert type="info" class="padding-0">
+              <div class="row">
+                <div class="col-md-10">
+                  <span class="padding-0" [innerHtml]="message"></span>
+                </div>
+                <div class="col-md-offset-10">
+                  <a (click)="leaveFilters()" class="col-md-offset-11" title="Eliminar filtro"><i class="fa fa-trash"></i></a>
+                </div>
+              </div>
+            </alert>
+          </div>
+          <div class="ibox-content" [class.sk-loading]="loading" style="padding: 9px;">
+            <sk-three-bounce></sk-three-bounce>
+            <div class="table-responsive">
+              <table class="table table-bordered table-stripped table-hover issue-tracker">
+                <thead class="thead-dark">
+                <tr>
+                  <th class="text-center">Nro. Carga</th>
+                  <th class="text-center">Des. Carga</th>
+                  <th class="text-center" *ngIf="!esContratista">Contratista</th>
+                  <th class="text-center">Oficina</th>
+                  <th class="text-center">Actividad</th>
+                  <th class="text-center" *ngIf="!esContratista">Fecha Carga</th>
+                  <th class="text-center">Fecha Envío SEDAPAL</th>
+                  <th class="text-center">Fecha Envío Contratista</th>
+                  <th class="text-center">Cantidad Enviada</th>
+                  <th class="text-center">Cantidad Ejecutada</th>
+                  <th class="text-center">Usuario</th>
+                  <th class="text-center">Estado</th>
+                  <th class="text-center" width="100px">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let cargaTrabajo of cargasTrabajo; let indice = index">
+                  <td class="text-center " data-col="uidCargaTrabajo ">
+                    {{cargaTrabajo.uidCargaTrabajo}}</td>
+                  <td class="text-left " data-col="descCarga">{{cargaTrabajo.descCarga}}</td>
+                  <td class="text-left " data-col="descContratista " *ngIf="!esContratista">{{cargaTrabajo.descContratista}}
+                  </td>
+                  <td class="text-left " data-col="descOficina ">{{cargaTrabajo.descOficina}}</td>
+                  <td class="text-left " data-col="descActividad ">{{cargaTrabajo.descActividad}}</td>
+                  <td class="text-center " data-col="fechaCarga " *ngIf="!esContratista">{{cargaTrabajo.fechaCarga }}</td>
+                  <td class="text-center " data-col="fechaSedapal ">{{cargaTrabajo.fechaSedapal }}
+                  </td>
+                  <td class="text-center " data-col="fechaContratista ">
+                    {{cargaTrabajo.fechaContratista}}</td>
+                  <td class="text-center " data-col="cantidadCarga ">{{cargaTrabajo.cantidadCarga}}
+                  </td>
+                  <td class="text-center " data-col="cantidadEjecutada ">
+                    {{cargaTrabajo.cantidadEjecutada}}</td>
+                  <td class="text-center " data-col="uidUsuarioC ">{{cargaTrabajo.uidUsuarioC}}</td>
+                  <td class="text-center" style="padding-left: 0;font-weight: bold" [ngSwitch]="cargaTrabajo.uidEstado">
+                    {{cargaTrabajo.estado}}
+                  </td>
+                  <td class="text-center " style="margin: 0 auto">
+                    <table style="margin: 0 auto">
+                      <tr>
+                        <td class="text-right">
+                          <button *ngIf="cargaTrabajo.uidEstado != 'AN'" data-toggle="tooltip" title="Mostrar Detalle" dropdownToggle type="button"
+                                  class="btn btn-sm btn-primary margin-right-10" (click)="mostrarDetalleRegistro(cargaTrabajo)"><i class="fa fa-search"></i></button>
+                        </td>
+                        <td class="text-left">
+                          <button *ngIf="esContratista==false && (esSedapal==true && cargaTrabajo.uidEstado != 'AN' && cargaTrabajo.uidEstado != 'CE' && cargaTrabajo.uidEstado != 'AC' && cargaTrabajo.uidEstado != 'OS' && cargaTrabajo.uidEstado != 'ES' && cargaTrabajo.uidEstado != 'EPC')" (click)="filaSeleccionada=indice" data-toggle="tooltip" title="Eliminar Registro" dropdownToggle type=" button "
+                                  [swal]="comentarSwal2" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-sm-12 col-xs-12">
+                <pagination [(ngModel)]="paginacion.pagina" (pageChanged)="OnPageChanged($event)"
+                            [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+                            [boundaryLinks]="true" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+                            firstText="&laquo;" lastText="&raquo;"></pagination>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-center m-a-sm">
+                  <pagination-info [totalItems]="paginacion.totalRegistros"
+                                   [itemsPerPage]="paginacion.registros" [page]="paginacion.pagina"></pagination-info>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="text-right m-a-sm">
+                  <pagination-set (optionChanged)="OnPageOptionChanged($event)" #general></pagination-set>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <swal #busquedaAvanzadaSwal title="Búsqueda Avanzada" customClass="carga-trabajo-swal" [showCancelButton]="true"
+        [focusCancel]="true" [allowOutsideClick]="true" confirmButtonText="Buscar" cancelButtonText="Cancelar"
+        (confirm)="OnBusquedaAvanzada()">
+    <div *swalPartial>
+      <carga-trabajo></carga-trabajo>
+    </div>
+  </swal>
+
+  <swal #comentarSwal input="textarea" title="Anular Registro" width="600px "
+        confirmButtonText="Aceptar " cancelButtonText="Cancelar " [showCancelButton]="true "
+        imageUrl= "assets/images/advertencia.png" imageWidth=50
+        (confirm)="OnAnular(filaSeleccionada) ">
+  </swal>
+
+  <swal #comentarSwal2 title="Anular Registro"
+        imageUrl= "assets/images/advertencia.png"
+        imageWidth=50
+        confirmButtonText="Aceptar"
+        [allowOutsideClick]="true"
+        cancelButtonText="Cancelar"
+        [showCancelButton]="true"
+        [focusConfirm] = "false"
+        [focusCancel] = "true"
+        (confirm)="OnAnular(filaSeleccionada) ">
+    <div *swalPartial>
+      <carga-anular></carga-anular>
+    </div>
+  </swal>

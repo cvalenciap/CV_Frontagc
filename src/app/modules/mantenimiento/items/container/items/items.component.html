@@ -1,0 +1,39 @@
+<div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 3px; padding-bottom: 0px;">
+    <div class="col-lg-12">
+        <h4 class="padding-5"><a routerLink="/inicio">Inicio</a> / Mantenimiento / <strong>Consulta de Items</strong>
+        </h4>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row m-b-md">
+        <div class="ibox-content">
+            <!-- Busqueda Basica -->
+            <div class="row m-b-md">
+                <div class="col-lg-1">
+                    <button type="button" class="btn btn-success"
+                    (click)="router.navigate(['/mantenimiento/item/editar']);" title="Agregar Registro"><i
+                            class="fa fa-plus margin-right-10"></i><span>Agregar</span></button>
+                </div>
+                <div class="col-lg-11">
+                    <app-busqueda-basica-item (busqueda)="buscar($event, 'BASICA');"
+                        (mostrarBusquedaAvanzada)="this.modalBusquedaAvanzada.show();">
+                    </app-busqueda-basica-item>
+                </div>
+            </div>
+            <!-- Busqueda Avanzada -->
+            <swal #modalBusquedaAvanzada (confirm)="buscar(requestItemBusquedaAvanzada, 'AVANZADA')" (cancel)="cancelar()"
+                customClass="swal-filtro-avanzado-item" [options]="alertOptionBuscarAvanzado">
+                <div *swalPartial>
+                    <app-busqueda-avanzada-item (destroy)="requestItemBusquedaAvanzada=$event">
+                    </app-busqueda-avanzada-item>                   
+                </div>
+            </swal>
+            <!-- Panel filtro realizado -->
+            <app-info-busqueda-item [requestItem]="requestItem" (limpiarFiltro)="limpiarFiltro($event)">
+            </app-info-busqueda-item>
+            <!-- Lista Grupos -->
+            <app-lista-item [listaItems]="listaItems" (eliminar)="eliminar($event)">
+            </app-lista-item>
+        </div>
+    </div>
+</div>

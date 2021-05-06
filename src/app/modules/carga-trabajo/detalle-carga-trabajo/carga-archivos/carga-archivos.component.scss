@@ -1,0 +1,135 @@
+.padding-left-right-15 {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.marginTo5 {
+  width: 100%;
+  margin: 5px;
+}
+
+.upload {
+  display: none;
+}
+
+.uploader {
+  border: 1px solid #ccc;
+  width: 100%;
+  position: relative;
+  height: 32px;
+  display: flex;
+  border-radius: 5px;
+}
+
+.uploader .input-value{
+  width: 100%;
+  padding: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 25px;
+}
+
+.uploader label {
+  cursor: pointer;
+  margin: 0;
+  width: 40px;
+  height: 30px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-left: 1px solid #ccc;
+  position: absolute;
+  right: 0;
+  background: #ddd url('../../../../../assets/images/folder.png') no-repeat center;
+}
+
+/* Submit button */
+.submitbtn {
+  text-transform: uppercase;
+  background-color: #1f659b;
+  border-radius: 0;
+  font-weight: bold;
+  width: 90px;
+  border: none;
+  height: 30px;
+  color: #fff;
+}
+.submitbtn:hover {
+  color: #c3e3fc;
+}
+.submitbtn:hover + span.form-arrow::before {
+  border: 2px solid #c3e3fc;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+
+.form-arrow{
+  position: relative;
+}
+.form-arrow::before{
+  content: '';
+  width: 8px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  display: block;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 20%;
+  right: 10px;
+}
+
+.icon {
+  font-size: 15px;
+}
+
+.table {
+  font-size: 12px;
+}
+
+
+.container-boton {
+  height: 40px;
+  margin-top: 1px;
+  margin-bottom: 10px;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

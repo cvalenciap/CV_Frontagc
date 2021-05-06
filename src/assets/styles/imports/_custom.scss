@@ -1,0 +1,262 @@
+/* Only demo */
+
+@media (max-width: 1000px) {
+    .welcome-message {
+        display: none;
+    }
+}
+
+article {
+    header {
+        h1,
+        h2 {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 100;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        h2 {
+            font-size: 14px;
+        }
+    }
+}
+
+.form-horizontal {
+    .col-sm-1 {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    .control-label {
+        font-weight: 600;
+        /*padding-top: 0;*/
+        /*text-align: left;*/
+    }
+}
+
+.tag-list {
+    padding: 0;
+    display: table-row;
+}
+
+.tag-list li {
+    font-size: 10px;
+    background-color: $gray;
+    padding: 5px 12px 5px 10px;
+    color: inherit;
+    border-radius: 2px;
+    border: 1px solid $border-color;
+    margin-right: 5px;
+    margin-top: 5px;
+    display: table-cell;
+    width: 32%;
+}
+
+.tag-list li.active {
+    border-color: #18a689;
+    background-color: #1ab394;
+    color: #fff;
+    font-weight: 600;
+    &::before {
+        font-family: FontAwesome;
+        font-weight: normal;
+        content: "\f00c";
+        margin-right: 3px;
+    }
+}
+
+.asunto-swal {
+    width: 650px !important;
+    .table {
+        tr {
+            td:nth-child(1) {
+                width: 40px;
+            }
+            td:nth-child(2) {}
+        }
+    }
+    .pagination {
+        margin: 0;
+    }
+}
+
+.filtros-digitalizados-swal{
+    width: 640px !important;
+    height: 450px !important;
+}
+
+.pdf-swal {
+    width: 900px !important;
+    height: 600px !important;
+}
+.img-swal {
+    width: 900px !important;
+    height: 800px !important;
+}
+
+
+/*LOGIN*/
+
+.login {
+    padding: 50px;
+    border: 1px solid #D1DADE;
+    background-color: white;
+}
+
+.loginscreen {
+    color: #fff;
+    a, a:active, a:visited {
+      color: $color-primary;
+    }
+    .hr{
+        color: #fff;
+    }
+    .ibox-content {
+      color: $sed-gray;
+      .alert-danger {
+        background-color: lighten($red, 5);
+        border-color: $red;
+        color: #fff;
+      }
+    }
+  }
+.fondo-login {
+    background-color: #0065a4;
+    background: $skin-sed-nav-bg;
+    .pace .pace-progress {
+        background: $skin-sed-color;
+    }
+    .minimalize-styl-2 {
+        margin: 14px 5px 5px 30px;
+        background: $skin-sed-color;
+        border-color: $skin-sed-nav-bg;
+        &:active {
+            background: #8caed5;
+            border-color: #3983ba;
+        }
+    }
+    .input{
+        background: #E8F0FE
+    }
+}
+
+/* Swal */
+
+.swal-filtro-avanzado-item {
+    width: 40% !important;
+    height: 300px !important;
+}
+
+.swal-filtro-avanzado-grupo {
+    width: 40% !important;
+    height: 300px !important;
+}
+
+.mantenimiento-personal-swal {
+    width: 40% !important;
+}
+
+.carga-swal {
+    width: 65% !important;
+    height: 600px !important;
+}
+
+.carga-archivo-detalle-swal {
+    width: 65% !important;
+    height: 480px !important;
+    border: 1px solid gray;
+}
+
+.carga-masiva-swal {
+    width: 65% !important;
+    height: 460px !important;
+}
+
+.insertar-valores-swal {
+  width: 50% !important;
+}
+.insertar-rendimiento-swal {
+  width: 50% !important;
+  height: 360px !important;
+}
+
+.swal-modal-autofit {
+  width: fit-content !important;
+  height: fit-content !important;
+}
+
+.swal-modal-70 {
+  width: 70% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-68 {
+  width: 68% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-65 {
+  width: 65% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-60 {
+  width: 60% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-58 {
+  width: 58% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-55 {
+  width: 55% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-50 {
+  width: 50% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-40 {
+  width: 40% !important;
+  height: fit-content !important;
+}
+
+.swal-modal-30 {
+  width: 30% !important;
+  height: fit-content !important;
+}
+
+.carga-trabajo-swal{
+  width: 600px !important;
+  height: 480px !important;
+}
+
+.buscar-empresa-swal{
+  width: 600px !important;
+  height: 350px !important;
+}
+
+.buscar-parametro-swal{
+    width: 600px !important;
+  height: 200px !important;
+}
+
+.custom-hr {
+  margin-top: 0.2rem !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.no-resize {
+  resize: none;
+}
+
+// Datepicker
+
+.bs-datepicker-container, .bs-daterangepicker-container {
+  z-index: 3000;
+}

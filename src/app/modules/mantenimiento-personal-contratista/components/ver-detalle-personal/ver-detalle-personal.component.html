@@ -1,0 +1,34 @@
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h3>Ver Personal</h3>
+  </div>
+</div>
+<!-- Datos Basicos -->
+<div class="row">
+  <div class="col-md-12">
+    <h4>Datos Básicos</h4>
+  </div>
+</div>
+<div class="mt-1 main-container">
+  <app-formulario-datos-basicos></app-formulario-datos-basicos>
+</div>
+
+<!-- Datos de Planilla -->
+<div class="row mt-1">
+  <div class="col-md-12">
+    <h4>Datos de Planilla</h4>
+  </div>
+</div>
+<div class="main-container">
+  <app-formulario-datos-planilla [dataPersonalDetalle]="dataPersonal"></app-formulario-datos-planilla>
+</div>
+
+<!-- Datos de Sedapal -->
+<div class="row mt-1">
+  <div class="col-md-12">
+    <h4>Datos de Sedapal</h4>
+  </div>
+</div>
+<div class="main-container">
+  <app-formulario-datos-sedapal [dataPersonalDetalle]="dataPersonal"></app-formulario-datos-sedapal>
+</div>

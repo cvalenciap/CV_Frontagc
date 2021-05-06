@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col-lg-12" >
+        <div class="ibox-content" style="padding: 0; border: 0;">
+            <div class="row" style="margin-right: 2px; margin-left: 2px;padding: 0px">
+                <div class="col-md-9" style="padding-left: 0px">
+                    <h4><b>Datos de Consulta</b></h4>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn-sm btn-default" style="background: #eee" (click)="onLimpiarFiltros()"><i
+                        class="fa fa-eraser" title="Buscar"></i> Limpiar filtros</button>
+                </div>
+            </div>
+            <hr class="hr-line-dashed" style="margin-top: 3px;">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Nro. Carga:</label>
+                    <div class="col-md-4">
+                        <input #buscar type="text" class="form-control texto-ingresado" name="numero-carga" (click)="OnConfigurarBusqueda()" [(ngModel)]="uidCarga">
+                    </div>
+                    <label class="col-md-2 control-label">Contratista:</label>
+                    <div class="col-md-4">
+                        
+                        <ng-select [items]="listaParametros.listaEmpresa" 
+                                    bindLabel="descripcion" 
+                                    placeholder="Seleccione Empresa" 
+                                    name="empresas" 
+                                    [clearable]="clrEmpresa"
+                                    [(ngModel)]="empresa">
+                        </ng-select>
+                        
+                        <!--
+                        <select name ="contratista" id="contratista" placeholder="Seleccione Empresa" class="form-control" [(ngModel)]="empresa">
+                            <option value="0">Empresa 1</option>
+                            <option value="1">Empresa 2</option>
+                        </select>                        
+                        -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Oficina:</label>
+                    <div class="col-md-4">
+                        <ng-select [items]="listaParametros.listaOficina" 
+                                    bindLabel="descripcion" 
+                                    placeholder="Seleccione Oficina" 
+                                    name="oficina" 
+                                    [clearable]="clrOficina" 
+                                    [(ngModel)]="oficina">
+                        </ng-select>
+                    </div>
+                    <label class="col-md-2 control-label">Actividad:</label>
+                    <div class="col-md-4">
+                        <ng-select [items]="listaParametros.listaActividad" 
+                                    bindLabel="descripcion" 
+                                    placeholder="Seleccione Actividad" 
+                                    name="actividades" 
+                                    [clearable]="clrActividad" 
+                                    [(ngModel)]="actividad">
+                        </ng-select>
+                    </div>
+
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Fecha Carga de:</label>
+                    <div class="col-md-4">
+                        <div class="input-group date">
+                            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaInicio"  [(bsValue)]="fechaInicial" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="DetectChange()" >
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <label class="col-md-2 control-label">Al :</label>
+                    <div class="col-md-4">
+                        <div class="input-group date">
+                            <input bsDatepicker #dp="bsDatepicker" type="text" class="form-control" name="fechaFin"  [(bsValue)]="fechaFinal" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" (bsValueChange)="DetectChange()">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Estado:</label>
+                    <div class="col-sm-4">
+                        <ng-select [items]="listaParametros.listaEstado" 
+                                    bindLabel="detalle" 
+                                    placeholder="Seleccione estado" 
+                                    name="clrEstado"
+                                    [clearable]="true" 
+                                    [(ngModel)]="estadoParametro">
+                        </ng-select>
+                    </div>
+                    <label class="col-sm-2 control-label">Descripcion:</label>
+                    <div class="col-md-4">
+                        <input #buscar type="text" maxlength="30" class="form-control texto-ingresado" name="descripcion" (click)="OnConfigurarBusqueda()" [(ngModel)]="vdescripcion">
+                    </div>
+
+                </div>
+                <div class="form-group" *ngIf="esContratista==false">
+                    <label class="col-md-2 control-label">Usuario AGC:</label>
+                    <div class="col-md-4">
+                        <input #buscar type="text" class="form-control texto-ingresado" name="usuario-carga" (click)="OnConfigurarBusqueda()" [(ngModel)]="uidUsuarioC">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

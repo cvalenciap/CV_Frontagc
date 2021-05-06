@@ -1,0 +1,114 @@
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h4 class="text-muted font-bold">Dar Alta Personal</h4>
+  </div>
+</div>
+
+<div *ngIf="!mostrarResultados">
+  <div class="row mt-2">
+    <div class="col-md-6">
+      <h5 class="text-muted font-bold">Personal Seleccionado: {{cantidadPendientes}}</h5>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="col-md-5">
+          <label class="control-label text-muted">Seleccionar todos motivo:</label>
+        </div>
+        <div class="col-md-7">
+          <ng-select placeholder="Seleccione" [items]="comboMotivosAlta" bindLabel="descripcion"
+            (change)="onComboTodosChange($event)"></ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-md-12">
+      <div class="ibox-content" [class.sk-loading]="isLoading">
+        <sk-three-bounce></sk-three-bounce>
+        <div class="table-responsive">
+          <table class="table table-sm table-stripped table-hover">
+            <thead>
+              <!-- <th class="text-center">N°</th> -->
+              <th class="text-center">D.N.I</th>
+              <th class="text-center">Apellidos y Nombres</th>
+              <th class="text-center">Código Sedapal</th>
+              <th class="text-center">Cargo</th>
+              <th class="text-center">Oficina Asignada</th>
+              <th class="text-center">Estado Código SEDAPAL</th>
+              <th class="text-center">Motivo de Alta</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let personal of listaPaginada; let i = index">
+                <!-- <td class="text-center col-md-1">{{personal.nro}}</td> -->
+                <td class="text-center col-md-1">{{personal.numeroDocumento}}</td>
+                <td class="text-left col-md-3">{{personal.nombresCompletos}}</td>
+                <td class="text-center col-md-1">{{personal.codigoEmpleado}}</td>
+                <td class="text-center">{{personal.cargo.descripcion}}</td>
+                <td class="text-center col-md-2">{{personal.oficina.descripcion}}</td>
+                <td class="text-center col-md-2">{{personal.estadoPersonal.descripcion}}</td>
+                <td class="col-md-2">
+                  <select class="form-control text-combo" (change)="onChangeMotivoAlta($event, personal)">
+                    <option class="text-combo" [disabled]="true" [selected]="personal.motivoAlta.codigo === 0">
+                      [Seleccione]</option>
+                    <option *ngFor="let item of comboMotivosAlta" class="text-combo" [value]="item.id"
+                      [selected]="(personal.motivoAlta !== undefined && personal.motivoAlta !== null) ? (item.id === personal.motivoAlta.codigo) : false">
+                      {{item.descripcion}}
+                    </option>
+                  </select>
+                  <!-- <ng-select  placeholder="Seleccione"
+                        [items]="comboMotivosAlta"
+                        bindLabel="descripcion"></ng-select> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+          <pagination [(ngModel)]="paginacion.pagina" [totalItems]="paginacion.totalRegistros"
+            [itemsPerPage]="paginacion.registros" (pageChanged)="onCambioPagina($event)" [boundaryLinks]="true"
+            [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+          </pagination>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12 text-center">
+          <pagination-info [totalItems]="paginacion.totalRegistros" [itemsPerPage]="paginacion.registros"
+            [page]="paginacion.pagina"></pagination-info>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2" *ngIf="!mostrarConfirmacion">
+    <div class="col-md-12 text-center">
+      <button class="btn btn-success btn-sm" style="margin-right: 1rem;" (click)="onMostrarConfirmacion()">Aceptar
+      </button>
+      <button class="btn bg-custom-gray btn-sm" (click)="onCancelar()">Cancelar <i class="fas fa fa-times"></i></button>
+    </div>
+  </div>
+
+  <div class="row mt-2" *ngIf="mostrarConfirmacion">
+    <div class="col-md-6 col-md-offset-3 text-center">
+      <div class="alert alert-info" role="alert">
+        <strong>¿Está seguro de aceptar al personal seleccionado?</strong>
+      </div>
+    </div>
+    <div class="col-md-12 text-center">
+      <button class="btn btn-success btn-sm" style="margin-right: 1rem;" (click)="onConfirmarAlta()">Aceptar <i
+          class="fas fa fa-check"></i></button>
+      <button class="btn bg-custom-gray btn-sm" (click)="onOcultarConfirmacion()">Cancelar <i
+          class="fas fa fa-times"></i></button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="mostrarResultados">
+  <app-resultado-alta [resultados]="listaResultados"
+                      (regresarEvent)="onRegresarEmit()"></app-resultado-alta>
+</div>
